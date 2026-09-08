@@ -1,0 +1,1 @@
+# handrail-sdk-bug-reporter-rails
