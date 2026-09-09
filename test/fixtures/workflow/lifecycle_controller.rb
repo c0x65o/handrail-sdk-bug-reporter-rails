@@ -15,7 +15,7 @@ class LifecycleController < WorkflowController
     render :inline => <<~HTML
       <!doctype html><html><head><title>Adapter fixture</title><%= csrf_meta_tags %>
       <% unless @navigation == 'ordinary' %><script src="/lifecycle/assets/<%= @navigation %>.js" defer></script><% end %>
-      <% if @loading == 'initial' %><script src="/javascripts/handrail_bug_reporter.js"></script><% end %>
+      <% if @loading == 'initial' %><script src="/javascripts/handrail_bug_reporter.js"></script><script src="/lifecycle/assets/probe.js"></script><% end %>
       <script src="/lifecycle/assets/host.js" defer></script></head>
       <body data-fixture-page="<%= @variant %>">
       <h1>Adapter <%= @variant %></h1><p id="host-content">Host content stays owned by the host.</p>
@@ -23,9 +23,9 @@ class LifecycleController < WorkflowController
       <a id="first-page" href="/lifecycle/<%= @navigation %>/first">First page</a></nav>
       <% if @variant == 'custom' %><button type="button" id="host-help" class="host-style" style="color: rgb(30, 40, 50)"><span>Host Help</span></button><% end %>
       <% unless @variant == 'marker-free' %>
-        <%= handrail_bug_reporter(@options).gsub(/<script.*?<\/script>/m, '').html_safe %>
+        <%= handrail_bug_reporter(@options).gsub(%r{<script.*?</script>}m, '').html_safe %>
       <% end %>
-      <% unless %w[initial late].include?(@loading) %><script src="/javascripts/handrail_bug_reporter.js" defer></script><% end %>
+      <% unless %w[initial late].include?(@loading) %><script src="/javascripts/handrail_bug_reporter.js" defer></script><script src="/lifecycle/assets/probe.js" defer></script><% end %>
       </body></html>
     HTML
   end
@@ -41,7 +41,8 @@ class LifecycleController < WorkflowController
     paths = {
       "turbo" => "node_modules/@hotwired/turbo/dist/turbo.es2017-umd.js",
       "turbolinks" => "node_modules/turbolinks/dist/turbolinks.js",
-      "host" => "test/fixtures/workflow/lifecycle_host.js"
+      "host" => "test/fixtures/workflow/lifecycle_host.js",
+      "probe" => "test/fixtures/workflow/lifecycle_probe.js"
     }
     path = paths[params[:name]]
     return head :not_found unless path

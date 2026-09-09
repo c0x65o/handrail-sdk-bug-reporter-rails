@@ -18,7 +18,7 @@ const redact = text => text.replace(/(?:hbr_workflow|workflow)[A-Za-z0-9_-]*sent
 export async function fixture(t, scenario = 'submission') {
   const directory = await mkdtemp(join(tmpdir(), 'rails-lifecycle-'));
   const auditPath = join(directory, 'http.jsonl');
-  const artifactDir = process.env.LIFECYCLE_ARTIFACT_DIR || join(directory, 'artifacts');
+  const artifactDir = process.env.LIFECYCLE_ARTIFACT_DIR || await mkdtemp(join(tmpdir(), 'rails-lifecycle-artifacts-'));
   await mkdir(artifactDir, { recursive: true });
   let server, browser, context, page, output = '', versions;
   const external = [], errors = [], network = [];
@@ -107,21 +107,33 @@ export async function fixture(t, scenario = 'submission') {
       return id;
     };
     window.clearInterval = id => { window.fixture.intervals.delete(id); return clear(id); };
-    for (const name of ['turbo:load', 'turbo:before-cache', 'turbolinks:load', 'turbolinks:before-cache']) {
-      document.addEventListener(name, () => queueMicrotask(() => window.fixture.events.push({ name,
-        roots: document.querySelectorAll('[data-handrail-bug-reporter-root]').length })));
-    }
+    const dispatch = EventTarget.prototype.dispatchEvent;
+    EventTarget.prototype.dispatchEvent = function(event) {
+      const result = dispatch.call(this, event);
+      // Observe after all synchronous library/adapter handlers, not in a
+      // microtask which Chromium may run between individual event listeners.
+      if (/^(turbo|turbolinks):(load|before-cache)$/.test(event.type)) fixture.events.push({ name: event.type,
+        roots: document.querySelectorAll('[data-handrail-bug-reporter-root]').length });
+      return result;
+    };
   });
   async function audit() {
     return (await readFile(auditPath, 'utf8').catch(() => '')).trim().split('\n').filter(Boolean).map(JSON.parse);
   }
   return { page, origin, network, audit,
+    async capture(label) {
+      await page.screenshot({ path: join(artifactDir, `${t.name.replace(/\W+/g, '-')}-${label}.png`) });
+    },
     async goto(variant = 'first', navigation = 'ordinary', query = '') {
       const response = await page.goto(`${origin}/lifecycle/${navigation}/${variant}${query}`);
       assert.equal(response.status(), 200);
     },
     async finish() {
       assert.deepEqual(external, []); assert.deepEqual(errors, []);
+      const unexpected = network.filter(row => row.status >= 400 && !(scenario === 'lifecycle_retry' &&
+        ((row.method === 'POST' && row.path === endpoint && row.status === 502) ||
+         (row.method === 'PUT' && row.path.endsWith('/archive') && row.status === 403))));
+      assert.deepEqual(unexpected, [], 'Only explicitly scripted/rejected responses may fail');
       assert.deepEqual((await audit()).filter(row => row.kind === 'fixture_error'), []);
       t.diagnostic(`Redacted artifacts: ${artifactDir}`);
     }
@@ -135,6 +147,7 @@ export async function roots(page, count = 1) {
 export async function open(page, label = 'Report a bug') {
   await page.getByRole('button', { name: label, exact: true }).click();
   await page.getByRole('dialog').waitFor();
+  await page.waitForFunction(() => document.querySelector('[role="dialog"]')?.contains(document.activeElement));
 }
 export async function send(page) {
   const response = page.waitForResponse(r => r.request().method() === 'POST' && new URL(r.url()).pathname.endsWith('/api/mobile-bug-reports') && r.status() === 201);

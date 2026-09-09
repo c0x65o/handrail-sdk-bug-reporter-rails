@@ -6,6 +6,8 @@ test('initial, deferred and post-readiness assets; disabled and marker-free page
   const host = await fixture(t), { page } = host;
   for (const loading of ['initial', 'deferred', 'late']) {
     await host.goto('first', 'ordinary', `?loading=${loading}`);
+    if (loading === 'initial') assert.deepEqual(await page.evaluate(() => assetReadiness), { state: 'loading', loaded: true, roots: 0 });
+    if (loading === 'deferred') assert.equal(await page.evaluate(() => assetReadiness.state), 'interactive');
     if (loading === 'late') {
       assert.equal(await page.evaluate(() => document.readyState), 'complete');
       assert.equal(await page.locator(island).count(), 0);
@@ -24,7 +26,7 @@ test('initial, deferred and post-readiness assets; disabled and marker-free page
     await host.goto(variant); await roots(page, 0);
     assert.equal(await page.locator(marker).count(), 0);
   }
-  // Explicitly disabled data marker also stays inert, then observer sees enable.
+  // Explicitly disabled data marker also stays inert.
   await host.goto('first'); await roots(page);
   await page.evaluate(() => {
     const marker = document.querySelector('[data-handrail-bug-reporter="1"]');
@@ -37,7 +39,7 @@ test('initial, deferred and post-readiness assets; disabled and marker-free page
 });
 
 for (const navigation of ['ordinary', 'turbo', 'turbolinks']) {
-  test(`${navigation}: three real forward/back/cache cycles, single root and history schedule`, { timeout: 90_000 }, async t => {
+  test(`${navigation}: three real forward/back${navigation === 'ordinary' ? '' : '/cache'} cycles, single root and history schedule`, { timeout: 90_000 }, async t => {
     const host = await fixture(t), { page } = host;
     await host.goto('first', navigation); await roots(page);
     const documentId = await page.evaluate(() => fixture.documentId);
@@ -46,6 +48,7 @@ for (const navigation of ['ordinary', 'turbo', 'turbolinks']) {
       await page.locator('[data-handrail-bug-view-switch="history"]').click();
       await page.waitForFunction(() => fixture.calls.some(row => row.url.includes('/mine') && row.status === 200));
       assert.equal(await page.evaluate(() => fixture.intervals.size), 1);
+      if (cycle === 0) await host.capture('history');
       await page.keyboard.press('Escape');
       await page.evaluate(cycle => { document.body.dataset.cacheStamp = String(cycle); }, cycle);
       await page.locator('#next-page').click();
@@ -56,13 +59,16 @@ for (const navigation of ['ordinary', 'turbo', 'turbolinks']) {
       if (navigation !== 'ordinary') assert.equal(await page.evaluate(() => fixture.documentId), documentId, 'Library visit must retain the JavaScript document');
       else assert.notEqual(await page.evaluate(() => fixture.documentId), documentId, 'Ordinary navigation loads a document');
       const documentsBeforeBack = host.network.filter(row => row.path.endsWith('/first')).length;
-      await page.goBack(); await page.waitForURL(/\/first$/); await roots(page);
+      await page.goBack(); await page.waitForURL(/\/first$/);
+      await page.waitForFunction(() => document.body.dataset.fixturePage === 'first'); await roots(page);
       if (navigation !== 'ordinary') {
         assert.equal(await page.locator('body').getAttribute('data-cache-stamp'), String(cycle), 'Actual snapshot restored host DOM');
         assert.equal(host.network.filter(row => row.path.endsWith('/first')).length, documentsBeforeBack, 'Restoration must use cached HTML');
       }
-      await page.goForward(); await page.waitForURL(/\/second\?/); await roots(page);
-      await page.goBack(); await page.waitForURL(/\/first$/); await roots(page);
+      await page.goForward(); await page.waitForURL(/\/second\?/);
+      await page.waitForFunction(() => document.body.dataset.fixturePage === 'second'); await roots(page);
+      await page.goBack(); await page.waitForURL(/\/first$/);
+      await page.waitForFunction(() => document.body.dataset.fixturePage === 'first'); await roots(page);
       await page.addScriptTag({ url: host.origin + asset }); await roots(page);
     }
     if (navigation !== 'ordinary') {
@@ -70,9 +76,10 @@ for (const navigation of ['ordinary', 'turbo', 'turbolinks']) {
       assert.ok(caches.length >= 3);
       assert.ok(caches.every(e => e.roots === 0), 'Actual library before-cache removes reporter roots');
     }
-    await open(page); await page.locator('[data-handrail-bug-view-switch="history"]').click();
-    await page.waitForFunction(() => fixture.intervals.size === 1);
     await page.clock.pauseAt(new Date());
+    await page.getByRole('button', { name: 'Report a bug', exact: true }).click();
+    await page.locator('[data-handrail-bug-view-switch="history"]').click();
+    await page.waitForFunction(() => fixture.intervals.size === 1);
     const calls = () => page.evaluate(() => fixture.calls.filter(row => row.url.includes('/mine')).length);
     const before = await calls();
     await page.clock.runFor(14_999); assert.equal(await calls(), before);
@@ -89,7 +96,7 @@ for (const navigation of ['ordinary', 'turbo', 'turbolinks']) {
 test('changed helper options, pathname privacy and explicit context reach mounted Rails', { timeout: 60_000 }, async t => {
   const host = await fixture(t), { page } = host;
   await host.goto('first'); await roots(page); await open(page); await send(page);
-  await page.keyboard.press('Escape');
+  await page.getByRole('dialog').press('Escape');
   await page.locator('#next-page').click(); await page.waitForURL(/second/); await roots(page);
   // Environment comes from the host Factory, not a per-helper option. Emulate a
   // changed host config on the fixture marker without mutating the shared Factory.
@@ -126,6 +133,8 @@ test('custom mouse/keyboard launcher ownership, replacements and repeatable tear
     if (operation === 'mouse') await page.locator('#host-help').click();
     else await page.keyboard.press(operation);
     await page.getByRole('dialog').waitFor();
+    await page.waitForFunction(() => document.querySelector('[role="dialog"]')?.contains(document.activeElement));
+    if (operation === 'mouse') await host.capture('custom-dialog');
     await page.keyboard.press('Escape');
     await page.getByRole('dialog').waitFor({ state: 'detached' });
     assert.equal(await page.evaluate(() => document.activeElement.id), 'host-help');
@@ -180,14 +189,21 @@ for (const kind of ['policy', 'history', 'submission']) {
     const held = [];
     await page.route(url + (suffix ? '**' : ''), route => { held.push(route); });
     t.after(async () => { for (const route of held) await route.abort().catch(() => {}); });
-    await host.goto('first'); await roots(page);
+    const navigation = kind === 'policy' ? 'turbo' : kind === 'history' ? 'turbolinks' : 'ordinary';
+    await host.goto('first', navigation); await roots(page);
     if (kind !== 'policy') {
       await open(page);
       if (kind === 'history') await page.locator('[data-handrail-bug-view-switch="history"]').click();
       else await page.getByRole('button', { name: 'Send report', exact: true }).click();
     }
     await page.waitForFunction(url => fixture.calls.some(row => new URL(row.url, location.href).href.startsWith(url) && !row.settled), url);
-    await page.evaluate(() => HandrailBugReporter.rails.teardown()); await roots(page, 0);
+    if (navigation === 'ordinary') {
+      await page.evaluate(() => HandrailBugReporter.rails.teardown()); await roots(page, 0);
+    } else {
+      if (kind === 'history') await page.getByRole('dialog').press('Escape');
+      await page.locator('#next-page').click();
+      await page.waitForFunction(() => document.body.dataset.fixturePage === 'second'); await roots(page);
+    }
     await page.waitForFunction(url => fixture.calls.some(row => new URL(row.url, location.href).href.startsWith(url) && row.aborted && row.settled), url);
     const before = held.length;
     await page.clock.runFor(60_000);
@@ -266,14 +282,14 @@ test('real Rails token rotation across POST/PUT/DELETE and an actual SDK transie
     };
     window.fetch = async (input, init) => {
       const response = await native(input, init);
-      if (response.status === 503 && init?.method === 'POST') await rotateFixtureToken();
+      if (response.status === 502 && init?.method === 'POST') await rotateFixtureToken();
       return response;
     };
   });
-  await open(page); await send(page);
+  await open(page); await send(page); await host.capture('rotated-retry-success');
   const result = await page.evaluate(async () => {
     const posts = fixture.calls.filter(row => row.url === '/fixture/api/mobile-bug-reports' && row.method === 'POST');
-    const retryValid = posts.length === 2 && posts[0].status === 503 && posts[1].status === 201 &&
+    const retryValid = posts.length === 2 && posts[0].status === 502 && posts[1].status === 201 &&
       posts[0].headers['x-csrf-token'] !== posts[1].headers['x-csrf-token'] &&
       posts.every(row => row.credentials === 'same-origin') && posts[0].body === posts[1].body;
     const wrapped = HandrailBugReporter.createCsrfFetch(window.fetch.bind(window));
@@ -293,9 +309,29 @@ test('real Rails token rotation across POST/PUT/DELETE and an actual SDK transie
     }
     return { retryValid, rejected: rejected.status, statuses, rotated: tokens[0] !== tokens[1] };
   });
-  assert.deepEqual(result, { retryValid: true, rejected: 422, statuses: [200, 200], rotated: true });
+  assert.deepEqual(result, { retryValid: true, rejected: 403, statuses: [200, 200], rotated: true });
   const calls = (await host.audit()).filter(row => row.kind === 'http');
   assert.equal(calls.filter(row => row.method === 'POST').length, 2);
   assert.equal(calls.filter(row => row.method === 'PUT').length, 1, 'Stale token rejected before outbound seam');
+  await host.finish();
+});
+
+test('disposal after transient failure suppresses the queued SDK retry', { timeout: 60_000 }, async t => {
+  const host = await fixture(t, 'lifecycle_retry'), { page } = host;
+  await host.goto('first'); await roots(page); await open(page);
+  await page.evaluate(() => {
+    const native = window.fetch;
+    window.fetch = async (input, init) => {
+      const response = await native(input, init);
+      if (response.status === 502 && init?.method === 'POST') HandrailBugReporter.rails.teardown();
+      return response;
+    };
+  });
+  await page.getByRole('button', { name: 'Send report', exact: true }).click();
+  await roots(page, 0);
+  await page.clock.runFor(60_000);
+  const attempts = await page.evaluate(() => fixture.calls.filter(row => row.method === 'POST' && row.url.endsWith('/api/mobile-bug-reports')).map(row => row.status));
+  assert.deepEqual(attempts, [502]);
+  assert.equal((await host.audit()).filter(row => row.method === 'POST').length, 1);
   await host.finish();
 });
