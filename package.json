@@ -1,7 +1,7 @@
 {
   "name": "handrail-bug-reporter-rails-assets",
   "private": true,
-  "version": "0.4.53",
+  "version": "0.4.54",
   "scripts": {
     "setup": "node scripts/install.mjs && npm run build",
     "build": "node scripts/build.mjs",

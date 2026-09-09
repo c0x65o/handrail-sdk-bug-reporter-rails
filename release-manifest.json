@@ -6,8 +6,8 @@
     "provenance": "source_snapshot",
     "commit": null,
     "ref": null,
-    "base_commit": "05f8359eb4ec88db017b39865f4fe3e28f905c70",
-    "base_ref": "commit:05f8359eb4ec88db017b39865f4fe3e28f905c70"
+    "base_commit": "bb1a4f86bb48f63e5a2ade43a1565c4625c58334",
+    "base_ref": "commit:bb1a4f86bb48f63e5a2ade43a1565c4625c58334"
   },
   "bundled_js": {
     "package": "@handrail/bug-reporter",
@@ -45,8 +45,8 @@
     "frontend/rails_adapter.js": "f5cb49f28025d06442492a48cfe945377290ef1f22497fb1c4a480940132a1e7",
     "frontend/upstream.json": "bcc7b9bb4ca824dc62534c2e5fc184dc56c12478958a40fa9e12dc70edd11f8c",
     "handrail-bug-reporter.gemspec": "d496b0a952cfe3d11bfb319e97496f20942e219eb5ff40519afa20338bfd36fd",
-    "package-lock.json": "d537781525d47dc80861962ee2e068397a5e4699db09e2de64015760dc00879d",
-    "package.json": "e4a80a1d5ba5cd10994612753cb9561f299ded45357a2cffdab58cef91675676",
+    "package-lock.json": "b50b6b20467af5ca859e8f392275c8638bd78094cabb441c578aa09601d6987b",
+    "package.json": "d1a1c9a135cff5494f95ccfb24346400a6b40896455e619fa2c5e88acc7f1252",
     "scripts/build.mjs": "37a30a7d1a2196f932e1308bca389736568cb76c1a0d28e6e591135697890316",
     "scripts/contract.mjs": "eebee85859cc5f8a4a776a2e079b295f47bb9226f74f777fa39ccfe9a6968ce1"
   }

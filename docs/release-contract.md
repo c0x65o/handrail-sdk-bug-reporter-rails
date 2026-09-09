@@ -7,9 +7,9 @@ npm, an asset build or a network request. A missing, malformed, stale or corrupt
 manifest/package raises `Handrail::BugReporter::ReleaseManifest::Invalid`.
 
 The Rails gem version comes from `lib/handrail/bug_reporter/version.rb`. It is
-independent of the frozen browser dependency: `@handrail/bug-reporter` **0.4.49**,
-`refs/tags/v0.4.49`, commit
-`96b293248611594c388d0fab3af63b1b2d1aae5c`. The verifier compares that mapping with
+independent of the frozen browser dependency: `@handrail/bug-reporter` **0.4.50**,
+`refs/tags/v0.4.50`, commit
+`7dfb33f548448f864cf957f19d96f8b5a27bc787`. The verifier compares that mapping with
 `frontend/upstream.json`, the dependency and both relevant package-lock entries.
 The JS repository's tracked generated release.ts is not an input.
 
@@ -65,6 +65,11 @@ ruby -Ilib:test test/payload_test.rb
 or prove reproducibility of the browser bundle. When frontend inputs change, use
 the existing frontend build/verification workflow before refreshing the manifest.
 The ordinary verifier rejects changed inputs until the manifest is refreshed.
+This includes version-only edits to `package.json` and `package-lock.json`.
+After the final package version update (including worker-owned version bumps),
+run `npm test` to verify upstream identity, sources and byte-for-byte bundle
+reproducibility, then `ruby scripts/verify_release.rb --write-snapshot` and
+`ruby scripts/verify_release.rb --git` before committing the snapshot.
 The existing Node contract still verifies installed upstream identity and sources;
 this Ruby contract adds an offline package check without replacing that build check.
 Runtime file hashes and the asset are always checked, even in package-only mode.
@@ -75,18 +80,29 @@ The package test uses a temporary bare clone, temporary Git index and Git plumbi
 for synthetic source/distribution commits and a synthetic `v1.2.3` tag. It never
 changes registered checkout refs or history. It archives that tag, builds and
 installs the gem with an empty executable PATH and network guard, then checks
-identity from a different consumer Git repository. Rails 1.2.3 and JS 0.4.49 in
+identity from a different consumer Git repository. Rails 1.2.3 and JS 0.4.50 in
 this fixture explicitly prove version independence. No actual SDK release tag,
 publish operation or network install occurs.
 
 ## Artifact evidence
 
 Committed browser asset: `app/assets/javascripts/handrail_bug_reporter.js`.
-SHA-256: `9c535c29d0d454a49705944b8dc74fb344f600ca55d8855a57b9a09644f84269`.
+SHA-256: `2e2f999cf20760913f1af917bf7cb51d1cc21d0005f15ca74236438b2f04216f`.
 The verifier prints Rails provenance, JS identity, this checksum and the number
 of verified runtime files; the package test prints its synthetic commit evidence.
 
-Validation on Ruby 3.1.2 (2026-09-09):
+Snapshot reconciliation (2026-09-09), base
+`bb1a4f86bb48f63e5a2ade43a1565c4625c58334`: the stale package input hashes
+matched the current files with their package version reverted from 0.4.53 to
+0.4.52. `npm test` passed all 19 tests, including a fresh build equal to the
+committed asset and installed upstream source/identity verification. Refreshed
+the manifest using `--write-snapshot`, preserving the JS pin, runtime hashes,
+null Rails release identity and README's explicit non-release placeholders.
+Full `ruby scripts/verify_release.rb --git` passed for all 23 runtime files and
+8 source inputs. `ruby test/package_contract_test.rb` passed 12 tests and
+468 assertions; `git diff --check` passed.
+
+Historical validation before the JS 0.4.50 upgrade, on Ruby 3.1.2 (2026-09-09):
 
 | Command | Result |
 | --- | --- |
@@ -102,7 +118,9 @@ The final isolated package fixture recorded source
 `2d7cfe1fa4f1d5b84892c0babf7dea70db3cb927` and distribution
 `dd3cdb9fdaae7342d7140b115470919168458908`, synthetic tag `refs/tags/v1.2.3`.
 Installed Rails identity used the source SHA and `commit:<source SHA>`;
-the installed asset matched the checksum above. Temporary fixtures were removed.
+the installed asset matched the then-current checksum
+`9c535c29d0d454a49705944b8dc74fb344f600ca55d8855a57b9a09644f84269`.
+Temporary fixtures were removed.
 The legacy Ruby/Rails appraisal matrix was not rerun for this scoped package task.
 An initial payload invocation without `-Ilib` failed to locate the library; the
 corrected command listed above passed. RubyGems emitted its existing empty-license
