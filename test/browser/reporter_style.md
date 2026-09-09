@@ -24,7 +24,7 @@ not available to the service.
 
 The reference Git checkout defaults to `../handrail-sdk-bug-reporter-js`.
 Set `HANDRAIL_JS_REFERENCE_REPO` to another existing checkout if necessary. It
-must contain commit `96b293248611594c388d0fab3af63b1b2d1aae5c`. The fixture reads
+must contain commit `7dfb33f548448f864cf957f19d96f8b5a27bc787`. The fixture reads
 that commit with `git show`, irrespective of working-tree edits or HEAD, and
 checks every source hash in `frontend/upstream.json`. The direct React reference
 uses the installed public `@handrail/bug-reporter/react` entry after validating
@@ -44,7 +44,7 @@ Open `http://127.0.0.1:4177/style-fixture?renderer=rails&theme=light&absent=fals
 Switch `renderer=reference`, `theme=dark`, and `absent=true` to inspect comparison
 cases. Set `PORT` for another local port. Press Enter on the existing **Help**
 button, Tab to consent, use Space or its label, attach a local PNG, and press
-Escape to return focus to Help. Use 1280×900 and 390×900 viewports at device scale
+Escape to return focus to Help. Use 1280×900, 1280×720 and 390×900 viewports at device scale
 1. Stop the server with Ctrl-C. `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` can select
 an installed Chromium executable; `PLAYWRIGHT_BROWSERS_PATH` can select its cache.
 
@@ -56,7 +56,38 @@ errors, page errors and CSP violations also fail. No credentials, customer pages
 real submissions, upstream APIs, screenshots of customer data or dev service
 are needed. The manual fixture is an ephemeral loopback server.
 
-## Executed evidence — 2026-09-09
+## Field-label regression verification — 2026-09-09
+
+The campaign exposed a gap in the original consent-only assertions. JS v0.4.50
+already fixes ordinary labels and mobile form overflow. Rails now pins that
+public HTTPS Git dependency to `7dfb33f548448f864cf957f19d96f8b5a27bc787`
+and rebuilds the shipped asset through `npm run setup`. Its source hashes and
+release manifest describe that exact revision; Ruby payload reference fixtures
+remain at their original v0.4.49 baseline.
+
+`reporter-form-layout.mjs` checks all four fields for absent generated label
+content, full readable control widths, headings above controls, scoped typography,
+5px gaps, intended optional-text styling and no horizontal overflow. These checks
+run alongside consent before/after late host CSS and after screenshot attachment.
+Field metrics also participate in the direct React versus Rails comparison.
+
+Before the upgrade, the expanded assertions failed all eight original matrix
+cases. After the upgrade, `npm run test:browser:style` passed 12 matrix cases /
+24 renders (13 TAP tests including the parent), adding the campaign's 1280×720
+viewport to 1280×900 and 390×900. There were no skips, console/page errors,
+external calls or submissions. Runtime: Node 22.23.1, Chromium 149.0.7827.55,
+Rails 7.2.3.2. The worker installed Playwright Chromium in its temporary directory
+and selected it with `PLAYWRIGHT_BROWSERS_PATH`; the initial default-cache launch
+failed because that browser executable was absent.
+
+Additional checks passed: `npm run setup` (fresh Git dependency compilation and
+asset build), `npm test` (19 frontend tests, including reproducible asset and
+gem packaging), `ruby -Itest test/package_contract_test.rb` (12 tests, 468
+assertions), and release checksum/Git verification. Desktop 1280×720 and mobile
+390×900 screenshots were also inspected: the four headings and controls are
+readable, with no injected host label text.
+
+## Original consent-only evidence — 2026-09-09
 
 Rails checkout began on `main` at `a1f896610d6a3e6b71766a605ffe9c0841980f02`.
 Existing and concurrently appearing Ruby, documentation, compatibility,

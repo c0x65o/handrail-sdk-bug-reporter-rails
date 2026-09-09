@@ -94,8 +94,10 @@ removed markers/islands, refreshed configuration/context, custom launcher
 preservation/replacement, repeatable teardown, CSRF methods/URL/header forms,
 token rotation in actual upstream retries, and manual API regressions. Bundle
 checks verify byte reproducibility, immutable upstream source and identity, and
-gem build/install with no Node or Git. The dependency remains JS v0.4.49 at
-`96b293248611594c388d0fab3af63b1b2d1aae5c`; no upstream source or styling changed.
+gem build/install with no Node or Git. The current dependency is JS v0.4.50 at
+`7dfb33f548448f864cf957f19d96f8b5a27bc787`, which isolates reporter field labels
+from host CSS. The [style fixture](../test/browser/reporter_style.md) verifies
+all fields alongside consent against the pinned direct React renderer.
 
 A linked clean real-browser QA campaign is still required before dispatcher
 completion. Extend the existing Rails-mounted workflow fixture task

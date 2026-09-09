@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { chromium } from 'playwright';
+import { assertReporterFormLayout } from './reporter-form-layout.mjs';
 import { upstream } from '../../scripts/contract.mjs';
 import { startStyleFixture, fixturePath, endpoint, cases, context } from './reporter_style.fixture.mjs';
 
@@ -40,7 +41,7 @@ async function layout(page) {
   });
 }
 
-function assertLayout(actual, theme, width) {
+function assertLayout(actual, theme, width, height) {
   assert.equal(actual.width, 14, 'compact consent width');
   assert.equal(actual.height, 14, 'compact consent height');
   assert.equal(actual.gap, 9, 'consent copy gap');
@@ -64,20 +65,20 @@ function assertLayout(actual, theme, width) {
   assert.equal(actual.dialog.radius, width <= 560 ? '0px' : '13px');
   assert.ok(actual.bounds.width > width / 2);
   assert.ok(actual.bounds.x >= 0 && actual.bounds.x + actual.bounds.width <= width);
-  assert.ok(actual.bounds.y >= 0 && actual.bounds.y + actual.bounds.height <= 900);
+  assert.ok(actual.bounds.y >= 0 && actual.bounds.y + actual.bounds.height <= height);
 }
 
-test('Rails helper/packaged adapter CSS parity with verified JS v0.4.49', async t => {
+test('Rails helper/packaged adapter CSS parity with verified JS v0.4.50', async t => {
   const fixture = await startStyleFixture();
   let browser;
   try {
     browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined });
     t.diagnostic(`Node ${process.version}; Chromium ${browser.version()}; Rails ${fixture.railsVersion}; JS ${upstream.version} ${upstream.commit}`);
-    for (const width of [1280, 390]) {
+    for (const [width, height] of [[1280, 900], [1280, 720], [390, 900]]) {
       for (const { theme, absent, expected } of cases) {
-        await t.test(`${width}px ${theme}, context ${absent ? 'absent' : 'provided'}`, async cell => {
+        await t.test(`${width}×${height} ${theme}, context ${absent ? 'absent' : 'provided'}`, async cell => {
           const measurements = [];
-          const page = await browser.newPage({ viewport: { width, height: 900 },
+          const page = await browser.newPage({ viewport: { width, height },
             deviceScaleFactor: 1, colorScheme: theme, reducedMotion: 'reduce', locale: 'en-US', timezoneId: 'UTC',
             serviceWorkers: 'block' });
           const errors = [];
@@ -117,10 +118,13 @@ test('Rails helper/packaged adapter CSS parity with verified JS v0.4.49', async 
               await checkbox.waitFor({ state: 'visible' });
               await page.waitForFunction(selector => document.querySelector(selector)?.contains(document.activeElement), dialogSelector);
               const beforeLateCSS = await layout(page);
-              assertLayout(beforeLateCSS, theme, width);
+              assertLayout(beforeLateCSS, theme, width, height);
+              const fieldsBefore = await assertReporterFormLayout(page);
               await page.addStyleTag({ url: `${fixture.origin}/host.css` });
               const afterLateCSS = await layout(page);
-              assertLayout(afterLateCSS, theme, width);
+              assertLayout(afterLateCSS, theme, width, height);
+              assert.deepEqual(await assertReporterFormLayout(page), fieldsBefore,
+                'late hostile rules do not alter reporter fields');
               assert.deepEqual(afterLateCSS, beforeLateCSS, 'late hostile rules do not alter SDK metrics');
               assert.deepEqual(await hostMetrics(page), hostBefore, 'SDK reset stays scoped');
               const attached = page.locator('[data-handrail-bug-context] section').first();
@@ -164,12 +168,13 @@ test('Rails helper/packaged adapter CSS parity with verified JS v0.4.49', async 
                   width: img.naturalWidth, height: img.naturalHeight };
               });
               assert.deepEqual(decoded, { blob: true, complete: true, width: 32, height: 24 });
+              await assertReporterFormLayout(page);
               await checkbox.focus();
               await page.keyboard.press('Escape');
               await dialog.waitFor({ state: 'detached' });
               assert.equal(await page.locator('#host-bug-button').evaluate(el => el === document.activeElement), true);
               assert.deepEqual(await hostMetrics(page), hostBefore, 'dismissal leaves host controls unchanged');
-              measurements.push({ beforeLateCSS, afterLateCSS, contextValues, decoded });
+              measurements.push({ beforeLateCSS, afterLateCSS, fields: fieldsBefore, contextValues, decoded });
             }
             assert.deepEqual(measurements[1], measurements[0], 'Rails and pinned direct React render agree');
             cell.diagnostic(`Both renderers: ${JSON.stringify(measurements[0])}`);

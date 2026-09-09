@@ -36,8 +36,8 @@ The current [release manifest](release-manifest.json) records Rails gem version
 Its base commit is not a release of the current working-tree implementation.
 The local `v0.4.50` tag's `version.rb` declares **0.4.49**; it is not a verified
 matching release and is not recommended here. The gem version is independent of
-the bundled **JS v0.4.49**, `refs/tags/v0.4.49`, at
-`96b293248611594c388d0fab3af63b1b2d1aae5c` in the JS repository.
+the bundled **JS v0.4.50**, `refs/tags/v0.4.50`, at
+`7dfb33f548448f864cf957f19d96f8b5a27bc787` in the JS repository.
 See the [release contract](docs/release-contract.md) for checksum, source and
 distribution-tag verification. Real Rails release tagging and installation into
 Bluecotton or Monuvision are later owner-directed operations.
