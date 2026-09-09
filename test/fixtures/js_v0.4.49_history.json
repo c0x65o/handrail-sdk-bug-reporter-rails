@@ -1,0 +1,98 @@
+{
+  "bug": {
+    "id": "bug-123",
+    "title": "Checkout failure",
+    "severity": "sev2",
+    "environment": "staging",
+    "status": "in_progress",
+    "status_rollup": {
+      "stage": "fixing",
+      "label": "Fix in progress",
+      "terminal": false,
+      "raw_status": "in_progress",
+      "workflow_state": "fixing",
+      "environment": null,
+      "fixed_version": null,
+      "version": null,
+      "updated_at": "2026-08-13T18:00:00.000Z"
+    },
+    "archived": false,
+    "archived_at": null,
+    "occurrence_count": 3,
+    "reporter_occurrence_count": 2,
+    "first_reported_at": "2026-08-12T18:00:00.000Z",
+    "last_reported_at": "2026-08-13T18:00:00.000Z",
+    "created_at": "2026-08-12T18:00:00.000Z",
+    "updated_at": "2026-08-13T18:00:00.000Z",
+    "fixed_at": null,
+    "closed_at": null
+  },
+  "journey": {
+    "schema_version": 1,
+    "headline": "Confirmed resolved",
+    "outcome": "resolved",
+    "handling": "automatic",
+    "next_step": null,
+    "started_at": "2026-08-13T17:50:00.000Z",
+    "completed_at": "2026-08-13T18:00:00.000Z",
+    "total_duration_ms": 600000,
+    "verification_method": "source_code_audit",
+    "verification_label": "Application source review",
+    "release_environment": "staging",
+    "fixed_version": "1.4.0",
+    "released_version": "1.4.0",
+    "automatic_fix_authorized": true,
+    "automatic_delivery_authorized": true,
+    "approval_required": false,
+    "milestones": [
+      {
+        "key": "reported",
+        "label": "Reported",
+        "state": "complete",
+        "started_at": "2026-08-13T17:50:00.000Z",
+        "completed_at": "2026-08-13T17:51:00.000Z",
+        "duration_ms": 0
+      },
+      {
+        "key": "confirmed",
+        "label": "Confirmed",
+        "state": "complete",
+        "started_at": "2026-08-13T17:51:00.000Z",
+        "completed_at": "2026-08-13T17:52:00.000Z",
+        "duration_ms": 60000
+      },
+      {
+        "key": "corrected",
+        "label": "Corrected",
+        "state": "complete",
+        "started_at": "2026-08-13T17:52:00.000Z",
+        "completed_at": "2026-08-13T17:53:00.000Z",
+        "duration_ms": 60000
+      },
+      {
+        "key": "checked",
+        "label": "Safety checked",
+        "state": "complete",
+        "started_at": "2026-08-13T17:53:00.000Z",
+        "completed_at": "2026-08-13T17:54:00.000Z",
+        "duration_ms": 60000
+      },
+      {
+        "key": "released",
+        "label": "Released",
+        "state": "complete",
+        "started_at": "2026-08-13T17:54:00.000Z",
+        "completed_at": "2026-08-13T17:55:00.000Z",
+        "duration_ms": 60000
+      },
+      {
+        "key": "confirmed_resolved",
+        "label": "Confirmed resolved",
+        "state": "complete",
+        "started_at": "2026-08-13T17:55:00.000Z",
+        "completed_at": "2026-08-13T17:56:00.000Z",
+        "duration_ms": 60000
+      }
+    ]
+  }
+}

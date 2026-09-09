@@ -1,0 +1,22 @@
+{
+  "name": "handrail-bug-reporter-rails-assets",
+  "private": true,
+  "version": "0.4.50",
+  "scripts": {
+    "setup": "node scripts/install.mjs && npm run build",
+    "build": "node scripts/build.mjs",
+    "test": "node --test --test-concurrency=1 test/frontend/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@handrail/bug-reporter": "git+https://github.com/c0x65o/handrail-sdk-bug-reporter-js.git#96b293248611594c388d0fab3af63b1b2d1aae5c",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.8",
+    "jsdom": "26.1.0"
+  }
+}

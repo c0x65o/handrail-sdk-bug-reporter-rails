@@ -1,0 +1,11 @@
+{
+  "files": {
+    "handrail_bug_reporter-4deb4b79ae9335ec6d3c32974a0aaac63240b64f3b39d32019aff034cc98f022.js": {
+      "logical_path": "handrail_bug_reporter.js",
+      "digest": "4deb4b79ae9335ec6d3c32974a0aaac63240b64f3b39d32019aff034cc98f022"
+    }
+  },
+  "assets": {
+    "handrail_bug_reporter.js": "handrail_bug_reporter-4deb4b79ae9335ec6d3c32974a0aaac63240b64f3b39d32019aff034cc98f022.js"
+  }
+}

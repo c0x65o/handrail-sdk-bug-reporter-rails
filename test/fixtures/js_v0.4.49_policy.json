@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "project_id": "project-123",
+  "environment": "staging",
+  "reporter": {
+    "identity_verified": true,
+    "access_level": "full_access",
+    "role": "maintainer"
+  },
+  "reporter_notifications": {
+    "available": true,
+    "recipient_hint": "r***@example.com",
+    "lifecycles": ["fixed"]
+  },
+  "ask_options": [],
+  "automation_policy": {
+    "schema_version": 3,
+    "automatic_fix_max_risk": "high",
+    "production_max_risk_by_impact": {
+      "critical": "moderate",
+      "high": "low",
+      "moderate": "none",
+      "low": "none"
+    }
+  }
+}

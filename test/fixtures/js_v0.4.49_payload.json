@@ -1,0 +1,1586 @@
+{
+  "provenance": {
+    "repository": "https://github.com/c0x65o/handrail-sdk-bug-reporter-js",
+    "commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+    "release_ref": "refs/tags/v0.4.49",
+    "package": "@handrail/bug-reporter",
+    "version": "0.4.49",
+    "esbuild": "0.25.12",
+    "observed_stale_generated_release": {
+      "version": "0.4.48",
+      "commit": "e0fcb6bf039032c7a0cac8afd147e5b792c3b5ab",
+      "ref": "refs/tags/v0.4.48",
+      "note": "Ignored working-tree build output observed 2026-09-09; absent from pinned Git tree and never used for fixtures."
+    },
+    "identity_override": "Only the in-memory generated release module was corrected from the pinned package manifest and verified tag/commit.",
+    "source_sha256": {
+      "src/identity.ts": "e92ea96c110647ab3cd2b3995899641a1f37688f70c74e879e21bbd018f65e71",
+      "src/reporter.ts": "70deafd2fd8a48b5a416dfacd084e121f0df3d062f21452fb922141d81fa200c",
+      "src/server.ts": "b1013cbd834dfa12dffc125c3806429684dab1a3227c9555a1ff559f0dfbb237",
+      "src/severity.ts": "c936e4fd9ff46bfd4a7e4c92eb704de0bbbc8924cc7e7e5386c112af0d6b37dd"
+    }
+  },
+  "config": {
+    "projectId": " project-123 ",
+    "environment": " STAGING "
+  },
+  "cases": [
+    {
+      "name": "minimal",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event "
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "field mapping",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "route": "/checkout",
+        "appVersion": "1.2",
+        "buildNumber": 42,
+        "commitSha": "app-sha",
+        "appFlavor": "preview",
+        "reproducer": "Click Pay",
+        "metadata": {
+          "count": 0,
+          "ok": true,
+          "missing": null
+        }
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": "/checkout",
+        "app_version": "1.2",
+        "build_number": 42,
+        "commit_sha": "app-sha",
+        "app_flavor": "preview",
+        "reproducer": "Click Pay",
+        "metadata": {
+          "count": 0,
+          "ok": true,
+          "missing": null
+        },
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "steps alias",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "stepsToReproduce": [
+          "Open checkout",
+          "Click Pay"
+        ]
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": [
+          "Open checkout",
+          "Click Pay"
+        ],
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "reproducer precedence",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "reproducer": "Primary",
+        "stepsToReproduce": "Secondary"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": "Primary",
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "empty reproducer fallback",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "reproducer": "",
+        "stepsToReproduce": "Fallback"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": "Fallback",
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "empty array reproducer retained",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "reproducer": [],
+        "stepsToReproduce": "Fallback"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": [],
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "severity critical",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": "critical"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "critical",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "trimmed uppercase critical",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": " \tCRITICAL\n"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "critical",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "severity high",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": "high"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "high",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "trimmed uppercase high",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": " \tHIGH\n"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "high",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "severity moderate",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": "moderate"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "moderate",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "trimmed uppercase moderate",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": " \tMODERATE\n"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "moderate",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "severity low",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": "low"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "low",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "trimmed uppercase low",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": " \tLOW\n"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "low",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "severity sev1",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": "sev1"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "critical",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "trimmed uppercase sev1",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": " \tSEV1\n"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "critical",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "severity sev2",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": "sev2"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "high",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "trimmed uppercase sev2",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": " \tSEV2\n"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "high",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "severity sev3",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": "sev3"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "moderate",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "trimmed uppercase sev3",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": " \tSEV3\n"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "moderate",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "severity sev4",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": "sev4"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "low",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "trimmed uppercase sev4",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": " \tSEV4\n"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "low",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "severity medium",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": "medium"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "moderate",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "trimmed uppercase medium",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": " \tMEDIUM\n"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "moderate",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "invalid severity null",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": null
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "invalid severity \"\"",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": ""
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "invalid severity \"unknown\"",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": "unknown"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "invalid severity 4",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": 4
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "invalid severity false",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": false
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "invalid severity {}",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": {}
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "invalid severity []",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "severity": []
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "impact precedence",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "impact": " SEV1 ",
+        "severity": "low"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "critical",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "invalid impact fallback",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "impact": "unknown",
+        "severity": "medium"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": "moderate",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "unicode trim",
+      "input": {
+        "title": " Title﻿",
+        "description": "　Description ",
+        "eventId": " fixture-event ",
+        "severity": " HIGH﻿"
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Title",
+        "description": "Description",
+        "severity": "high",
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "nested secrets",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "metadata": {
+          "authorization": "private",
+          "profileKey": "private",
+          "nested": [
+            {
+              "accessToken": "private",
+              "api-key": "private",
+              "safe": "visible"
+            }
+          ],
+          "directMessage": "private",
+          "x.session.id": "private"
+        }
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": {
+          "authorization": "[REDACTED]",
+          "profileKey": "[REDACTED]",
+          "nested": [
+            {
+              "accessToken": "[REDACTED]",
+              "api-key": "[REDACTED]",
+              "safe": "visible"
+            }
+          ],
+          "directMessage": "[REDACTED]",
+          "x.session.id": "[REDACTED]"
+        },
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "intentional profile",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "profileKey": " owned-profile ",
+        "metadata": {
+          "profile_key": "private"
+        }
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": {
+          "profile_key": "[REDACTED]"
+        },
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "profile_key": "owned-profile",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "caller event cap",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx "
+      },
+      "hooks": [],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "reserved injection",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "project_id": "foreign",
+        "environment": "prod",
+        "source": "spoof",
+        "platform": "node",
+        "automation_requests": {
+          "fix": true
+        }
+      },
+      "hooks": [
+        {
+          "merge": {
+            "project_id": "foreign",
+            "environment": "prod",
+            "event_id": "spoof",
+            "source": "spoof",
+            "platform": "node",
+            "reporter_sdk_version": "999",
+            "profile_key": "spoof",
+            "screenshot_base64": "spoof",
+            "reporter_notification": {
+              "notify_on_resolution": true
+            },
+            "reporter_assertion": {
+              "verified": true
+            },
+            "automation_requests": {
+              "fix": true
+            },
+            "credentials": "private"
+          }
+        }
+      ],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "hook secret reintroduction",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event ",
+        "metadata": {
+          "password": "private"
+        }
+      },
+      "hooks": [
+        {
+          "merge": {
+            "metadata": {
+              "refreshToken": "hook-private",
+              "safe": "visible"
+            }
+          }
+        }
+      ],
+      "expected": {
+        "title": "Checkout issue",
+        "description": "Cannot complete checkout.",
+        "severity": null,
+        "route": null,
+        "app_version": null,
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": {
+          "refreshToken": "[REDACTED]",
+          "safe": "visible"
+        },
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "hook field edits",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event "
+      },
+      "hooks": [
+        {
+          "merge": {
+            "title": " Hook title ",
+            "app_version": "hook-version",
+            "severity": "low"
+          }
+        }
+      ],
+      "expected": {
+        "title": "Hook title",
+        "description": "Cannot complete checkout.",
+        "severity": "low",
+        "route": null,
+        "app_version": "hook-version",
+        "build_number": null,
+        "commit_sha": null,
+        "app_flavor": null,
+        "reproducer": null,
+        "metadata": null,
+        "project_id": "project-123",
+        "environment": "staging",
+        "event_id": "fixture-event",
+        "source": "node_web_bug_reporter",
+        "platform": "node",
+        "reporter_sdk_runtime": "node",
+        "reporter_sdk_package": "@handrail/bug-reporter",
+        "reporter_sdk_version": "0.4.49",
+        "reporter_sdk_commit": "96b293248611594c388d0fab3af63b1b2d1aae5c",
+        "reporter_sdk_ref": "refs/tags/v0.4.49"
+      }
+    },
+    {
+      "name": "invalid title",
+      "input": {
+        "title": " ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event "
+      },
+      "hooks": [],
+      "error": {
+        "code": "invalid_report",
+        "message": "A report title and description are required."
+      }
+    },
+    {
+      "name": "invalid description type",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": 42,
+        "eventId": " fixture-event "
+      },
+      "hooks": [],
+      "error": {
+        "code": "invalid_report",
+        "message": "A report title and description are required."
+      }
+    },
+    {
+      "name": "hook removes title",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event "
+      },
+      "hooks": [
+        {
+          "remove": "title"
+        }
+      ],
+      "error": {
+        "code": "invalid_report",
+        "message": "A report title and description are required."
+      }
+    },
+    {
+      "name": "hook blank description",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event "
+      },
+      "hooks": [
+        {
+          "merge": {
+            "description": " "
+          }
+        }
+      ],
+      "error": {
+        "code": "invalid_report",
+        "message": "A report title and description are required."
+      }
+    },
+    {
+      "name": "hook error",
+      "input": {
+        "title": "  Checkout issue  ",
+        "description": "  Cannot complete checkout.  ",
+        "eventId": " fixture-event "
+      },
+      "hooks": [
+        {
+          "error": true
+        }
+      ],
+      "error": {
+        "code": "redaction_failed",
+        "message": "The bug report could not be safely prepared."
+      }
+    }
+  ],
+  "normalization_cases": [
+    {
+      "name": "cycles",
+      "expected": {
+        "cycle": {
+          "self": "[Circular]"
+        },
+        "arrayCycle": [
+          "[Circular]"
+        ]
+      }
+    },
+    {
+      "name": "depth",
+      "expected": {
+        "child": {
+          "child": {
+            "child": {
+              "child": {
+                "child": {
+                  "child": {
+                    "child": {
+                      "child": {
+                        "child": {
+                          "child": {
+                            "child": {
+                              "child": {
+                                "child": {
+                                  "child": {
+                                    "child": {
+                                      "child": {
+                                        "child": {
+                                          "child": {
+                                            "child": {
+                                              "child": "[Circular]"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "shared reference",
+      "expected": {
+        "repeated": [
+          {
+            "safe": "visible"
+          },
+          {
+            "safe": "visible"
+          }
+        ]
+      }
+    },
+    {
+      "name": "numbers and date",
+      "expected": {
+        "nan": null,
+        "infinity": null,
+        "negativeInfinity": null,
+        "time": "2026-09-09T01:02:03.000Z",
+        "number": 42
+      }
+    },
+    {
+      "name": "unsupported values",
+      "expected": {
+        "array": [
+          null
+        ]
+      }
+    },
+    {
+      "name": "bounded keys",
+      "expected": {
+        "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk": "bounded",
+        "safe": "visible"
+      }
+    }
+  ]
+}
