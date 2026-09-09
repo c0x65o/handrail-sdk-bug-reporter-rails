@@ -38,6 +38,16 @@ The local `v0.4.50` tag's `version.rb` declares **0.4.49**; it is not a verified
 matching release and is not recommended here. The gem version is independent of
 the bundled **JS v0.4.50**, `refs/tags/v0.4.50`, at
 `7dfb33f548448f864cf957f19d96f8b5a27bc787` in the JS repository.
+
+The original parity baseline was **JS v0.4.49**, `refs/tags/v0.4.49`, at
+`96b293248611594c388d0fab3af63b1b2d1aae5c`, recorded in `frontend/upstream.json`
+at Rails commit `a6f83605c217f37ac0caa4afa982379206f6288f`. The
+[historical payload proof](docs/payload.md#fixed-js-v0449-fixtures) still compares
+Ruby normalization with that fixed JS server-entry baseline; it does not verify
+the current browser bundle. Rails commit `bb1a4f86bb48f63e5a2ade43a1565c4625c58334`
+upgraded the bundle to JS v0.4.50. The [current release manifest](release-manifest.json)
+and [upstream identity](frontend/upstream.json) record that current mapping.
+
 See the [release contract](docs/release-contract.md) for checksum, source and
 distribution-tag verification. Real Rails release tagging and installation into
 Bluecotton or Monuvision are later owner-directed operations.
@@ -289,13 +299,19 @@ JS; the Rails browser asset reuses the pinned JS UI.
 | Screenshot validation and previews | [Ruby screenshot tests](test/screenshot_test.rb), [screenshot contract/results](docs/screenshots.md), [workflow tests](test/browser/reporter_workflow.test.mjs), [style tests](test/browser/reporter_style.test.mjs). |
 | Helper, custom/manual UI, lifecycle, CSRF and appearance | [view helper tests](test/view_helper_test.rb), [adapter tests](test/frontend/rails_adapter.test.mjs), [bundle/manual API tests](test/frontend/bundle.test.mjs), [style tests](test/browser/reporter_style.test.mjs); [helper contract/results](docs/view_helper.md). |
 
-Recorded local acceptance on 2026-09-09 includes
-[three workflow browser journeys](test/fixtures/workflow/README.md) with no
-failures/errors/skips, and [eight style matrix cases / sixteen reporter renders](test/browser/reporter_style.md)
+The original local acceptance records from 2026-09-09 include
+[three workflow browser journeys](test/fixtures/workflow/README.md#local-acceptance-evidence-2026-09-09)
+with no failures/errors/skips, and
+[eight consent-only style matrix cases / sixteen reporter renders](test/browser/reporter_style.md#original-consent-only-evidence--2026-09-09)
 with zero failures/skips. These used Ruby 3.1.2 / Rails 7.2.3.2 and local transport
-fixtures, not live Handrail or customer integrations. The linked lifecycle/CSRF
-QA campaign and CSS parity acceptance campaign remain separate, pending checklist
-items; these local passes do not establish campaign acceptance.
+fixtures, not live Handrail or customer integrations. The original style coverage
+did not verify all ordinary form labels; the later
+[v0.4.50 field-label regression record](test/browser/reporter_style.md#field-label-regression-verification--2026-09-09)
+reports twelve matrix cases / twenty-four renders against the upgraded bundle.
+Historical payload and original browser results do not establish current browser
+acceptance. The linked lifecycle/CSRF QA campaign and CSS parity acceptance
+campaign remain separate checklist items; local passes do not establish campaign
+acceptance.
 
 ## Compatibility smoke coverage
 
