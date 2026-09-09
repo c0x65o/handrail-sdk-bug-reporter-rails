@@ -11,10 +11,13 @@ module Handrail
 
       class SubmissionResult
         include SafeSerialization
-        attr_reader :status, :status_code, :bug_id, :response
+        attr_reader :status, :status_code, :bug_id, :response,
+          :notification_subscription, :notification_warning
 
-        def initialize(status, status_code = nil, response = nil)
+        def initialize(status, status_code = nil, response = nil, subscription = nil, warning = nil)
           @status, @status_code = status, status_code
+          @notification_subscription = subscription
+          @notification_warning = warning && warning.dup.freeze
           @response = freeze_response(response)
           value = response && response["bug_id"]
           @bug_id = value.is_a?(String) && !value.strip.empty? ? value.strip.freeze : nil
@@ -62,9 +65,11 @@ module Handrail
         unless configuration.status == :ready
           raise Error.new(:invalid_configuration), :cause => nil
         end
-        bytes = prepare_submission(input, redaction_hooks, allow_screenshots)
+        bytes, preference = prepare_submission(input, redaction_hooks, allow_screenshots)
         response = request(:method => "POST", :body => bytes)
-        SubmissionResult.new(:submitted, response.status_code, parse_submission_response(response))
+        parsed = parse_submission_response(response)
+        subscription, warning = Notification.follow_up(self, parsed, preference)
+        SubmissionResult.new(:submitted, response.status_code, parsed, subscription, warning)
       rescue Error => error
         if error.code == :request_failed && error.status_code
           raise Error.new(:submission_rejected, error.status_code,
@@ -144,9 +149,10 @@ module Handrail
       private
 
       def prepare_submission(input, redaction_hooks, allow_screenshots)
-        Payload.new(input, :project_id => configuration.project_id,
+        payload = Payload.new(input, :project_id => configuration.project_id,
           :environment => configuration.environment, :redaction_hooks => redaction_hooks,
-          :allow_screenshots => allow_screenshots).to_json
+          :allow_screenshots => allow_screenshots)
+        [payload.to_json, payload.to_h["reporter_notification"]]
       rescue Payload::Error => error
         raise Error.new(error.code.to_sym), :cause => nil
       rescue StandardError

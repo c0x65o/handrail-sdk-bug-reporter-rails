@@ -1,0 +1,29 @@
+
+Review config/initializers/handrail_bug_reporter.rb and its environment mapping.
+Set HANDRAIL_API_URL, HANDRAIL_PROJECT_ID and HANDRAIL_BUG_REPORT_TOKEN in the
+host's server environment before boot. Missing values leave reporting unavailable.
+The default resolver retains anonymous reporting; the initializer shows how to
+return a trusted, request-scoped Handrail application-session token for Known Users.
+
+Mounting is opt-in. To request a mount, run:
+  bin/rails generate handrail:bug_reporter:install --mount
+Or manually add this to config/routes.rb (only if no reporter mount exists):
+  mount Handrail::BugReporter::Engine => "/handrail/api/mobile-bug-reports", :as => "handrail_bug_reporter"
+An existing route reference is preserved for manual review. For a customized
+mount, use its own path helper and a local path ending in /api/mobile-bug-reports.
+
+After mounting, manually place the helper in your chosen host view/layout:
+  <%= handrail_bug_reporter(:endpoint => handrail_bug_reporter_path) %>
+For a customized mount, replace handrail_bug_reporter_path with its path helper.
+Use the local mount, not HANDRAIL_API_URL, as the browser endpoint.
+
+The host must provide its normal Rails session cookie and csrf_meta_tags in the
+page head. Keep host CSRF protection enabled; the adapter reads the current meta
+token for same-origin writes. The generator does not edit layouts or add launchers.
+The helper includes the external handrail_bug_reporter.js asset. With Sprockets,
+the engine registers it for precompilation; run the host's normal asset build.
+Without an asset pipeline, serve the packaged asset at the URL resolved by Rails'
+javascript_include_tag. No importmap or Webpacker migration is required.
+
+Ruby 2.3 / Rails 4.2 remain provisional compatibility targets, not verified
+Bluecotton or Monuvision versions.

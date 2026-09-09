@@ -1,11 +1,16 @@
 {
   "name": "handrail-bug-reporter-rails-assets",
   "private": true,
-  "version": "0.4.50",
+  "version": "0.4.51",
   "scripts": {
     "setup": "node scripts/install.mjs && npm run build",
     "build": "node scripts/build.mjs",
-    "test": "node --test --test-concurrency=1 test/frontend/*.test.mjs"
+    "test": "node --test --test-concurrency=1 test/frontend/*.test.mjs",
+    "test:browser": "node --test --test-concurrency=1 test/browser/*.test.mjs",
+    "test:browser:style": "node --test --test-concurrency=1 test/browser/reporter_style.test.mjs",
+    "test:browser:workflow": "node --test --test-concurrency=1 test/browser/reporter_workflow.test.mjs",
+    "test:browser:lifecycle": "node --test --test-concurrency=1 test/browser/reporter_lifecycle.test.mjs",
+    "fixture:style": "node test/browser/reporter_style.fixture.mjs"
   },
   "engines": {
     "node": ">=18"
@@ -16,7 +21,10 @@
     "react-dom": "18.3.1"
   },
   "devDependencies": {
+    "@hotwired/turbo": "8.0.23",
     "esbuild": "0.25.8",
-    "jsdom": "26.1.0"
+    "jsdom": "26.1.0",
+    "playwright": "1.61.1",
+    "turbolinks": "5.2.0"
   }
 }

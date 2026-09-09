@@ -1,4 +1,7 @@
 require_relative "lib/handrail/bug_reporter/version"
+require_relative "lib/handrail/bug_reporter/release_manifest"
+
+Handrail::BugReporter::ReleaseManifest.verify!(File.expand_path(File.dirname(__FILE__)), Handrail::BugReporter::VERSION)
 
 Gem::Specification.new do |spec|
   spec.name = "handrail-bug-reporter"
@@ -14,7 +17,8 @@ Gem::Specification.new do |spec|
   # Do not require Git, Rails, or network access to evaluate/package the gem.
   spec.files = Dir.chdir(File.dirname(__FILE__)) do
     Dir["lib/**/*.rb", "config/routes.rb", "app/controllers/**/*.rb", "app/helpers/**/*.rb",
-      "README.md", "app/assets/javascripts/handrail_bug_reporter.js"].sort
+      "README.md", "release-manifest.json", "app/assets/javascripts/handrail_bug_reporter.js",
+      "lib/generators/handrail/bug_reporter/templates/*"].sort
   end
   spec.require_paths = ["lib"]
   # No license has been granted in this repository; do not invent one here.

@@ -4,6 +4,7 @@ require "time"
 require "date"
 require "handrail/bug_reporter/identity"
 require "handrail/bug_reporter/screenshot"
+require "handrail/bug_reporter/notification"
 
 module Handrail
   module BugReporter
@@ -47,6 +48,7 @@ module Handrail
         # Capture trusted values before hooks. Never derive them from hook output.
         event = clean_string(read(input, "event_id", "eventId"))
         profile = clean_string(read(input, "profile_key", "profileKey"))
+        notification = Notification.preference(read(input, "notification"))
         screenshot = read(input, "screenshot")
         attachment = screenshot.nil? ? {} : normalize_screenshot(screenshot, allow_screenshots)
         fields = {}
@@ -84,6 +86,7 @@ module Handrail
         fields["environment"] = env.downcase
         fields["event_id"] = event ? event[0, 160] : SecureRandom.uuid
         fields["profile_key"] = profile if profile
+        fields["reporter_notification"] = notification if notification
         @data = deep_freeze(fields.merge(attachment).merge(Identity::SDK_IDENTITY))
         freeze
       end

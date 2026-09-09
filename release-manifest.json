@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "rails": {
+    "package": "handrail-bug-reporter",
+    "version": "0.4.49",
+    "provenance": "source_snapshot",
+    "commit": null,
+    "ref": null,
+    "base_commit": "a1f896610d6a3e6b71766a605ffe9c0841980f02",
+    "base_ref": "commit:a1f896610d6a3e6b71766a605ffe9c0841980f02"
+  },
+  "bundled_js": {
+    "package": "@handrail/bug-reporter",
+    "version": "0.4.49",
+    "ref": "refs/tags/v0.4.49",
+    "commit": "96b293248611594c388d0fab3af63b1b2d1aae5c"
+  },
+  "files_sha256": {
+    "app/assets/javascripts/handrail_bug_reporter.js": "9c535c29d0d454a49705944b8dc74fb344f600ca55d8855a57b9a09644f84269",
+    "app/controllers/handrail/bug_reporter/reports_controller.rb": "5ccb926bc969f649f3f6704e3baacfd6fa771ad7b49334d3f00f921a7ed6d756",
+    "app/helpers/handrail/bug_reporter_helper.rb": "3281b10265566b635914ea6b2c63730a84c8b07d60c22b2b632169199b40a271",
+    "config/routes.rb": "01ca15bc26db4ac7475a913f81f8d6c04243c4088dfd0ae3d2556d57f7334ebe",
+    "lib/generators/handrail/bug_reporter/install_generator.rb": "b307df968f4f3a21279b8aff854b5be089c0503152f0e07f1b6d55d4af158187",
+    "lib/generators/handrail/bug_reporter/templates/initializer.rb.tt": "5b36c1762bd86c2635db32dae13c90b3c645a49f299b8cc78d5ed0afa9143cea",
+    "lib/generators/handrail/bug_reporter/templates/instructions.txt": "afda60478565ef6185d286518148c4a97c033a17955b382685639884d33f7936",
+    "lib/handrail/bug_reporter.rb": "bc38b50d316c21a84e79a1f2b7022fa7e01c1347af4b370e3e367f8519ee1475",
+    "lib/handrail/bug_reporter/client.rb": "9235a5d9d8ce0c58732fe66c6699a5192ea11e47eae29317426b47ea7b667c78",
+    "lib/handrail/bug_reporter/configuration.rb": "7b1f78bf5a10a0fb4e2bfb6b450b91f76f726637a98298e8d8b094917e43307b",
+    "lib/handrail/bug_reporter/engine.rb": "03392605e9ee970d1831a622ac3159b2c27cbb2768b8d55d9d4c804da836df14",
+    "lib/handrail/bug_reporter/forwarding.rb": "92652eff1e1e2b56c2498ade2d3d47dea7530efe79e646e0257116af8ce295d9",
+    "lib/handrail/bug_reporter/forwarding_guard.rb": "a7c3fad96f69d75c66c1e9ba2ef780cc9fbf576792943319a194d02a0e852402",
+    "lib/handrail/bug_reporter/history.rb": "214fdf7be03d9d4df6283505a31d610dad112b1580edaa6c30f62833bb0db36a",
+    "lib/handrail/bug_reporter/identity.rb": "2eba9374faeb544c3f2c7c73907b60f6d23ea46ecfcd94f9749f6328e29f753c",
+    "lib/handrail/bug_reporter/notification.rb": "11f91ff03c5b24e41563d2d08965a8653c2dc5ec48f5e4f4f098e1a1398a047d",
+    "lib/handrail/bug_reporter/payload.rb": "7a07de96beb4945720d71d2f6ffe1f81977bb2b4afea0107c84ed3051abcd5a5",
+    "lib/handrail/bug_reporter/policy.rb": "48aaccde9d6548f3662d0427bc2b058b7ca9b5539f9b8c00486d6e6e57b8eebb",
+    "lib/handrail/bug_reporter/release.rb": "e684ea1c31df88b3fe3f07d4cb025209b67dabee4c6c390718cae0b6f7d55d70",
+    "lib/handrail/bug_reporter/release_manifest.rb": "edc41befd813be0b13d2c4d4cc999f672145c076ff1fef74b6174128059d626f",
+    "lib/handrail/bug_reporter/screenshot.rb": "ff4e5ac51e69ed7a78681237e2f1eee1b965cf48c235fcf129e1acda3d5a1a18",
+    "lib/handrail/bug_reporter/transport.rb": "2e817d69e39e118346ebb522611a5e93063bed7c514884dd4e276b261fe11122",
+    "lib/handrail/bug_reporter/version.rb": "eebc8bbfb2e79c611544fe4dc4b3c6d4e1bc862cd627ef022ec3128d78d0cc27"
+  },
+  "source_sha256": {
+    "frontend/entry.jsx": "fd59bfc5c1245002bc9f047b9bc91c1916e9e381cb18635dd047ab4d9992dd02",
+    "frontend/rails_adapter.js": "f5cb49f28025d06442492a48cfe945377290ef1f22497fb1c4a480940132a1e7",
+    "frontend/upstream.json": "6f1153f50418a5895be473dbc367e8766d473a46320caa32a305be5690cba5de",
+    "handrail-bug-reporter.gemspec": "d496b0a952cfe3d11bfb319e97496f20942e219eb5ff40519afa20338bfd36fd",
+    "package-lock.json": "a75e3ccfd9e7c4e4d200b705ffede0d613de4f4484a9bb6613965bff9e73cd86",
+    "package.json": "bb0ba43917527dee541ede0e6e1d3a71cc63a6b113b7176cee68913954691281",
+    "scripts/build.mjs": "37a30a7d1a2196f932e1308bca389736568cb76c1a0d28e6e591135697890316",
+    "scripts/contract.mjs": "eebee85859cc5f8a4a776a2e079b295f47bb9226f74f777fa39ccfe9a6968ce1"
+  }
+}

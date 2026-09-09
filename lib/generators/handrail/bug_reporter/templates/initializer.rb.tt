@@ -1,0 +1,39 @@
+# Server-only configuration. ENV is read when this host boots, never by the
+# install generator. Keep the report token out of views, assets and browser data.
+require "handrail/bug_reporter"
+
+# Rails environment => this project's Handrail environment binding.
+# Review these values against your Handrail project before enabling reporting.
+# For custom environments (e.g. preview), add an explicit mapping here; do not
+# silently send them to production. Unmapped environments yield nil and leave
+# the SDK misconfigured (forwarding returns 503), without preventing host boot.
+handrail_environments = {
+  "development" => "development",
+  "test" => "test",
+  "staging" => "staging",
+  "production" => "production"
+}
+
+configuration = Handrail::BugReporter::Configuration.new(
+  :api_base_url => ENV["HANDRAIL_API_URL"],
+  :project_id => ENV["HANDRAIL_PROJECT_ID"],
+  :environment => handrail_environments[Rails.env.to_s],
+  :report_token => ENV["HANDRAIL_BUG_REPORT_TOKEN"]
+)
+
+Rails.application.config.handrail_bug_reporter_factory = Handrail::BugReporter::Factory.new(
+  configuration,
+  :resolve_application_session_token => lambda do |request|
+    # nil retains anonymous reporting. To enable Known User reporting, replace
+    # nil with your trusted host authentication lookup, for example:
+    # principal = request.env["my_app.authenticated_principal"]
+    # principal && principal.handrail_application_session_token
+    # Only host authentication middleware may populate that principal. Return
+    # its current Handrail application-session token, or nil when signed out.
+    # This request-scoped token is separate from the server report token above;
+    # it is resolved anew for the current request on each transport attempt.
+    # Never fabricate identity from an email/user ID, or trust request headers,
+    # parameters, JSON fields or arbitrary cookies as authentication credentials.
+    nil
+  end
+)

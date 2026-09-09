@@ -1,0 +1,14 @@
+html { font-family: Arial, sans-serif; font-size: 16px; }
+body { margin: 8px; }
+input, textarea { width: 100%; border: 1px solid #ddd; border-radius: 9px;
+  padding: .7rem .8rem; background: #fff; color: #202020; }
+input[type="checkbox"] { appearance: none !important; width: 100% !important;
+  min-width: 240px !important; height: 48px !important; padding: 20px !important;
+  margin: 24px !important; flex: 1 !important; position: absolute !important; }
+label { display: grid !important; grid-template-columns: 1fr 1fr !important;
+  gap: 80px !important; font-weight: 900 !important; text-align: right !important; }
+label span, label strong { font-size: 24px !important; font-weight: 900 !important;
+  white-space: nowrap !important; text-transform: uppercase !important; }
+label::before, input[type="checkbox"]::after { content: "Host checkbox" !important; }
+input:focus-visible { outline: 0 !important; box-shadow: none !important; }
+#host-controls { position: fixed; left: -2000px; width: 300px; }

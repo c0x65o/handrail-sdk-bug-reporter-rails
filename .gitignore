@@ -5,4 +5,5 @@
 !.env.example
 !*.env.example
 /node_modules/
+/vendor/bundle/
 /.frontend-install-*/

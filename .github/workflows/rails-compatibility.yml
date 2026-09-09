@@ -1,0 +1,62 @@
+name: Rails compatibility smoke
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'config/**'
+      - 'lib/**'
+      - '*.gemspec'
+      - 'Gemfile'
+      - 'Appraisals'
+      - 'gemfiles/**'
+      - 'test/compatibility/**'
+      - 'test/dummy/**'
+      - 'test/support/no_network.rb'
+      - '.github/workflows/rails-compatibility.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - cell: rails_4_2
+            ruby: '2.3.8'
+            bundler: '2.3.26'
+          - cell: rails_5_2
+            ruby: '2.5.9'
+            bundler: '2.3.26'
+          - cell: rails_6_1
+            ruby: '2.7.8'
+            bundler: '2.4.22'
+          - cell: rails_7_2
+            ruby: '3.1.2'
+            bundler: '2.3.7'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler: ${{ matrix.bundler }}
+          bundler-cache: false
+      - name: Installed Git gem, Sprockets, and CSRF smoke
+        env:
+          TMPDIR: ${{ runner.temp }}
+        run: ruby test/compatibility/run.rb '${{ matrix.cell }}'
+      - name: Preserve exact resolved lock and snapshot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compatibility-${{ matrix.cell }}
+          include-hidden-files: true
+          path: |
+            ${{ runner.temp }}/handrail-${{ matrix.cell }}-*/host/Gemfile*
+            ${{ runner.temp }}/handrail-${{ matrix.cell }}-*/snapshot.json
+            ${{ runner.temp }}/handrail-${{ matrix.cell }}-*/host/public/assets/**
