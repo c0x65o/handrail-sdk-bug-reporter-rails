@@ -48,6 +48,25 @@ Escape to return focus to Help. Use 1280×900, 1280×720 and 390×900 viewports 
 1. Stop the server with Ctrl-C. `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` can select
 an installed Chromium executable; `PLAYWRIGHT_BROWSERS_PATH` can select its cache.
 
+The fixture snapshots its assets at startup. After changing the dependency or
+rebuilding the asset, restart the running fixture before handing it to browser
+QA. For the managed dev service, use Handrail's `handrail_dev_service_action`
+with `action=restart`, `service_id=rails-css-parity-fixture`.
+Check that existing service separately from the suite (which starts a fresh
+fixture):
+
+```sh
+node test/browser/verify-served-style.mjs http://127.0.0.1:4179
+# Optional third argument: directory for initial/after-reload screenshots.
+```
+
+This check compares the actual browser asset response with the reviewed asset,
+checks runtime version/commit and all ordinary field layouts at 1280×720 before
+and after reload, and verifies default Moderate selection and cancellation.
+It blocks submissions and requests outside the fixture's expected GET routes.
+An asset mismatch fails with an instruction to restart the fixture; passing a
+freshly started local matrix alone does not establish the served QA revision.
+
 All browser assets and fake policy responses are local. The helper process
 rejects network access and raises if credential resolution or transport runs.
 The server has no submission endpoint: unexpected methods/paths are recorded
@@ -86,6 +105,56 @@ gem packaging), `ruby -Itest test/package_contract_test.rb` (12 tests, 468
 assertions), and release checksum/Git verification. Desktop 1280×720 and mobile
 390×900 screenshots were also inspected: the four headings and controls are
 readable, with no injected host label text.
+
+## Served asset regression result — 2026-09-09
+
+Work request `623bb749-a61e-45bb-8d72-b3d8f66a7418` addresses finding
+`ef9835c9-6c78-4346-8e92-0141875b5f5c` from campaign
+`123e4406-f6db-4b6f-b359-0e998511d094` (campaign run
+`9cb4fc7d-8999-46e7-adc3-c3736d381086`). Both supplied screenshots were
+reviewed, along with the original browser observations:
+
+- [Reporter after reload](/api/pm/qa-campaign-artifacts/a11188eb-c825-43c9-833c-a81294e42f46/content)
+  — SHA-256 `64697cb5ac01e1fe70a16e400d7ac7900fd489f08ceef8a16bd598b867f10266`.
+- [Filled reporter preview](/api/pm/qa-campaign-artifacts/8b421034-c3a5-4ccd-b949-57110cb1a29b/content)
+  — SHA-256 `b00d53b14c9be4399d8f9748da61572899a0020161a4838815ae9098f2a93f71`.
+- [Browser observations](/api/pm/qa-campaign-artifacts/ba36de47-691c-41c8-b4fd-95cd72d33a3d/content)
+  — SHA-256 `9f1b05402999e180779556d7d260b97dc26e8b619a0a2b3f655676a43d73b7c2`.
+
+The evidence records v0.4.49 / `96b293248611594c388d0fab3af63b1b2d1aae5c`,
+host-generated text on all four ordinary labels, a 59.984375px severity control,
+and no writes. It does not establish a defect in v0.4.50. Independent HTTP
+inspection of port 4179 confirmed the still-running fixture served an in-memory
+v0.4.49 asset with SHA-256
+`9c535c29d0d454a49705944b8dc74fb344f600ca55d8855a57b9a09644f84269`,
+while the checked-in asset and dependency already contained the reviewed fix.
+The failure boundary was the stale dev fixture process; no environment,
+dependency or product CSS change was needed.
+
+Handrail restarted `rails-css-parity-fixture` at 18:22 UTC. The actual served
+asset then matched the reviewed v0.4.50 asset byte for byte (SHA-256
+`2e2f999cf20760913f1af917bf7cb51d1cc21d0005f15ca74236438b2f04216f`).
+The served check passed on initial navigation and reload at 1280×720: all four
+labels had `none` for both pseudo-elements, 13px/700 typography, a 5px gap,
+and full-width controls. Severity measured 194.703125px with Moderate selected;
+Steps used 13px text and an 11px optional hint. The after-reload screenshot was
+visually inspected and showed readable labels and Moderate. Cancellation closed
+the form; no console/page errors, external requests or submissions occurred.
+
+Validation used Node 22.23.1 and Chromium 149.0.7827.55 with the existing Ruby
+fixture and local policy HTTP boundary (no database). The served check passed;
+`npm run test:browser:style` passed all 12 matrix cases / 24 renders (13 TAP
+tests, zero skips); the scoped immutable dependency/reproducible asset test
+passed; and the new script passed `node --check`. A temporary loopback server
+substituting the historical v0.4.49 asset also confirmed that the served check
+fails with the restart diagnostic. The existing HTTPS/full-SHA
+dependency and matching lockfile remain unchanged.
+
+Worker synchronization had been deferred because the workspace was in use.
+Inspection found both relevant branches aligned with their local origin/main
+refs, no merge/rebase/index lock or unmerged entries, and only an existing
+`release-manifest.json` edit. That edit was preserved. This result adds the
+served-service check and restart guidance, without replacing the reviewed fix.
 
 ## Original consent-only evidence — 2026-09-09
 
