@@ -6,8 +6,8 @@
     "provenance": "source_snapshot",
     "commit": null,
     "ref": null,
-    "base_commit": "ffd9e828d63f5399a14da23d86ca4083aaf433b3",
-    "base_ref": "commit:ffd9e828d63f5399a14da23d86ca4083aaf433b3"
+    "base_commit": "47f24091ae01e6363b3dd1acf9b497183ee9ebe0",
+    "base_ref": "commit:47f24091ae01e6363b3dd1acf9b497183ee9ebe0"
   },
   "bundled_js": {
     "package": "@handrail/bug-reporter",
@@ -35,7 +35,7 @@
     "lib/handrail/bug_reporter/payload.rb": "7a07de96beb4945720d71d2f6ffe1f81977bb2b4afea0107c84ed3051abcd5a5",
     "lib/handrail/bug_reporter/policy.rb": "48aaccde9d6548f3662d0427bc2b058b7ca9b5539f9b8c00486d6e6e57b8eebb",
     "lib/handrail/bug_reporter/release.rb": "e684ea1c31df88b3fe3f07d4cb025209b67dabee4c6c390718cae0b6f7d55d70",
-    "lib/handrail/bug_reporter/release_manifest.rb": "232ed9ba450af34df7082787a819258a59aefa531703ef144e5812092405a7fb",
+    "lib/handrail/bug_reporter/release_manifest.rb": "6691b43e07699b5d826cf5771338b907aa11f0702c78b0e678ed4cc4857a653c",
     "lib/handrail/bug_reporter/screenshot.rb": "ff4e5ac51e69ed7a78681237e2f1eee1b965cf48c235fcf129e1acda3d5a1a18",
     "lib/handrail/bug_reporter/transport.rb": "2e817d69e39e118346ebb522611a5e93063bed7c514884dd4e276b261fe11122",
     "lib/handrail/bug_reporter/version.rb": "eebc8bbfb2e79c611544fe4dc4b3c6d4e1bc862cd627ef022ec3128d78d0cc27"
@@ -45,9 +45,10 @@
     "frontend/rails_adapter.js": "f5cb49f28025d06442492a48cfe945377290ef1f22497fb1c4a480940132a1e7",
     "frontend/upstream.json": "bcc7b9bb4ca824dc62534c2e5fc184dc56c12478958a40fa9e12dc70edd11f8c",
     "handrail-bug-reporter.gemspec": "d496b0a952cfe3d11bfb319e97496f20942e219eb5ff40519afa20338bfd36fd",
-    "package-lock.json": "77ac0838bc89405d723c4fe5c051917e0b73fe6b9e973c46986f9b624d26c578",
-    "package.json": "6a7dcd0b7de085917512521cd8beff7bd100d5fe00c3dc978be0764ac61b89f1",
+    "package-lock.json": "54c6ad9063066fbcf26475ce85ec349c7dbefc4291bc0923c884632a20ca0171",
+    "package.json": "c052127689339b2e29155e7b98be28939eeb84077bf2c21f2a353f9a9bba0275",
     "scripts/build.mjs": "37a30a7d1a2196f932e1308bca389736568cb76c1a0d28e6e591135697890316",
     "scripts/contract.mjs": "eebee85859cc5f8a4a776a2e079b295f47bb9226f74f777fa39ccfe9a6968ce1"
-  }
+  },
+  "source_fingerprint": "private-contributor-v1"
 }

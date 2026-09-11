@@ -320,27 +320,41 @@ The Ruby `>= 2.3` / Rails `>= 4.2, < 8.0` bounds are provisional. The scoped
 loading, installed Sprockets assets and real cookie-session/CSRF requests without
 ActiveRecord, a database, Node or live upstream HTTP.
 
-| Target | Ruby | Rails components | Bundler | Worker result (2026-09-09) |
+| Target | Ruby | Rails components | Bundler | Recorded worker result |
 | --- | --- | --- | --- | --- |
-| `rails_4_2` | 2.3.8 | 4.2.11.3 | 2.3.26 | Unavailable: Ruby not installed |
-| `rails_5_2` | 2.5.9 | 5.2.8.1 | 2.3.26 | Unavailable: Ruby not installed |
-| `rails_6_1` | 2.7.8 | 6.1.7.10 | 2.4.22 | Unavailable: Ruby not installed |
-| `rails_7_2` | 3.1.2 | 7.2.3.2 | 2.3.7 | Passed: 74 assertions, zero skips |
+| `rails_4_2` | 2.3.8 | 4.2.11.3 | 2.3.26 | Passed 2026-09-10: 77 assertions, zero failures/errors/skips |
+| `rails_5_2` | 2.5.9 | 5.2.8.1 | 2.3.26 | Passed 2026-09-10: 77 assertions, zero failures/errors/skips |
+| `rails_6_1` | 2.7.8 | 6.1.7.10 | 2.4.22 | Passed 2026-09-10: 77 assertions, zero failures/errors/skips |
+| `rails_7_2` | 3.1.2 | 7.2.3.2 | 2.3.7 | Passed 2026-09-09: 74 assertions, zero skips |
 
 Every dependency patch is pinned in [matrix.json](test/compatibility/matrix.json)
 and the [appraisal gemfiles](gemfiles). With the selected Ruby and Bundler installed,
 run `ruby test/compatibility/run.rb rails_7_2` (substitute the target cell).
 See the test README for commands, installation/precompile evidence and limitations.
+For Rails 4.2, `ruby test/compatibility/bootstrap_rails_4_2.rb` builds the pinned
+runtime in private scratch space and runs the smoke without Docker or system
+runtime changes. The [retained acceptance record](test/compatibility/evidence/rails_4_2-2026-09-10/README.md)
+includes source/package hashes, the exact lockfile and execution artifacts.
+For Rails 5.2, `ruby test/compatibility/bootstrap_rails_5_2.rb` uses the same shared
+bootstrap with Ruby 2.5.9; its [retained acceptance record](test/compatibility/evidence/rails_5_2-2026-09-10/README.md)
+proves the current Git-installed package, exact lock, Node-free precompilation
+and real cookie-session/CSRF behavior.
+For Rails 6.1, `ruby test/compatibility/bootstrap_rails_6_1.rb` builds Ruby 2.7.8
+and installs Bundler 2.4.22 with cell-specific checksum pins. Its
+[retained acceptance record](test/compatibility/evidence/rails_6_1-2026-09-10/README.md)
+verifies the current Git-installed package, exact dependency lock, Node-free
+Sprockets 4.2.1 precompilation and real cookie-session/CSRF behavior.
 The authored compatibility workflow has not been executed on hosted CI.
 
 Neither Bluecotton nor Monuvision is verified compatible: their actual
 `Gemfile.lock` and Ruby versions must be supplied and matched before adoption.
 These smoke results do not establish browser workflow or CSS parity.
 
-Only Ruby **3.1.2 / Rails 7.2.3.2** has recorded matrix runtime acceptance
-(74 assertions, zero failures/errors/skips). The three legacy cells remain
-unverified because their interpreters were unavailable. Declared dependency
-bounds and authored CI are not verified support. Exact Bluecotton and Monuvision
+Ruby **2.3.8 / Rails 4.2.11.3**, **2.5.9 / Rails 5.2.8.1**,
+**2.7.8 / Rails 6.1.7.10** and **3.1.2 / Rails 7.2.3.2** have recorded matrix runtime
+acceptance (77, 77, 77 and 74 assertions respectively, zero failures/errors/skips).
+Other combinations within the declared dependency bounds remain unverified;
+authored CI is not executed support evidence. Exact Bluecotton and Monuvision
 versions were unavailable; compare each application's Ruby version and
 `Gemfile.lock` before adoption.
 

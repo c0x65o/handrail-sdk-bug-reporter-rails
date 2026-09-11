@@ -5,6 +5,9 @@ require "tmpdir"
 require "open3"
 require "digest"
 require "rbconfig"
+require "openssl"
+require "time"
+$stdout.sync = true
 
 root = File.expand_path("../..", File.dirname(__FILE__))
 matrix = JSON.parse(File.read(File.join(root, "test/compatibility/matrix.json")))
@@ -25,7 +28,16 @@ end
 
 def run(env, *args)
   puts "+ #{args.join(' ')}"
-  raise "Command failed: #{args.inspect}" unless system(env, *args)
+  output = ""
+  Open3.popen2e(env, *args) do |input, stream, child|
+    input.close
+    stream.each_line do |line|
+      print line
+      output << line
+    end
+    raise "Command failed: #{args.inspect}" unless child.value.success?
+  end
+  output
 end
 
 run({}, RbConfig.ruby, File.join(root, "test/compatibility/check_matrix.rb"))
@@ -34,6 +46,23 @@ puts "EVIDENCE: #{work} (retained for inspection; safe to remove after review)"
 # Eliminate inherited source-tree overrides and Bundler local/Git settings.
 env = {}
 ENV.keys.grep(/\ABUNDLE_|\ARUBY(?:OPT|LIB)\z|\AGIT_/).each { |key| env[key] = nil }
+evidence = {
+  "cell" => name, "started_at" => Time.now.utc.iso8601,
+  "source_revision" => capture(env, "git", "-C", root, "rev-parse", "HEAD"),
+  "source_status" => capture(env, "git", "-C", root, "status", "--short", "--untracked-files=all"),
+  "runtime" => { "ruby" => RUBY_DESCRIPTION, "rubygems" => Gem::VERSION,
+    "bundler" => cell.fetch("bundler"), "openssl" => OpenSSL::OPENSSL_VERSION,
+    "configure_args" => RbConfig::CONFIG["configure_args"] },
+  "harness_sha256" => {}
+}
+Dir.chdir(root) do
+  (Dir["test/compatibility/*.rb", "test/compatibility/*.json", "test/dummy/**/*", "test/support/no_network.rb"] +
+    ["gemfiles/#{name}.gemfile", "Appraisals", ".github/workflows/rails-compatibility.yml"]).sort.each do |path|
+    evidence["harness_sha256"][path] = Digest::SHA256.file(path).hexdigest if File.file?(path)
+  end
+end
+evidence_file = File.join(work, "acceptance.json")
+File.write(evidence_file, JSON.pretty_generate(evidence) + "\n")
 repository = File.join(work, "sdk.git")
 run(env, "git", "clone", "--quiet", "--bare", "--no-hardlinks", root, repository)
 git_env = env.merge("GIT_DIR" => repository, "GIT_INDEX_FILE" => File.join(work, "snapshot.index"),
@@ -61,6 +90,8 @@ capture(git_env, "git", "update-ref", "refs/heads/compatibility-fixture", revisi
 snapshot_file = File.join(work, "snapshot.json")
 File.write(snapshot_file, JSON.pretty_generate(snapshot) + "\n")
 puts "SNAPSHOT: #{revision}; #{snapshot.length} current package files"
+evidence["package_revision"] = revision
+evidence["snapshot_sha256"] = Digest::SHA256.file(snapshot_file).hexdigest
 
 host = File.join(work, "host")
 FileUtils.cp_r(File.join(root, "test/dummy"), host)
@@ -95,5 +126,17 @@ Dir.chdir(host) do
   env["RUBYOPT"] = "-r#{File.join(host, 'checks/no_network.rb')}"
   run(env, RbConfig.ruby, bundle, "exec", RbConfig.ruby, "-e",
     'load Gem.bin_path("rake", "rake")', "--", "assets:precompile", "--trace")
-  run(env, RbConfig.ruby, bundle, "exec", RbConfig.ruby, "checks/smoke.rb")
+  output = run(env, RbConfig.ruby, bundle, "exec", RbConfig.ruby, "checks/smoke.rb")
+  File.write(File.join(work, "smoke.log"), output)
+  totals = output.match(/^(\d+) runs, (\d+) assertions, 0 failures, 0 errors, 0 skips$/)
+  raise "Acceptance requires executed assertions and zero failures/errors/skips" unless totals && totals[1].to_i > 0 && totals[2].to_i > 0
+  evidence["results"] = { "runs" => totals[1].to_i, "assertions" => totals[2].to_i,
+    "failures" => 0, "errors" => 0, "skips" => 0 }
+  evidence["artifacts"] = {}
+  ["Gemfile", "Gemfile.lock", *Dir["public/assets/*", "public/assets/.*"].select { |path| File.file?(path) }].sort.each do |path|
+    evidence["artifacts"]["host/#{path}"] = Digest::SHA256.file(path).hexdigest
+  end
 end
+evidence["finished_at"] = Time.now.utc.iso8601
+File.write(evidence_file, JSON.pretty_generate(evidence) + "\n")
+puts "ACCEPTANCE: #{evidence_file}"

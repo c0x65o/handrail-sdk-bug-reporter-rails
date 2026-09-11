@@ -1,0 +1,44 @@
++ /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/runtime/bin/ruby /opt/handrail/repos/handrail/handrail-feedback-sdks/handrail-sdk-bug-reporter-rails/test/compatibility/check_matrix.rb
+CONFIG PASS rails_4_2: Ruby 2.3.8, Rails 4.2.11.3, Bundler 2.3.26, 25 exact gem pins
+CONFIG PASS rails_5_2: Ruby 2.5.9, Rails 5.2.8.1, Bundler 2.3.26, 25 exact gem pins
+CONFIG PASS rails_6_1: Ruby 2.7.8, Rails 6.1.7.10, Bundler 2.4.22, 25 exact gem pins
+CONFIG PASS rails_7_2: Ruby 3.1.2, Rails 7.2.3.2, Bundler 2.3.7, 43 exact gem pins
+CONFIG PASS: workflow matches all four exact runtime/Bundler pairs
+EVIDENCE: /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-14-tnx2ck (retained for inspection; safe to remove after review)
++ git clone --quiet --bare --no-hardlinks /opt/handrail/repos/handrail/handrail-feedback-sdks/handrail-sdk-bug-reporter-rails /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-14-tnx2ck/sdk.git
+SNAPSHOT: cf721d3b2381e38407ed10fac362f76dd6a537de; 26 current package files
++ /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/runtime/bin/ruby /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/gems/gems/bundler-2.4.22/exe/bundle lock
+Fetching /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-14-tnx2ck/sdk.git
+Fetching gem metadata from https://rubygems.org/..........
+Resolving dependencies...
+Writing lockfile to /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-14-tnx2ck/host/Gemfile.lock
++ /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/runtime/bin/ruby -e gem "bundler", ARGV.shift; load ARGV.shift 2.4.22 checks/verify_lock.rb
+LOCK PASS: 25 exact dependency versions; SDK Git cf721d3b2381e38407ed10fac362f76dd6a537de
++ /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/runtime/bin/ruby /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/gems/gems/bundler-2.4.22/exe/bundle install --jobs 2 --retry 2
+Bundle complete! 26 Gemfile dependencies, 27 gems now installed.
+Bundled gems are installed into `/opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/bundle`
++ /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/runtime/bin/ruby /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/gems/gems/bundler-2.4.22/exe/bundle exec /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/runtime/bin/ruby -e load Gem.bin_path("rake", "rake") -- assets:precompile --trace
+** Invoke assets:precompile (first_time)
+** Invoke assets:environment (first_time)
+** Execute assets:environment
+** Invoke environment (first_time)
+** Execute environment
+** Execute assets:precompile
+I, [2026-09-10T17:56:25.687958 #244]  INFO -- : Writing /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-14-tnx2ck/host/public/assets/manifest-7723e427d4a824b2af70a2110ec500326b8de8dea270f039fcd63ef043dc1765.js
+I, [2026-09-10T17:56:25.688211 #244]  INFO -- : Writing /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-14-tnx2ck/host/public/assets/manifest-7723e427d4a824b2af70a2110ec500326b8de8dea270f039fcd63ef043dc1765.js.gz
+I, [2026-09-10T17:56:25.688481 #244]  INFO -- : Writing /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-14-tnx2ck/host/public/assets/handrail_bug_reporter-e09fce1905fd73a44ef2a9e6f06ce42305bad8ab9de22cbcecd7f89801aa32b5.js
+I, [2026-09-10T17:56:25.688664 #244]  INFO -- : Writing /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-14-tnx2ck/host/public/assets/handrail_bug_reporter-e09fce1905fd73a44ef2a9e6f06ce42305bad8ab9de22cbcecd7f89801aa32b5.js.gz
++ /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/runtime/bin/ruby /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/gems/gems/bundler-2.4.22/exe/bundle exec /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/runtime/bin/ruby checks/smoke.rb
+Run options: --seed 49100
+
+# Running:
+
+SMOKE PASS: Ruby 2.7.8; Rails 6.1.7.10; Bundler 2.4.22
+INSTALL: /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/bundle/ruby/2.7.0/bundler/gems/sdk-cf721d3b2381; 26 snapshot files verified
+PRECOMPILE: /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-14-tnx2ck/host/public/assets/handrail_bug_reporter-e09fce1905fd73a44ef2a9e6f06ce42305bad8ab9de22cbcecd7f89801aa32b5.js; 241154 bytes; SHA256 2e2f999cf20760913f1af917bf7cb51d1cc21d0005f15ca74236438b2f04216f
+REQUESTS: valid=201/one HTTP boundary call; invalid=403/no additional call
+.
+
+Finished in 0.032103s, 31.1495 runs/s, 2398.5141 assertions/s.
+1 runs, 77 assertions, 0 failures, 0 errors, 0 skips
+ACCEPTANCE: /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-14-tnx2ck/acceptance.json

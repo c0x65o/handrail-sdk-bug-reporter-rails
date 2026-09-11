@@ -1,0 +1,33 @@
+Run options: --seed 49
+
+# Running:
+
+rails_6_1: rejected Bootstrap pins must match rails_6_1
+rails_6_1: rejected Bootstrap pins must match rails_6_1
+rails_6_1: rejected Bootstrap pins must match rails_6_1
+rails_6_1: rejected Runtime directory must be outside the SDK checkout
+rails_6_1: rejected Use a runtime directory without whitespace
+rails_6_1: rejected HANDRAIL_COMPAT_JOBS must be 1 or 2
+rails_6_1: rejected Runtime directory is already in use
+rails_6_1: rejected SHA256 mismatch: /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/bootstrap-controls-20260910-5-mvmkzq/runtime/downloads/ruby-2.7.8.tar.gz
+.rails_4_2: rejected Bootstrap pins must match rails_4_2
+rails_4_2: rejected Bootstrap pins must match rails_4_2
+rails_4_2: rejected Bootstrap pins must match rails_4_2
+rails_4_2: rejected Runtime directory must be outside the SDK checkout
+rails_4_2: rejected Use a runtime directory without whitespace
+rails_4_2: rejected HANDRAIL_COMPAT_JOBS must be 1 or 2
+rails_4_2: rejected Runtime directory is already in use
+rails_4_2: rejected SHA256 mismatch: /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/bootstrap-controls-20260910-5-3quh67/runtime/downloads/ruby-2.3.8.tar.gz
+.rails_5_2: rejected Bootstrap pins must match rails_5_2
+rails_5_2: rejected Bootstrap pins must match rails_5_2
+rails_5_2: rejected Bootstrap pins must match rails_5_2
+rails_5_2: rejected Runtime directory must be outside the SDK checkout
+rails_5_2: rejected Use a runtime directory without whitespace
+rails_5_2: rejected HANDRAIL_COMPAT_JOBS must be 1 or 2
+rails_5_2: rejected Runtime directory is already in use
+rails_5_2: rejected SHA256 mismatch: /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/bootstrap-controls-20260910-5-v0ghem/runtime/downloads/ruby-2.5.9.tar.gz
+.
+
+Finished in 1.681360s, 1.7843 runs/s, 48.1753 assertions/s.
+
+3 runs, 81 assertions, 0 failures, 0 errors, 0 skips

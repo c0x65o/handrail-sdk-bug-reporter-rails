@@ -1,0 +1,18 @@
+{
+  "ruby-2.3.8.tar.gz": [
+    "https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.8.tar.gz",
+    "b5016d61440e939045d4e22979e04708ed6c8e1c52e7edb2553cf40b73c59abf"
+  ],
+  "openssl-1.0.2u.tar.gz": [
+    "https://www.openssl.org/source/old/1.0.2/openssl-1.0.2u.tar.gz",
+    "ecd0c6ffb493dd06707d38b14bb4d8c2288bb7033735606569d8f90f89669d16"
+  ],
+  "yaml-0.2.5.tar.gz": [
+    "https://pyyaml.org/download/libyaml/yaml-0.2.5.tar.gz",
+    "c642ae9b75fee120b2d96c712538bd2cf283228d2337df2cf2988e3c02678ef4"
+  ],
+  "bundler-2.3.26.gem": [
+    "https://rubygems.org/downloads/bundler-2.3.26.gem",
+    "1ee53cdf61e728ad82c6dbff06cfcd8551d5422e88e86203f0e2dbe9ae999e09"
+  ]
+}

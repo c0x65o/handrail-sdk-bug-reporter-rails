@@ -20,9 +20,10 @@ The JS repository's tracked generated release.ts is not an input.
   identify the actual current files, including uncommitted work; the base is not
   claimed to contain those bytes. This is the checked-in manifest's current mode.
 * `committed_source`: Rails reporter commit/ref identify an existing immutable
-  **source revision**, with all runtime files and contributor inputs byte-equal to
-  that revision. The manifest is a later attestation, excluded from its own input
-  hashes. Its containing commit is deliberately not its source commit. A ref must
+  **source revision**, with all runtime files and contributor inputs matching
+  that revision under the manifest's fingerprint rules below. The manifest is a
+  later attestation, excluded from its own input hashes. Its containing commit
+  is deliberately not its source commit. A ref must
   be `commit:<full SHA>` or an existing matching `refs/tags/v<gem version>` resolving
   to the source commit. Missing tags, branch refs, short SHAs, version/ref mismatches
   and dirty source trees are rejected by Git verification.
@@ -31,14 +32,61 @@ For an eventual distribution tag, the natural sequence is source commit A, then
 manifest-only commit B attesting A, then a version tag pointing at B. Runtime
 identity is `commit:A`; it does not pretend that A is B. `--tag` verifies the
 existing distribution tag/version at HEAD, the committed manifest, ancestry of A,
-clean source and byte equality. No script creates a commit or tag. Finalization
-and any release remain separately authorized operations.
+clean source and fingerprint equality. No script creates a commit or tag.
+Finalization and any release remain separately authorized operations.
 
 Offline checks establish internal consistency and detect accidental corruption;
 they cannot authenticate a claimed Git revision or a maliciously rewritten file
 plus checksum. Use `--git`/`--tag` with the trusted SDK checkout for that evidence.
 Neither mode consults a parent consumer repository. At runtime all paths are
 relative to the installed SDK and environment identity overrides are ignored.
+
+## Optional contributor fingerprints
+
+Without a `source_fingerprint` field, schema 1 retains the legacy contract:
+every runtime and source checksum is SHA-256 of the exact file bytes, including
+private contributor versions and JSON formatting. The checked-in manifest
+currently retains this behavior; activation is a separate follow-up item.
+
+Explicitly setting `"source_fingerprint": "private-contributor-v1"` selects
+version-stable fingerprints for `package.json` and `package-lock.json` only.
+Before hashing, both JSON documents must be objects, `package.json` must declare
+the boolean `private: true`, and the lock must contain a `packages[""]` object.
+All three version declarations must be valid SemVer strings and exactly equal
+(including any prerelease/build suffix). Missing, malformed or mismatched
+declarations fail even when regenerating hashes. Duplicate JSON keys also fail
+instead of silently discarding an earlier declaration or value.
+
+The mode removes only each document's top-level `version` and the lock's
+`packages[""].version`, recursively sorts object keys, preserves array order and
+all remaining values, serializes compact JSON with Ruby's JSON library, and
+hashes those bytes with SHA-256. Formatting/key order and consistent private
+version bumps therefore do not change the fingerprints. `private=true`, scripts,
+dependency versions, resolved commit SHAs, integrity values and other metadata
+remain covered. All runtime artifacts and other source inputs still use raw
+byte hashes. The mode does not change the gem version or frozen JS identity.
+
+Manifest generation, offline contributor verification and committed-source Git
+verification use `ReleaseManifest.hashes` with the same mode. Git reads and
+validates both contributor documents from the selected source revision itself;
+valid working-tree versions cannot excuse invalid committed declarations.
+Clean-tree, source inventory, provenance, ancestry and tag checks still apply.
+Package-only verification validates the mode and runtime hashes without reading
+contributor files. Unknown modes (including an explicit JSON null) are rejected.
+
+To opt in when deliberately generating a manifest:
+
+```sh
+ruby scripts/verify_release.rb --write-snapshot --source-fingerprint private-contributor-v1
+# Or, for an existing clean source revision:
+ruby scripts/verify_release.rb --write-committed --commit FULL_SHA --ref commit:FULL_SHA --source-fingerprint private-contributor-v1
+```
+
+Ordinary verification reads the mode from the manifest; the option is accepted
+only with a write command. Every write without this option generates legacy raw
+hashes, even if the previous manifest opted in. Pass the option on each write
+to retain the mode. Do not just add the field to existing raw hashes: regenerate
+the contributor fingerprints as well. Neither command rebuilds runtime assets.
 
 ## Local commands
 
@@ -64,8 +112,9 @@ ruby -Ilib:test test/payload_test.rb
 `--write-snapshot` intentionally records current reviewed bytes; it does not build
 or prove reproducibility of the browser bundle. When frontend inputs change, use
 the existing frontend build/verification workflow before refreshing the manifest.
-The ordinary verifier rejects changed inputs until the manifest is refreshed.
-This includes version-only edits to `package.json` and `package-lock.json`.
+The ordinary verifier rejects changed inputs until the manifest is refreshed,
+except the explicitly excluded contributor versions/formatting in the opt-in mode.
+Legacy manifests also reject version-only edits to `package.json` and `package-lock.json`.
 After the final package version update (including worker-owned version bumps),
 run `npm test` to verify upstream identity, sources and byte-for-byte bundle
 reproducibility, then `ruby scripts/verify_release.rb --write-snapshot` and

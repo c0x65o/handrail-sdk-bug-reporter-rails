@@ -1,0 +1,7 @@
+rails_4_2 checksum: expected nonzero rejection; SHA256 mismatch: /opt/handrail/.handrail/codex-runs/e9a14840-bc01-4b93-ad84-2fcac0b7f2f0/tmp/bootstrap-control-39w9dxa9/downloads/ruby-2.3.8.tar.gz
+rails_4_2 source isolation: expected nonzero rejection; Runtime directory must be outside the SDK checkout
+rails_4_2 concurrency: expected nonzero rejection; Runtime directory is already in use: /opt/handrail/.handrail/codex-runs/e9a14840-bc01-4b93-ad84-2fcac0b7f2f0/tmp/bootstrap-control-39w9dxa9
+rails_5_2 checksum: expected nonzero rejection; SHA256 mismatch: /opt/handrail/.handrail/codex-runs/e9a14840-bc01-4b93-ad84-2fcac0b7f2f0/tmp/bootstrap-control-rfx6pgj3/downloads/ruby-2.5.9.tar.gz
+rails_5_2 source isolation: expected nonzero rejection; Runtime directory must be outside the SDK checkout
+rails_5_2 concurrency: expected nonzero rejection; Runtime directory is already in use: /opt/handrail/.handrail/codex-runs/e9a14840-bc01-4b93-ad84-2fcac0b7f2f0/tmp/bootstrap-control-rfx6pgj3
+6 bootstrap controls passed.

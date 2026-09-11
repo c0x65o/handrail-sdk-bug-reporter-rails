@@ -49,11 +49,13 @@ class PackageContractTest < Minitest::Test
     File.write(File.join(@source, Contract::FILE), JSON.pretty_generate(value) + "\n")
   end
 
-  def snapshot
+  def snapshot(mode = nil)
     value = manifest
+    value.delete("source_fingerprint")
+    value["source_fingerprint"] = mode if mode
     value["rails"]["version"] = FIXTURE_VERSION
     value["files_sha256"] = Contract.hashes(@source, Contract.runtime_files(@source))
-    value["source_sha256"] = Contract.hashes(@source, Contract::SOURCE_FILES)
+    value["source_sha256"] = Contract.hashes(@source, Contract::SOURCE_FILES, mode)
     write_manifest(value)
     value
   end
@@ -96,13 +98,19 @@ class PackageContractTest < Minitest::Test
     command(*args, :env => @git_env).strip
   end
 
-  def committed_fixture
+  def committed_fixture(mode = nil)
     snapshot
     fixture_git
+    options = mode ? ["--source-fingerprint", mode] : []
     output = command(RbConfig.ruby, TOOL, "--root", @checkout, "--write-committed",
-      "--commit", @revision, "--ref", "commit:#{@revision}")
+      "--commit", @revision, "--ref", "commit:#{@revision}", *options)
     assert_equal @revision, JSON.parse(output).fetch("rails").fetch("commit")
     FileUtils.cp(File.join(@checkout, Contract::FILE), File.join(@source, Contract::FILE))
+    yield if block_given?
+    distribute_fixture
+  end
+
+  def distribute_fixture
     distribution = fixture_commit(@revision, true)
     # Synthetic tag exists only in the disposable fixture, never the SDK checkout.
     @tag = "refs/tags/v#{FIXTURE_VERSION}"
@@ -111,6 +119,181 @@ class PackageContractTest < Minitest::Test
     command("git", "clone", "--quiet", "--branch", "v#{FIXTURE_VERSION}", @bare, @distribution)
     command(RbConfig.ruby, TOOL, "--root", @distribution, "--tag", @tag)
     distribution
+  end
+
+  def edit_contributor(path)
+    absolute = File.join(@source, path)
+    value = Contract.read_json(absolute)
+    yield value
+    File.write(absolute, JSON.pretty_generate(value) + "\n")
+  end
+
+  def contributor_version(version)
+    edit_contributor("package.json") { |value| value["version"] = version }
+    edit_contributor("package-lock.json") do |value|
+      value["version"] = version
+      value["packages"][""]["version"] = version
+    end
+  end
+
+  def test_fingerprint_accepts_consistent_versions_and_canonical_json
+    original = snapshot(Contract::SOURCE_FINGERPRINT)
+    ["9.8.7", "10.0.0-rc.1+build.2"].each do |version|
+      contributor_version(version)
+      Contract::CONTRIBUTOR_FILES.each do |path|
+        value = Contract.read_json(File.join(@source, path))
+        # Reorder objects at every depth; array order remains significant.
+        reverse = lambda do |entry|
+          case entry
+          when Hash then Hash[entry.to_a.reverse.map { |key, child| [key, reverse.call(child)] }]
+          when Array then entry.map { |child| reverse.call(child) }
+          else entry
+          end
+        end
+        File.write(File.join(@source, path), JSON.generate(reverse.call(value)))
+      end
+      assert_equal original, Contract.verify!(@source, FIXTURE_VERSION, true)
+    end
+    assert_equal original["source_sha256"], Contract.hashes(@source, Contract::SOURCE_FILES, Contract::SOURCE_FINGERPRINT)
+  end
+
+  def test_fingerprint_rejects_malformed_or_mismatched_declarations
+    snapshot(Contract::SOURCE_FINGERPRINT)
+    originals = Hash[Contract::CONTRIBUTOR_FILES.map { |path| [path, File.binread(File.join(@source, path))] }]
+    changes = [
+      ["package.json", lambda { |value| value.delete("private") }],
+      ["package.json", lambda { |value| value["private"] = false }],
+      ["package.json", lambda { |value| value["private"] = "true" }],
+      ["package-lock.json", lambda { |value| value["packages"] = [] }],
+      ["package-lock.json", lambda { |value| value["packages"].delete("") }]
+    ]
+    [nil, 123, "", "01.2.3", "1.2", "1.2.3\n", "1.2.3-01", "1.2.3+", "9.9.9"].each do |version|
+      changes << ["package.json", lambda { |value| value["version"] = version }]
+      changes << ["package-lock.json", lambda { |value| value["version"] = version }]
+      changes << ["package-lock.json", lambda { |value| value["packages"][""]["version"] = version }]
+    end
+    changes.each do |path, change|
+      originals.each { |name, bytes| File.binwrite(File.join(@source, name), bytes) }
+      edit_contributor(path, &change)
+      reject(/Contributor|contributor/, true)
+      assert_raises(Contract::Invalid) { Contract.hashes(@source, Contract::SOURCE_FILES, Contract::SOURCE_FINGERPRINT) }
+    end
+    Contract::CONTRIBUTOR_FILES.each do |path|
+      ["{", "[]", "null", originals[path].sub('{', '{"version":"malformed",')].each do |bytes|
+        originals.each { |name, content| File.binwrite(File.join(@source, name), content) }
+        File.write(File.join(@source, path), bytes)
+        reject(/Contributor|contributor/, true)
+      end
+    end
+  end
+
+  def test_fingerprint_keeps_other_values_and_runtime_bytes_covered
+    original = snapshot(Contract::SOURCE_FINGERPRINT)
+    changes = [
+      ["package.json", lambda { |value| value["dependencies"]["react"] = "19.0.0" }],
+      ["package.json", lambda { |value| value["scripts"]["build"] = "echo changed" }],
+      ["package.json", lambda { |value| value["extra"] = [1, 2] }],
+      ["package.json", lambda { |value| value["nested"] = { "version" => "9.9.9" } }],
+      ["package-lock.json", lambda { |value| value["packages"][""]["dependencies"]["react"] = "19.0.0" }],
+      ["package-lock.json", lambda { |value| value["packages"]["node_modules/react"]["version"] = "19.0.0" }],
+      ["package-lock.json", lambda { |value| value["packages"]["node_modules/@handrail/bug-reporter"]["resolved"] = "git+https://example.invalid/sdk.git##{'a' * 40}" }],
+      ["package-lock.json", lambda { |value| value["packages"]["node_modules/react"]["integrity"] = "sha512-changed" }]
+    ]
+    changes.each do |path, change|
+      bytes = File.binread(File.join(@source, path))
+      edit_contributor(path, &change)
+      reject(/tampered artifact/, true)
+      File.binwrite(File.join(@source, path), bytes)
+    end
+    [Contract::ASSET, "lib/handrail/bug_reporter/identity.rb", "frontend/rails_adapter.js"].each do |path|
+      bytes = File.binread(File.join(@source, path))
+      File.binwrite(File.join(@source, path), bytes + "\n")
+      reject(/tampered artifact/, true)
+      File.binwrite(File.join(@source, path), bytes)
+    end
+    assert_equal original, Contract.verify!(@source, FIXTURE_VERSION, true)
+  end
+
+  def test_fingerprint_package_only_does_not_require_contributor_files
+    snapshot(Contract::SOURCE_FINGERPRINT)
+    Contract::SOURCE_FILES.each { |path| FileUtils.rm(File.join(@source, path)) }
+    assert_equal Contract::SOURCE_FINGERPRINT, Contract.verify!(@source, FIXTURE_VERSION)["source_fingerprint"]
+    command(RbConfig.ruby, TOOL, "--root", @source, "--package")
+    reject(/Missing or unsafe artifact/, true)
+  end
+
+  def test_fingerprint_mode_requires_explicit_supported_opt_in
+    original = snapshot
+    [nil, false, {}, "unknown"].each do |mode|
+      value = original.merge("source_fingerprint" => mode)
+      write_manifest(value)
+      reject(/Unsupported source fingerprint mode/)
+    end
+    assert_raises(Contract::Invalid) do
+      HandrailReleaseTool.run(["--root", @source, "--source-fingerprint", Contract::SOURCE_FINGERPRINT])
+    end
+  end
+
+  def test_legacy_fingerprint_rejects_version_and_formatting_changes
+    original = snapshot
+    refute original.key?("source_fingerprint")
+    contributor_version("9.8.7")
+    reject(/tampered artifact/, true)
+    snapshot
+    File.open(File.join(@source, "package.json"), "a") { |file| file.puts }
+    reject(/tampered artifact/, true)
+  end
+
+  def test_fingerprint_snapshot_writer_requires_explicit_mode
+    fixture_git
+    command(RbConfig.ruby, TOOL, "--root", @checkout, "--write-snapshot",
+      "--source-fingerprint", Contract::SOURCE_FINGERPRINT)
+    value = Contract.read_json(File.join(@checkout, Contract::FILE))
+    assert_equal Contract::SOURCE_FINGERPRINT, value["source_fingerprint"]
+    assert_equal Contract.hashes(@checkout, Contract::SOURCE_FILES, Contract::SOURCE_FINGERPRINT), value["source_sha256"]
+    command(RbConfig.ruby, TOOL, "--root", @checkout, "--write-snapshot")
+    value = Contract.read_json(File.join(@checkout, Contract::FILE))
+    refute value.key?("source_fingerprint")
+    assert_equal Contract.hashes(@checkout, Contract::SOURCE_FILES), value["source_sha256"]
+  end
+
+  def test_fingerprint_git_accepts_committed_version_bump_and_checks_tampering
+    committed_fixture(Contract::SOURCE_FINGERPRINT) { contributor_version("9.8.7") }
+    value = Contract.verify!(@distribution, FIXTURE_VERSION, true)
+    assert_equal "committed_source", value["rails"]["provenance"]
+    assert_equal @revision, value["rails"]["commit"]
+    # Source A and clean distribution B have distinct private versions.
+    refute_equal command("git", "-C", @distribution, "show", "#{@revision}:package.json"),
+      File.binread(File.join(@distribution, "package.json"))
+    ["source_sha256", "files_sha256"].each do |inventory|
+      bad = Marshal.load(Marshal.dump(value))
+      path = inventory == "source_sha256" ? "package-lock.json" : Contract::ASSET
+      bad[inventory][path] = "a" * 64
+      error = assert_raises(Contract::Invalid) { HandrailReleaseTool.verify_git!(@distribution, bad) }
+      assert_match(/Source revision differs/, error.message)
+    end
+    File.open(File.join(@distribution, "package.json"), "a") { |file| file.puts }
+    error = assert_raises(Contract::Invalid) { HandrailReleaseTool.verify_git!(@distribution, value) }
+    assert_match(/Dirty source tree/, error.message)
+  end
+
+  def test_fingerprint_git_validates_selected_revision_declarations
+    # A has invalid excluded metadata; B repairs it. Valid local declarations
+    # must never excuse the invalid declarations in the attested source A.
+    edit_contributor("package-lock.json") { |value| value["version"] = "9.9.9" }
+    fixture_git
+    contributor_version("1.0.0")
+    value = snapshot(Contract::SOURCE_FINGERPRINT)
+    value["rails"] = { "package" => Contract::PACKAGE, "version" => FIXTURE_VERSION,
+      "provenance" => "committed_source", "commit" => @revision, "ref" => "commit:#{@revision}" }
+    write_manifest(value)
+    distribution = fixture_commit(@revision, true)
+    command("git", "update-ref", "refs/heads/valid-local", distribution, :env => @git_env)
+    local = File.join(@work, "valid-local")
+    command("git", "clone", "--quiet", "--branch", "valid-local", @bare, local)
+    assert_equal value, Contract.verify!(local, FIXTURE_VERSION, true)
+    error = assert_raises(Contract::Invalid) { HandrailReleaseTool.verify_git!(local, value) }
+    assert_match(/Contributor version declarations mismatch/, error.message)
   end
 
   def test_tag_archive_build_install_identity_and_integrity_without_tools_or_git

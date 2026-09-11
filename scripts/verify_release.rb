@@ -55,9 +55,12 @@ module HandrailReleaseTool
         [Contract::ASSET, "config/routes.rb"].include?(path)
     end
     Contract.check(source_files.sort == manifest.fetch("files_sha256").keys.sort, "Source revision artifact inventory differs")
-    manifest.fetch("files_sha256").merge(manifest.fetch("source_sha256")).each do |path, hash|
-      bytes = git(root, "show", "#{commit}:#{path}")
-      Contract.check(Digest::SHA256.hexdigest(bytes) == hash, "Source revision differs: #{path}")
+    [[manifest.fetch("files_sha256"), nil],
+      [manifest.fetch("source_sha256"), Contract.source_fingerprint_mode(manifest)]].each do |expected, mode|
+      actual = Contract.hashes(root, expected.keys, mode) { |path| git(root, "show", "#{commit}:#{path}") }
+      expected.each do |path, hash|
+        Contract.check(actual[path] == hash, "Source revision differs: #{path}")
+      end
     end
   end
 
@@ -73,6 +76,7 @@ module HandrailReleaseTool
       opts.on("--write-committed", "Attest bytes from an existing clean source revision") { options[:committed] = true }
       opts.on("--commit SHA") { |value| options[:commit] = value }
       opts.on("--ref REF") { |value| options[:ref] = value }
+      opts.on("--source-fingerprint MODE", "Opt in when writing: #{Contract::SOURCE_FINGERPRINT}") { |value| options[:fingerprint] = value }
     end
     parser.parse!(argv)
     Contract.check(argv.empty?, "Unexpected arguments")
@@ -82,6 +86,7 @@ module HandrailReleaseTool
     version = version_source[/^\s*VERSION = "([^"]+)"\s*$/, 1]
     Contract.check(version, "Missing literal Rails VERSION")
     writing = options[:snapshot] || options[:committed]
+    Contract.check(writing || !options[:fingerprint], "Source fingerprint option requires a manifest write")
     Contract.check(!(writing && options[:tag]), "Verify distribution tags after the manifest is committed")
     Contract.check(!(options[:snapshot] && options[:committed]), "Choose one provenance mode")
     Contract.check(options[:committed] || !(options[:commit] || options[:ref]), "Commit/ref require --write-committed")
@@ -99,7 +104,8 @@ module HandrailReleaseTool
       end
       manifest = { "schema_version" => 1, "rails" => rails, "bundled_js" => Contract::JS_BASELINE,
         "files_sha256" => Contract.hashes(root, Contract.runtime_files(root)),
-        "source_sha256" => Contract.hashes(root, Contract::SOURCE_FILES) }
+        "source_sha256" => Contract.hashes(root, Contract::SOURCE_FILES, options[:fingerprint]) }
+      manifest["source_fingerprint"] = options[:fingerprint] if options[:fingerprint]
       Contract.verify!(root, version, true, manifest)
       verify_git!(root, manifest)
       File.write(File.join(root, Contract::FILE), JSON.pretty_generate(manifest) + "\n")

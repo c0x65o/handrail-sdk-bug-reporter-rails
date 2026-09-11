@@ -1,0 +1,20 @@
+PASS: all 19 current harness hashes match final acceptance
+PASS: all 26 current package hashes match tested Git revision cf721d3b2381e38407ed10fac362f76dd6a537de
+PASS: all runner artifact and retained artifact hashes
+PASS: checksum-verified Ruby/OpenSSL/libyaml/Bundler sources, Bundler upstream metadata and built runtime identity
+PASS: 25 cached dependency gem archive hashes
+PASS: retained reporter gzip equals actual precompiled asset, 241154 bytes
+/opt/handrail/repos/handrail/handrail-feedback-sdks/handrail-sdk-bug-reporter-rails/test/compatibility/evidence/rails_6_1-2026-09-10/package.bundle is okay
+The bundle contains this ref:
+cf721d3b2381e38407ed10fac362f76dd6a537de refs/heads/compatibility-fixture
+The bundle records a complete history.
+The bundle uses this hash algorithm: sha1
+PASS: all prior files except the three intended edits preserved byte-for-byte, including both historical evidence directories, entry points, runner and SDK implementation
+PASS: /usr/bin/ruby: syntax for 12 compatibility/dummy files
+PASS: /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/runtime/bin/ruby: syntax for 12 compatibility/dummy files
+CONFIG PASS rails_4_2: Ruby 2.3.8, Rails 4.2.11.3, Bundler 2.3.26, 25 exact gem pins
+CONFIG PASS rails_5_2: Ruby 2.5.9, Rails 5.2.8.1, Bundler 2.3.26, 25 exact gem pins
+CONFIG PASS rails_6_1: Ruby 2.7.8, Rails 6.1.7.10, Bundler 2.4.22, 25 exact gem pins
+CONFIG PASS rails_7_2: Ruby 3.1.2, Rails 7.2.3.2, Bundler 2.3.7, 43 exact gem pins
+CONFIG PASS: workflow matches all four exact runtime/Bundler pairs
+PASS: matrix consistency and git diff --check

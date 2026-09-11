@@ -1,0 +1,12 @@
+Run options: --seed 49100
+
+# Running:
+
+SMOKE PASS: Ruby 2.7.8; Rails 6.1.7.10; Bundler 2.4.22
+INSTALL: /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/bundle/ruby/2.7.0/bundler/gems/sdk-cf721d3b2381; 26 snapshot files verified
+PRECOMPILE: /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-14-tnx2ck/host/public/assets/handrail_bug_reporter-e09fce1905fd73a44ef2a9e6f06ce42305bad8ab9de22cbcecd7f89801aa32b5.js; 241154 bytes; SHA256 2e2f999cf20760913f1af917bf7cb51d1cc21d0005f15ca74236438b2f04216f
+REQUESTS: valid=201/one HTTP boundary call; invalid=403/no additional call
+.
+
+Finished in 0.032103s, 31.1495 runs/s, 2398.5141 assertions/s.
+1 runs, 77 assertions, 0 failures, 0 errors, 0 skips

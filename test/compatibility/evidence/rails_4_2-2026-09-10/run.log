@@ -1,0 +1,74 @@
++ /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/runtime/bin/ruby /opt/handrail/repos/handrail/handrail-feedback-sdks/handrail-sdk-bug-reporter-rails/test/compatibility/check_matrix.rb
+CONFIG PASS rails_4_2: Ruby 2.3.8, Rails 4.2.11.3, Bundler 2.3.26, 25 exact gem pins
+CONFIG PASS rails_5_2: Ruby 2.5.9, Rails 5.2.8.1, Bundler 2.3.26, 25 exact gem pins
+CONFIG PASS rails_6_1: Ruby 2.7.8, Rails 6.1.7.10, Bundler 2.4.22, 25 exact gem pins
+CONFIG PASS rails_7_2: Ruby 3.1.2, Rails 7.2.3.2, Bundler 2.3.7, 43 exact gem pins
+CONFIG PASS: workflow matches all four exact runtime/Bundler pairs
+EVIDENCE: /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/tmp/handrail-rails_4_2-20260910-17797-e6c4yu (retained for inspection; safe to remove after review)
++ git clone --quiet --bare --no-hardlinks /opt/handrail/repos/handrail/handrail-feedback-sdks/handrail-sdk-bug-reporter-rails /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/tmp/handrail-rails_4_2-20260910-17797-e6c4yu/sdk.git
+SNAPSHOT: 92da5c8ff2000d164ef1f8e9d17cec1417a11d93; 26 current package files
++ /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/runtime/bin/ruby /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/gems/gems/bundler-2.3.26/exe/bundle lock
+Your RubyGems version (2.5.2.3) has a bug that prevents `required_ruby_version` from working for Bundler. Any scripts that use `gem install bundler` will break as soon as Bundler drops support for your Ruby version. Please upgrade RubyGems to avoid future breakage and silence this warning by running `gem update --system 3.2.3`
+Fetching /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/tmp/handrail-rails_4_2-20260910-17797-e6c4yu/sdk.git
+Fetching gem metadata from https://rubygems.org/..........
+Resolving dependencies...
+Writing lockfile to /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/tmp/handrail-rails_4_2-20260910-17797-e6c4yu/host/Gemfile.lock
++ /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/runtime/bin/ruby -e gem "bundler", ARGV.shift; load ARGV.shift 2.3.26 checks/verify_lock.rb
+LOCK PASS: 25 exact dependency versions; SDK Git 92da5c8ff2000d164ef1f8e9d17cec1417a11d93
++ /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/runtime/bin/ruby /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/gems/gems/bundler-2.3.26/exe/bundle install --jobs 2 --retry 2
+Your RubyGems version (2.5.2.3) has a bug that prevents `required_ruby_version` from working for Bundler. Any scripts that use `gem install bundler` will break as soon as Bundler drops support for your Ruby version. Please upgrade RubyGems to avoid future breakage and silence this warning by running `gem update --system 3.2.3`
+Using rake 12.3.3
+Using concurrent-ruby 1.1.10
+Using i18n 0.9.5
+Using minitest 5.11.3
+Using thread_safe 0.3.6
+Using tzinfo 1.2.11
+Using activesupport 4.2.11.3
+Using builder 3.2.4
+Using erubis 2.7.0
+Using mini_portile2 2.4.0
+Using nokogiri 1.10.10
+Using rails-deprecated_sanitizer 1.0.4
+Using rails-dom-testing 1.0.9
+Using crass 1.0.6
+Using loofah 2.12.0
+Using rails-html-sanitizer 1.0.4
+Using actionview 4.2.11.3
+Using rack 1.6.13
+Using rack-test 0.6.3
+Using actionpack 4.2.11.3
+Using bundler 2.3.26
+Using thor 0.20.3
+Using railties 4.2.11.3
+Using handrail-bug-reporter 0.4.49 from /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/tmp/handrail-rails_4_2-20260910-17797-e6c4yu/sdk.git (at 92da5c8@92da5c8)
+Using json 1.8.6
+Using sprockets 3.7.2
+Using sprockets-rails 3.2.2
+Bundle complete! 26 Gemfile dependencies, 27 gems now installed.
+Bundled gems are installed into `/opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/bundle`
++ /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/runtime/bin/ruby /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/gems/gems/bundler-2.3.26/exe/bundle exec /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/runtime/bin/ruby -e load Gem.bin_path("rake", "rake") -- assets:precompile --trace
+Your RubyGems version (2.5.2.3) has a bug that prevents `required_ruby_version` from working for Bundler. Any scripts that use `gem install bundler` will break as soon as Bundler drops support for your Ruby version. Please upgrade RubyGems to avoid future breakage and silence this warning by running `gem update --system 3.2.3`
+** Invoke assets:precompile (first_time)
+** Invoke assets:environment (first_time)
+** Execute assets:environment
+** Invoke environment (first_time)
+** Execute environment
+** Execute assets:precompile
+I, [2026-09-10T17:35:38.329293 #18172]  INFO -- : Writing /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/tmp/handrail-rails_4_2-20260910-17797-e6c4yu/host/public/assets/handrail_bug_reporter-bdab3525cf1f8de0f7ac1f2966d8a6f9afc1840f46c77437d0aa5c9140694a17.js
+I, [2026-09-10T17:35:38.329666 #18172]  INFO -- : Writing /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/tmp/handrail-rails_4_2-20260910-17797-e6c4yu/host/public/assets/handrail_bug_reporter-bdab3525cf1f8de0f7ac1f2966d8a6f9afc1840f46c77437d0aa5c9140694a17.js.gz
++ /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/runtime/bin/ruby /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/gems/gems/bundler-2.3.26/exe/bundle exec /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/runtime/bin/ruby checks/smoke.rb
+Your RubyGems version (2.5.2.3) has a bug that prevents `required_ruby_version` from working for Bundler. Any scripts that use `gem install bundler` will break as soon as Bundler drops support for your Ruby version. Please upgrade RubyGems to avoid future breakage and silence this warning by running `gem update --system 3.2.3`
+Run options: --seed 38426
+
+# Running:
+
+SMOKE PASS: Ruby 2.3.8; Rails 4.2.11.3; Bundler 2.3.26
+INSTALL: /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/bundle/ruby/2.3.0/bundler/gems/sdk-92da5c8ff200; 26 snapshot files verified
+PRECOMPILE: /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/tmp/handrail-rails_4_2-20260910-17797-e6c4yu/host/public/assets/handrail_bug_reporter-bdab3525cf1f8de0f7ac1f2966d8a6f9afc1840f46c77437d0aa5c9140694a17.js; 241155 bytes; SHA256 bdab3525cf1f8de0f7ac1f2966d8a6f9afc1840f46c77437d0aa5c9140694a17
+REQUESTS: valid=201/one HTTP boundary call; invalid=403/no additional call
+.
+
+Finished in 0.157876s, 6.3341 runs/s, 487.7241 assertions/s.
+
+1 runs, 77 assertions, 0 failures, 0 errors, 0 skips
+ACCEPTANCE: /opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/tmp/handrail-rails_4_2-20260910-17797-e6c4yu/acceptance.json

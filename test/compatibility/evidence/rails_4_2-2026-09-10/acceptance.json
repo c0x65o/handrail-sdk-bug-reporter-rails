@@ -1,0 +1,47 @@
+{
+  "cell": "rails_4_2",
+  "started_at": "2026-09-10T22:35:34Z",
+  "source_revision": "47f24091ae01e6363b3dd1acf9b497183ee9ebe0",
+  "source_status": "M README.md\n M test/README.md\n M test/compatibility/run.rb\n?? test/compatibility/bootstrap_rails_4_2.rb\n?? test/compatibility/evidence/rails_4_2-2026-09-10/README.md",
+  "runtime": {
+    "ruby": "ruby 2.3.8p459 (2018-10-18 revision 65136) [x86_64-linux]",
+    "rubygems": "2.5.2.3",
+    "bundler": "2.3.26",
+    "openssl": "OpenSSL 1.0.2u  20 Dec 2019",
+    "configure_args": " '--prefix=/opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/runtime' '--disable-install-doc' '--with-openssl-dir=/opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/runtime' '--with-libyaml-dir=/opt/handrail/.handrail/codex-runs/67447928-041c-4bf4-b0b3-4cbf3f94e315/tmp/handrail-rails_4_2-8f5be22f2abc/runtime' '--without-gmp' '--without-ext=readline,dbm,gdbm' 'CFLAGS=-O2 -fcommon'"
+  },
+  "harness_sha256": {
+    ".github/workflows/rails-compatibility.yml": "e9fbc3940f8e1d275413b67403acc52bf6f066b02c5d5af853613ea862da091c",
+    "Appraisals": "c499f0c7efdb5c48d5fb9ca978512168c3aa7ad4c318608f6b92c9280866ecc7",
+    "gemfiles/rails_4_2.gemfile": "f8e53026c6827942d8f813f8ec817fc8c07a897788184f097ecc6deb4ed9d06d",
+    "test/compatibility/bootstrap_rails_4_2.rb": "92bab82696f9157ea5040aaf9d8ffef425b5b0d506c0c0264b9bacdb65133556",
+    "test/compatibility/check_matrix.rb": "3fe3119d8fb2cc146512e0121fc03f604f095684f73ad23228a3adf264de20af",
+    "test/compatibility/matrix.json": "0f6223d493caff96d536b6437cc803289d67747435f907c18a6e01253bc17114",
+    "test/compatibility/run.rb": "c10dbf90efda5406f1919e86778ca2f0e4fa4b7fe984bab015401cb0704f9320",
+    "test/compatibility/smoke.rb": "214932d8eaf5a94c151cbd149d02861d42e9e1ed0cf95be5c715f66636f74678",
+    "test/compatibility/verify_lock.rb": "4cb79f7733fabe785ce154c522b492de301243ccb930f78961db2dc257fffbf7",
+    "test/dummy/Rakefile": "16a7fb3276a221a39db51c6098e1cf40cea8d891e9d40db4d599195df08a83b2",
+    "test/dummy/app/assets/config/manifest.js": "39606762d96268ee0ca7f07c7411736c0d5cb12a5d6d5ce7326c0ed87c022c9a",
+    "test/dummy/config/application.rb": "a6537705cc45f8fdecb79d7ed1e8604aeb9b0f1a0f65dcb4531a6c1d0736bea8",
+    "test/dummy/config/environment.rb": "f64370e56bef6c7a53e192da788a6ab58a7bbe9845f7600d0437d514d795ec0a",
+    "test/dummy/config/routes.rb": "91843cc9eb858434dcd85b39b229937efe25dfebc6cdff9fa992dd659c3871e7",
+    "test/support/no_network.rb": "21a8f9e128626f30dc1d3f38244990dd335ab714557cc27ccfb501e2aaca3a66"
+  },
+  "package_revision": "92da5c8ff2000d164ef1f8e9d17cec1417a11d93",
+  "snapshot_sha256": "fe109efc4b479cbdc94aa8081f637b1fc24f991cfe82dcace22664614f0cf337",
+  "results": {
+    "runs": 1,
+    "assertions": 77,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
+  },
+  "artifacts": {
+    "host/Gemfile": "355cade50c307254ba9ce65f30b3a1abf0a30afac76e8a964c8a77a40b040e62",
+    "host/Gemfile.lock": "2e4d7085f8e063e4a1ec39c3f0e4f3f2a3b15aeb0237a521ef9cde6423815126",
+    "host/public/assets/.sprockets-manifest-b2a987cbfd311e3aac2e8c3d54146542.json": "c794fe402b2f88db5d9fd4442e4e3e1a4424cdd12aa78dfea1ab812dc3677c2d",
+    "host/public/assets/handrail_bug_reporter-bdab3525cf1f8de0f7ac1f2966d8a6f9afc1840f46c77437d0aa5c9140694a17.js": "bdab3525cf1f8de0f7ac1f2966d8a6f9afc1840f46c77437d0aa5c9140694a17",
+    "host/public/assets/handrail_bug_reporter-bdab3525cf1f8de0f7ac1f2966d8a6f9afc1840f46c77437d0aa5c9140694a17.js.gz": "008beffa62f3ca16ff166fb81aeb065d33043aebbead5f79302563720422670c"
+  },
+  "finished_at": "2026-09-10T22:35:39Z"
+}

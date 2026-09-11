@@ -112,23 +112,104 @@ and Sprockets `4.2.1` with sprockets-rails `3.4.2` / `3.5.2` for Rails 6.1 / 7.2
 Full dependency patches are in the matrix JSON and each gemfile, including
 legacy-compatible Nokogiri, Rack, Thor, concurrent-ruby and Minitest pins.
 
-| Cell | Ruby | Rails components | Bundler | Executed acceptance on 2026-09-09 |
+| Cell | Ruby | Rails components | Bundler | Recorded acceptance |
 | --- | --- | --- | --- | --- |
-| `rails_4_2` | 2.3.8 | 4.2.11.3 | 2.3.26 | **Unavailable**: interpreter absent |
-| `rails_5_2` | 2.5.9 | 5.2.8.1 | 2.3.26 | **Unavailable**: interpreter absent |
-| `rails_6_1` | 2.7.8 | 6.1.7.10 | 2.4.22 | **Unavailable**: interpreter absent |
-| `rails_7_2` | 3.1.2p20 | 7.2.3.2 | 2.3.7 | **Passed**: 1 run, 74 assertions, 0 failures/errors/skips |
+| `rails_4_2` | 2.3.8p459 | 4.2.11.3 | 2.3.26 | **Passed 2026-09-10**: 1 run, 77 assertions, 0 failures/errors/skips |
+| `rails_5_2` | 2.5.9p229 | 5.2.8.1 | 2.3.26 | **Passed 2026-09-10**: 1 run, 77 assertions, 0 failures/errors/skips |
+| `rails_6_1` | 2.7.8p225 | 6.1.7.10 | 2.4.22 | **Passed 2026-09-10**: 1 run, 77 assertions, 0 failures/errors/skips |
+| `rails_7_2` | 3.1.2p20 | 7.2.3.2 | 2.3.7 | **Passed 2026-09-09**: 1 run, 74 assertions, 0 failures/errors/skips |
 
-The worker is Debian 12 with only `/usr/bin/ruby3.1`; no rbenv, mise or ruby-build
-is available. `docker version --format '{{.Server.Version}}'` fails to connect to
-`unix:///var/run/docker.sock`. Each legacy runner invocation exits nonzero with
+At the original 2026-09-09 run, the Debian 12 worker had only `/usr/bin/ruby3.1`;
+no rbenv, mise or ruby-build was available. Docker could not connect to
+`unix:///var/run/docker.sock`. Each legacy runner invocation exited nonzero with
 `UNAVAILABLE ... requires Ruby ...; current 3.1.2`. No legacy skip is counted as a
 pass. The upper cell covers the declared Rails 7.x range; it is a fresh smoke run,
 separate from the historical scaffold evidence above. No SDK compatibility fix
 was required by this executed cell. Other allowed runtime combinations remain
 unverified, and the scoped workflow is authored source, not executed CI evidence.
 
+On 2026-09-10 the repository bootstrap made `rails_4_2` executable on Debian 12
+with a private source-built Ruby 2.3.8p459 / RubyGems 2.5.2.3 / Bundler 2.3.26,
+OpenSSL 1.0.2u and libyaml 0.2.5. The current package (Rails SDK 0.4.49, bundled
+JS 0.4.50) passed **77 assertions with zero failures/errors/skips**, including
+all 26 snapshot entries (gemspec metadata checked separately), Git installation,
+Sprockets 3.7.2 precompilation with empty PATH, and real cookie-session/CSRF
+requests. The compiled asset is 241,155 bytes, SHA-256
+`bdab3525cf1f8de0f7ac1f2966d8a6f9afc1840f46c77437d0aa5c9140694a17`.
+No SDK or dummy-host changes were needed. See the
+[retained Rails 4.2 record](compatibility/evidence/rails_4_2-2026-09-10/README.md)
+for source revision, exact lockfile, snapshot hashes, logs and artifact references.
+That Rails 4.2 run did not test the other legacy cells or consumer applications.
+
+A separate 2026-09-10 bootstrap run established `rails_5_2` acceptance with Ruby
+2.5.9p229 / RubyGems 2.7.6.3 / Bundler 2.3.26, Rails components 5.2.8.1 and the
+same private OpenSSL/libyaml versions. It passed **77 assertions with zero
+failures/errors/skips**, verifying the 26-entry current package snapshot, 25 exact
+dependency pins, actual Git loading, Node-free Sprockets precompilation and real
+cookie-session/CSRF behavior. The compiled reporter has the same 241,155 bytes
+and SHA-256 shown above. No SDK, matrix, runner, smoke or dummy-host changes were
+needed for this cell. See the [retained Rails 5.2 record](compatibility/evidence/rails_5_2-2026-09-10/README.md)
+for source/package hashes, lockfile, logs and artifacts. The original Rails 4.2
+evidence remains unchanged; its entry point now delegates to the shared bootstrap.
+That Rails 5.2 run did not evaluate Rails 6.1, consumer installation, browser QA
+or release tagging.
+
+A further 2026-09-10 isolated bootstrap run established `rails_6_1` acceptance on
+Ruby 2.7.8p225 / RubyGems 3.1.6 / Bundler 2.4.22 and Rails components 6.1.7.10.
+It passed **77 assertions with zero failures/errors/skips**, checking all 26
+package snapshot entries, the exact 25-gem dependency closure, Git-loaded gem
+identity, Sprockets 4.2.1 precompilation without Node, and real cookie-session/CSRF
+requests. Its compiled reporter is 241,154 bytes, SHA-256
+`2e2f999cf20760913f1af917bf7cb51d1cc21d0005f15ca74236438b2f04216f`.
+Only the bootstrap and documentation needed changes; SDK implementation, matrix,
+runner, smoke assertions and dummy host remained unchanged. The
+[retained Rails 6.1 record](compatibility/evidence/rails_6_1-2026-09-10/README.md)
+contains source/package/harness hashes, runtime versions, the resolved lock,
+logs and artifacts. Shared bootstrap guards passed 81 assertions across all three
+entry points. Previous Rails 4.2/5.2 evidence is preserved as historical evidence,
+not counted as fresh runtime acceptance. Consumer installations, browser re-QA
+and release tagging remain outside this result.
+
 ### Reproduce
+
+For `rails_4_2`, `rails_5_2` and `rails_6_1`, the repository owns an isolated source bootstrap:
+
+```sh
+ruby test/compatibility/bootstrap_rails_4_2.rb
+ruby test/compatibility/bootstrap_rails_5_2.rb
+ruby test/compatibility/bootstrap_rails_6_1.rb
+```
+
+Run with the host Ruby, outside `bundle exec`. The bootstrap targets Linux with
+GCC, Make, Perl, tar, curl, Git, libc/zlib development headers and a CA bundle.
+All three entry points use `test/compatibility/bootstrap.rb`. It builds the selected
+Ruby (2.3.8, 2.5.9 or 2.7.8) with private static OpenSSL 1.0.2u and libyaml 0.2.5,
+installs the cell-specific Bundler (2.3.26 for Rails 4.2/5.2, 2.4.22 for Rails 6.1),
+then invokes the existing `run.rb` with that cell.
+Downloads must match the SHA-256 pins before extraction or installation. Ruby's
+pins come from the [2.3.8 release announcement](https://www.ruby-lang.org/en/news/2018/10/17/ruby-2-3-8-released/),
+[2.5.9 release announcement](https://www.ruby-lang.org/en/news/2021/04/05/ruby-2-5-9-released/)
+and [2.7.8 release announcement](https://www.ruby-lang.org/en/news/2023/03/30/ruby-2-7-8-released/);
+the other archives come from the OpenSSL, libyaml and RubyGems upstreams recorded
+in `sources.json`. TLS verification uses the host CA bundle, never an insecure
+download option. This obsolete runtime is confined to the compatibility fixture.
+
+All build outputs, runtime files, gems and logs live under
+`$TMPDIR/handrail-<cell>-<checkout-path-hash>/` (system temp by default), created
+with a private umask of 0077. No Docker daemon, system installation or runtime
+manager is needed.
+`HANDRAIL_COMPAT_RUNTIME` can select another private writable directory outside
+the SDK checkout (without whitespace). `HANDRAIL_COMPAT_JOBS` accepts 1 or 2 and
+defaults to 2. Set `SSL_CERT_FILE` if the host CA bundle is elsewhere than
+`/etc/ssl/certs/ca-certificates.crt`. A directory lock prevents concurrent runs.
+Completed builds are reused only when the shared bootstrap hash and cell match;
+each invocation still runs fresh package acceptance. `bootstrap.log` retains the
+build/install commands and output; `acceptance.log` retains the complete smoke
+execution and prints the fixture directory. A failed build or smoke exits nonzero.
+Run `ruby test/compatibility/bootstrap_test.rb` with the host Ruby to verify all
+three entry points reject matrix pin drift, corrupt Ruby archives, in-checkout
+runtime paths, whitespace paths, excess build jobs and concurrent use without
+building a runtime.
 
 Select the exact Ruby in the table, install its exact Bundler, and run from the
 repository root **outside `bundle exec`**. For example, on Ruby 3.1.2:
@@ -151,8 +232,11 @@ credentials or running server.
 `TMPDIR` can select a writable scratch directory. Optional
 `HANDRAIL_COMPAT_BUNDLE_PATH` selects a reusable gem cache. The runner retains its
 printed `EVIDENCE` directory for inspection: the generated `host/Gemfile.lock`,
-Git source, `snapshot.json`, dummy app and compiled assets. Remove that temporary
-directory after review. No Bundler configuration, generated assets, Git index,
+Git source, `snapshot.json`, dummy app and compiled assets. `acceptance.json`
+records source HEAD/status, package revision, harness hashes, runtime details,
+artifact hashes and executed assertion totals; `smoke.log` retains the test
+output. Acceptance requires nonzero runs/assertions and zero failures/errors/skips.
+Remove that temporary directory after review. No Bundler configuration, generated assets, Git index,
 commit or branch is written in the registered checkout.
 
 The runner clones the existing repository as an isolated bare fixture (no Git
@@ -183,7 +267,7 @@ The worker generated all four gemfiles using real Appraisal 2.5.0 in a temporary
 copy, then verified their definitions and the CI matrix against `matrix.json`.
 
 The smoke asserts Bundler Git provenance, Engine root, loaded SDK library paths,
-installed asset filename, and SHA-256 equality for all 23 package files. Bundler
+installed asset filename, and SHA-256 equality for all snapshot package files. Bundler
 normalizes the installed gemspec, so its version, dependency names and package
 file list are checked separately. Real `rake assets:precompile` must produce a
 fingerprinted reporter entry in the Sprockets manifest whose bytes equal the

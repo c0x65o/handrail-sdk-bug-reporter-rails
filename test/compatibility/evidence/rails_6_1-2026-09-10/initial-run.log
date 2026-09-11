@@ -1,0 +1,95 @@
++ /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/runtime/bin/ruby /opt/handrail/repos/handrail/handrail-feedback-sdks/handrail-sdk-bug-reporter-rails/test/compatibility/check_matrix.rb
+CONFIG PASS rails_4_2: Ruby 2.3.8, Rails 4.2.11.3, Bundler 2.3.26, 25 exact gem pins
+CONFIG PASS rails_5_2: Ruby 2.5.9, Rails 5.2.8.1, Bundler 2.3.26, 25 exact gem pins
+CONFIG PASS rails_6_1: Ruby 2.7.8, Rails 6.1.7.10, Bundler 2.4.22, 25 exact gem pins
+CONFIG PASS rails_7_2: Ruby 3.1.2, Rails 7.2.3.2, Bundler 2.3.7, 43 exact gem pins
+CONFIG PASS: workflow matches all four exact runtime/Bundler pairs
+EVIDENCE: /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-17468-1rg1vve (retained for inspection; safe to remove after review)
++ git clone --quiet --bare --no-hardlinks /opt/handrail/repos/handrail/handrail-feedback-sdks/handrail-sdk-bug-reporter-rails /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-17468-1rg1vve/sdk.git
+SNAPSHOT: 894b8dbc7461776ab9b96b7d043faa4b370a0814; 26 current package files
++ /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/runtime/bin/ruby /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/gems/gems/bundler-2.4.22/exe/bundle lock
+Fetching /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-17468-1rg1vve/sdk.git
+Fetching gem metadata from https://rubygems.org/..........
+Resolving dependencies...
+Writing lockfile to /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-17468-1rg1vve/host/Gemfile.lock
++ /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/runtime/bin/ruby -e gem "bundler", ARGV.shift; load ARGV.shift 2.4.22 checks/verify_lock.rb
+LOCK PASS: 25 exact dependency versions; SDK Git 894b8dbc7461776ab9b96b7d043faa4b370a0814
++ /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/runtime/bin/ruby /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/gems/gems/bundler-2.4.22/exe/bundle install --jobs 2 --retry 2
+Fetching gem metadata from https://rubygems.org/..........
+Fetching rake 12.3.3
+Installing rake 12.3.3
+Fetching concurrent-ruby 1.3.4
+Fetching minitest 5.22.3
+Installing minitest 5.22.3
+Fetching zeitwerk 2.6.18
+Installing concurrent-ruby 1.3.4
+Fetching builder 3.2.4
+Installing zeitwerk 2.6.18
+Fetching erubi 1.10.0
+Installing builder 3.2.4
+Fetching mini_portile2 2.8.7
+Installing erubi 1.10.0
+Fetching racc 1.7.3
+Installing mini_portile2 2.8.7
+Installing racc 1.7.3 with native extensions
+Fetching crass 1.0.6
+Installing crass 1.0.6
+Fetching rack 2.2.17
+Installing rack 2.2.17
+Fetching method_source 1.0.0
+Fetching thor 1.2.2
+Installing method_source 1.0.0
+Fetching i18n 1.14.7
+Installing thor 1.2.2
+Installing i18n 1.14.7
+Fetching tzinfo 2.0.6
+Fetching rack-test 2.1.0
+Installing tzinfo 2.0.6
+Fetching sprockets 4.2.1
+Installing rack-test 2.1.0
+Fetching nokogiri 1.15.7
+Installing sprockets 4.2.1
+Fetching activesupport 6.1.7.10
+Installing nokogiri 1.15.7 with native extensions
+Installing activesupport 6.1.7.10
+Fetching rails-dom-testing 2.2.0
+Fetching loofah 2.22.0
+Installing loofah 2.22.0
+Installing rails-dom-testing 2.2.0
+Fetching rails-html-sanitizer 1.6.0
+Installing rails-html-sanitizer 1.6.0
+Fetching actionview 6.1.7.10
+Installing actionview 6.1.7.10
+Fetching actionpack 6.1.7.10
+Installing actionpack 6.1.7.10
+Fetching sprockets-rails 3.4.2
+Fetching railties 6.1.7.10
+Installing sprockets-rails 3.4.2
+Installing railties 6.1.7.10
+Bundle complete! 26 Gemfile dependencies, 27 gems now installed.
+Bundled gems are installed into `/opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/bundle`
++ /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/runtime/bin/ruby /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/gems/gems/bundler-2.4.22/exe/bundle exec /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/runtime/bin/ruby -e load Gem.bin_path("rake", "rake") -- assets:precompile --trace
+** Invoke assets:precompile (first_time)
+** Invoke assets:environment (first_time)
+** Execute assets:environment
+** Invoke environment (first_time)
+** Execute environment
+** Execute assets:precompile
+I, [2026-09-10T17:55:36.882882 #25397]  INFO -- : Writing /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-17468-1rg1vve/host/public/assets/manifest-7723e427d4a824b2af70a2110ec500326b8de8dea270f039fcd63ef043dc1765.js
+I, [2026-09-10T17:55:36.883261 #25397]  INFO -- : Writing /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-17468-1rg1vve/host/public/assets/manifest-7723e427d4a824b2af70a2110ec500326b8de8dea270f039fcd63ef043dc1765.js.gz
+I, [2026-09-10T17:55:36.883422 #25397]  INFO -- : Writing /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-17468-1rg1vve/host/public/assets/handrail_bug_reporter-e09fce1905fd73a44ef2a9e6f06ce42305bad8ab9de22cbcecd7f89801aa32b5.js
+I, [2026-09-10T17:55:36.883600 #25397]  INFO -- : Writing /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-17468-1rg1vve/host/public/assets/handrail_bug_reporter-e09fce1905fd73a44ef2a9e6f06ce42305bad8ab9de22cbcecd7f89801aa32b5.js.gz
++ /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/runtime/bin/ruby /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/gems/gems/bundler-2.4.22/exe/bundle exec /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/runtime/bin/ruby checks/smoke.rb
+Run options: --seed 39643
+
+# Running:
+
+SMOKE PASS: Ruby 2.7.8; Rails 6.1.7.10; Bundler 2.4.22
+INSTALL: /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/bundle/ruby/2.7.0/bundler/gems/sdk-894b8dbc7461; 26 snapshot files verified
+PRECOMPILE: /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-17468-1rg1vve/host/public/assets/handrail_bug_reporter-e09fce1905fd73a44ef2a9e6f06ce42305bad8ab9de22cbcecd7f89801aa32b5.js; 241154 bytes; SHA256 2e2f999cf20760913f1af917bf7cb51d1cc21d0005f15ca74236438b2f04216f
+REQUESTS: valid=201/one HTTP boundary call; invalid=403/no additional call
+.
+
+Finished in 0.034546s, 28.9469 runs/s, 2228.9116 assertions/s.
+1 runs, 77 assertions, 0 failures, 0 errors, 0 skips
+ACCEPTANCE: /opt/handrail/.handrail/codex-runs/260b525f-1400-4a38-b322-92b5e185240d/tmp/handrail-rails_6_1-8f5be22f2abc/tmp/handrail-rails_6_1-20260910-17468-1rg1vve/acceptance.json

@@ -20,8 +20,23 @@ module Handrail
       SOURCE_FILES = %w[handrail-bug-reporter.gemspec frontend/upstream.json
         frontend/entry.jsx frontend/rails_adapter.js package.json package-lock.json
         scripts/build.mjs scripts/contract.mjs].freeze
+      SOURCE_FINGERPRINT = "private-contributor-v1".freeze
+      CONTRIBUTOR_FILES = %w[package.json package-lock.json].freeze
+      CONTRIBUTOR_VERSION = /\A
+        (?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)
+        (?:-(?:0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)
+          (?:\.(?:0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*)?
+        (?:\+[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*)?\z/x
 
       class Invalid < StandardError; end
+
+      # Ambiguous duplicate declarations must not disappear during parsing.
+      class ContributorObject < Hash
+        def []=(key, value)
+          raise Invalid, "Duplicate contributor JSON key: #{key}" if key?(key)
+          super
+        end
+      end
       module_function
 
       def check(condition, message)
@@ -41,11 +56,62 @@ module Handrail
         end
       end
 
-      def hashes(root, paths)
-        paths.sort.each_with_object({}) do |path, result|
-          absolute = File.join(root, path)
-          check(File.file?(absolute) && !File.symlink?(absolute), "Missing or unsafe artifact: #{path}")
-          result[path] = Digest::SHA256.file(absolute).hexdigest
+      def source_fingerprint_mode(manifest)
+        return nil unless manifest.key?("source_fingerprint")
+        check(manifest["source_fingerprint"] == SOURCE_FINGERPRINT, "Unsupported source fingerprint mode")
+        manifest["source_fingerprint"]
+      end
+
+      def canonical_json(value)
+        case value
+        when Hash
+          value.keys.sort.each_with_object({}) { |key, result| result[key] = canonical_json(value[key]) }
+        when Array
+          value.map { |entry| canonical_json(entry) }
+        else
+          value
+        end
+      end
+
+      def contributor_documents(bytes)
+        documents = CONTRIBUTOR_FILES.map do |path|
+          check(bytes.key?(path), "Missing contributor input: #{path}")
+          JSON.parse(bytes.fetch(path), :object_class => ContributorObject)
+        end
+        package, lock = documents
+        check(package.is_a?(Hash) && package["private"] == true,
+          "Contributor package.json must declare private=true")
+        check(lock.is_a?(Hash) && lock["packages"].is_a?(Hash) && lock["packages"][""].is_a?(Hash),
+          "Malformed contributor package-lock.json root package")
+        versions = [package["version"], lock["version"], lock["packages"][""]["version"]]
+        check(versions.all? { |version| version.is_a?(String) && CONTRIBUTOR_VERSION =~ version },
+          "Malformed contributor version declaration")
+        check(versions.uniq.length == 1, "Contributor version declarations mismatch")
+        package.delete("version")
+        lock.delete("version")
+        lock["packages"][""].delete("version")
+        Hash[CONTRIBUTOR_FILES.zip(documents)]
+      rescue JSON::ParserError => error
+        raise Invalid, "Malformed contributor JSON: #{error.message}"
+      end
+
+      # The byte reader also allows Git verification to validate the selected
+      # revision's declarations, never borrowing them from the working tree.
+      def hashes(root, paths, mode = nil)
+        check(mode.nil? || mode == SOURCE_FINGERPRINT, "Unsupported source fingerprint mode")
+        bytes = paths.sort.each_with_object({}) do |path, result|
+          if block_given?
+            result[path] = yield path
+          else
+            absolute = File.join(root, path)
+            check(File.file?(absolute) && !File.symlink?(absolute), "Missing or unsafe artifact: #{path}")
+            result[path] = File.binread(absolute)
+          end
+        end
+        documents = mode ? contributor_documents(bytes) : {}
+        bytes.each_with_object({}) do |(path, content), result|
+          content = JSON.generate(canonical_json(documents[path])) if documents.key?(path)
+          result[path] = Digest::SHA256.hexdigest(content)
         end
       end
 
@@ -61,6 +127,7 @@ module Handrail
       def verify!(root, version, source = false, manifest = nil)
         manifest ||= read_json(File.join(root, FILE))
         check(manifest.is_a?(Hash) && manifest["schema_version"] == 1, "Unsupported release manifest schema")
+        mode = source_fingerprint_mode(manifest)
         rails = manifest["rails"]
         check(rails.is_a?(Hash) && rails["package"] == PACKAGE && rails["version"] == version &&
           version.is_a?(String) && VERSION =~ version, "Rails manifest version is stale or malformed")
@@ -91,7 +158,7 @@ module Handrail
         check(inputs.is_a?(Hash) && inputs.keys.sort == SOURCE_FILES.sort &&
           inputs.values.all? { |hash| hash.is_a?(String) && SHA256 =~ hash }, "Missing or malformed source inventory")
         if source
-          verify_hashes!(root, inputs)
+          verify_hashes!(root, inputs, mode)
           upstream = read_json(File.join(root, "frontend/upstream.json"))
           check(upstream.is_a?(Hash) && JS_BASELINE.all? { |key, value| upstream[key] == value }, "Upstream identity mismatch")
           dependency = "git+https://github.com/c0x65o/handrail-sdk-bug-reporter-js.git##{js['commit']}"
@@ -107,10 +174,11 @@ module Handrail
         raise Invalid, "Malformed release metadata: #{error.message}"
       end
 
-      def verify_hashes!(root, expected)
+      def verify_hashes!(root, expected, mode = nil)
+        actual = hashes(root, expected.keys, mode)
         expected.each do |path, hash|
           check(hash.is_a?(String) && SHA256 =~ hash, "Invalid SHA-256: #{path}")
-          check(hashes(root, [path])[path] == hash, "Stale or tampered artifact: #{path}")
+          check(actual[path] == hash, "Stale or tampered artifact: #{path}")
         end
       end
     end
