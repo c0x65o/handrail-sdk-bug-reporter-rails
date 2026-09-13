@@ -24,6 +24,7 @@ module Handrail
       return "".html_safe if options[:enabled] == false
       factory = Rails.application.config.handrail_bug_reporter_factory
       return "".html_safe unless factory && factory.configuration.enabled
+      return "".html_safe unless factory.authorized?(request)
       configuration = factory.configuration
 
       mode = options.fetch(:mode, "launcher").to_s

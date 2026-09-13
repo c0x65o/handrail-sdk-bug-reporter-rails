@@ -2,8 +2,12 @@
 Review config/initializers/handrail_bug_reporter.rb and its environment mapping.
 Set HANDRAIL_API_URL, HANDRAIL_PROJECT_ID and HANDRAIL_BUG_REPORT_TOKEN in the
 host's server environment before boot. Missing values leave reporting unavailable.
-The default resolver retains anonymous reporting; the initializer shows how to
-return a trusted, request-scoped Handrail application-session token for Known Users.
+The generated authorize_request callback denies all reporter routes and helper
+renders until you replace false with the host's trusted authenticated-admin check.
+The engine does not inherit ApplicationController authentication filters. Protect
+every route, including policy/history reads; hiding a launcher is insufficient.
+The separate identity resolver shows how to return a trusted, request-scoped
+Handrail application-session token for Known Users; nil grants no upstream identity.
 
 Mounting is opt-in. To request a mount, run:
   bin/rails generate handrail:bug_reporter:install --mount
@@ -12,7 +16,7 @@ Or manually add this to config/routes.rb (only if no reporter mount exists):
 An existing route reference is preserved for manual review. For a customized
 mount, use its own path helper and a local path ending in /api/mobile-bug-reports.
 
-After mounting, manually place the helper in your chosen host view/layout:
+After mounting, manually place the helper in authenticated admin views/layouts only:
   <%= handrail_bug_reporter(:endpoint => handrail_bug_reporter_path) %>
 For a customized mount, replace handrail_bug_reporter_path with its path helper.
 Use the local mount, not HANDRAIL_API_URL, as the browser endpoint.
@@ -27,3 +31,8 @@ javascript_include_tag. No importmap or Webpacker migration is required.
 
 Ruby 2.3 / Rails 4.2 remain provisional compatibility targets, not verified
 Bluecotton or Monuvision versions.
+
+Adoption requires verified-parity notification and explicit owner continuation.
+Monuvision must succeed before BlueCotton. Install from public HTTPS Git at a full
+commit SHA with a matching Gemfile.lock and the normal install/asset-build pipeline.
+No tag, branch, registry, tarball, local-path or workspace source substitutes.

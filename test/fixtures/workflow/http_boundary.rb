@@ -19,6 +19,12 @@ class WorkflowHTTP
     File.open(@audit, "a") { |file| file.puts(JSON.generate(value)) }
   end
 
+  def authorize(request)
+    role = request.session[:role]
+    record(:kind => "authorization", :role => role)
+    role == "admin" && request.session[:principal] == "workflow-private-principal"
+  end
+
   def resolve(request)
     principal = request.session[:principal]
     record(:kind => "identity", :principal => principal)
@@ -61,11 +67,18 @@ class WorkflowHTTP
         return { :status => 503, :body => JSON.generate(:error => "fixture_transient"), :headers => {} }
       end
       @submitted = true
+      case @scenario
+      when "accepted_malformed"
+        return { :status => 201, :body => "accepted but not JSON", :headers => {} }
+      when "accepted_empty"
+        return { :status => 204, :body => nil, :headers => {} }
+      end
       status = 201
       # An unrelated intake identifier must never become a child-route bug ID.
       { :bug_id => BUG_ID, :id => "intake-not-a-bug-id" }
     when ["POST", ROOT + "/bugs/#{BUG_ID}/subscription"]
       raise "Subscription preceded acceptance" unless @submitted
+      return { :status => 204, :body => nil, :headers => {} } if @scenario == "subscription_empty"
       if @scenario == "subscription_failure"
         status = 422
         { :error => "fixture_subscription_unavailable" }
@@ -73,6 +86,8 @@ class WorkflowHTTP
         { :notification_subscription => { :active => true, :created => true,
           :recipient_hint => "j***@example.com", :subscribed_at => TIME } }
       end
+    when ["POST", ROOT + "/mine/archive-closed"]
+      { :contract_version => "v1", :archived_count => 0 }
     when ["GET", ROOT + "/mine"]
       # The opaque cursor carries the original query, just as the upstream
       # history contract does; loadMoreBugs sends only limit + cursor.

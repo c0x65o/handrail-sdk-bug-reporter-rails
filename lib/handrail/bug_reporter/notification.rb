@@ -38,6 +38,7 @@ module Handrail
         # into Client#submit's intake error mapping, or replay the parent request.
         def follow_up(client, response, preference)
           return [nil, nil] unless preference
+          return [nil, WARNING] unless response.is_a?(Hash)
           if response.key?("notification_subscription")
             subscription = parse(response)
           else

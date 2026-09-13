@@ -266,32 +266,38 @@ class SubmissionTest < Minitest::Test
     assert_safe(error)
   end
 
-  def test_malformed_successes_raise_safe_errors_without_retrying_accepted_requests
-    [nil, "", " ", "<html>#{TOKEN} #{SESSION}</html>", '{"secret":"' + TOKEN,
-      "null", "[]", '"' + SESSION + '"', "42", "true", "\xff".force_encoding("UTF-8"),
-      '{"bug_id":"'.b + "\xff".b + '"}', "[" * 110 + "]" * 110].each do |body|
-      before = @calls.length
-      error = assert_raises(SDK::Error) do
-        client(config(:max_attempts => 3)) { |*_| response(200, body, "x-request-id" => "parse-id") }.submit(report)
+  def test_accepted_empty_malformed_and_primitive_results_never_replay_intake
+    cases = [[nil, nil], ["", nil], [" ", nil], ["<html>#{TOKEN}</html>", nil],
+      ['{"secret":"' + TOKEN, nil], ["null", nil], ["[]", []], ['"accepted"', "accepted"],
+      ["42", 42], ["false", false], ["true", true], ["9007199254740993", 9007199254740993],
+      ["\xff".b, nil], ["[" * 110 + "]" * 110, nil]]
+    cases.each do |body, expected|
+      [200, 201, 202, 204].each do |status|
+        [false, true].each do |consent|
+          before = @calls.length
+          result = client(config(:max_attempts => 3)) { |*_| response(status, body) }.submit(
+            report(:event_id => "accepted-event", :notification => { :notify_on_resolution => consent }))
+          assert result.submitted?
+          assert_equal status, result.status_code
+          expected.nil? ? assert_nil(result.response) : assert_equal(expected, result.response)
+          assert result.response.frozen?
+          assert_nil result.bug_id
+          assert_nil result.notification_subscription
+          consent ? assert_equal(SDK::Notification::WARNING, result.notification_warning) : assert_nil(result.notification_warning)
+          assert_equal before + 1, @calls.length
+          assert_equal "accepted-event", JSON.parse(@calls.last[3])["event_id"]
+        end
       end
-      assert_equal :malformed_response, error.code
-      assert_equal 200, error.status_code
-      assert_equal "parse-id", error.request_id
-      assert_nil error.upstream_code
-      assert_nil error.upstream_message
-      assert_safe(error)
-      assert_equal before + 1, @calls.length
     end
     assert_empty @sleeps
   end
 
-  def test_malformed_response_secret_header_is_not_retained
-    error = assert_raises(SDK::Error) do
-      client { |*_| response(204, nil, "x-request-id" => TOKEN, "x-handrail-request-id" => SESSION) }.submit(report)
-    end
-    assert_equal :malformed_response, error.code
-    assert_nil error.request_id
-    assert_safe(error)
+  def test_empty_success_does_not_expose_header_diagnostics
+    result = client { |*_| response(204, nil, "x-request-id" => TOKEN) }.submit(report)
+    assert result.submitted?
+    assert_nil result.response
+    refute_includes result.inspect, TOKEN
+    assert_equal 1, @calls.length
   end
 
   def test_result_inspection_and_serialization_do_not_print_upstream_data

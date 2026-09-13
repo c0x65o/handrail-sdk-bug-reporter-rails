@@ -207,7 +207,7 @@ class TransportTest < Minitest::Test
     fibers.each(&:resume)
     fibers.reverse_each(&:resume)
     assert_equal ["session-A", "session-B", nil, nil, nil, nil, nil], calls.map { |call| call[2]["x-handrail-application-session-token"] }
-    assert_equal [:@configuration, :@resolver, :@transport].sort, factory.instance_variables.sort
+    assert_equal [:@authorization_configured, :@authorize_request, :@configuration, :@resolver, :@transport].sort, factory.instance_variables.sort
     assert_equal [:@clock, :@configuration, :@http, :@sleeper].sort, factory.instance_variable_get(:@transport).instance_variables.sort
     clients.each { |reporter| refute_match(/session-A|session-B|private|hbr_/, reporter.inspect) }
   end

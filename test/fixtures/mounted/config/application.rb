@@ -19,6 +19,11 @@ module MountedHost
 end
 
 class SessionFixtureController < ActionController::Base
+  def member
+    session[:principal] = "fixture-member"
+    render :json => { :csrf => form_authenticity_token }
+  end
+
   def show
     # Represents an existing host-authenticated principal; the SDK never signs in
     # a user or chooses session credentials from headers/JSON.

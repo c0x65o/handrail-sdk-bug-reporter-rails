@@ -41,11 +41,16 @@ Success JSON is validated and forwarded byte-for-byte to the browser, without
 Ruby domain parsing or reserialization of versioned status, summary, or journey
 fields. History ownership errors preserve upstream 401/403 and use the JS
 forwarding contract `{"error":"bug_reporting_rejected"}`. Upstream diagnostics,
-credentials, cookies, and response headers are not relayed. Other upstream
-failures retain the existing generic 502 behavior. Public Client and Transport
-behavior is unchanged; neither file was edited.
+credentials, cookies, and response headers are not relayed. All upstream 4xx/5xx statuses now use that same rejection contract. Network
+and redirect failures return 502 `bug_reporting_unavailable`. Empty successes keep
+their status; malformed success JSON becomes `null` at that same accepted status.
+This avoids retrying an accepted mutation and suppresses malformed diagnostics.
+The host `authorize_request` callback applies to every route before forwarding;
+CSRF remains mandatory on all writes. Public Ruby operation behavior is unchanged.
 
-## Verification, 2026-09-09
+## Historical verification, 2026-09-09
+
+The following is a prior-source record, not current candidate acceptance.
 
 Runtime: Ruby 3.1.2, Rails 7.2.3.2, Rack 3.2.7, Bundler 2.3.7. Ruby >=2.3 and
 Rails >=4.2 bounds remain provisional; no legacy runtime matrix was exercised.

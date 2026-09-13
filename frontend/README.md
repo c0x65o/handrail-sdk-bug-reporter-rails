@@ -10,9 +10,10 @@ The gemspec includes this prebuilt asset for both gem and Bundler Git packaging.
 The asset must be included in Git by the publication workflow, along with the
 contributor sources and lockfile; no Git finalization is performed by this item.
 
-Loading the script only defines the API: no UI, listeners, timers, storage, or
-network activity. Load it once per page. Helpers and navigation integrations
-must explicitly call this API after their own lifecycle/configuration checks.
+Loading the script defines the API and starts bounded navigation listeners and a
+MutationObserver. Only explicit helper markers mount a UI; marker-free loading
+makes no requests or UI mutations. Repeated asset execution reuses lifecycle state.
+Manual mounts remain caller-owned.
 
 ## API for helper and adapter workers
 
@@ -24,7 +25,8 @@ const reporter = HandrailBugReporter.mount(element, {
     apiBaseUrl: '/handrail/api/mobile-bug-reports',
     projectId: 'your-project-id',
     environment: 'production',
-    allowScreenshots: true
+    allowScreenshots: true,
+    fetch: HandrailBugReporter.createCsrfFetch(window.fetch.bind(window))
   },
   initialForm: { route: location.pathname },
   label: 'Report a bug',
@@ -41,14 +43,14 @@ reporter.update({ appearance: { themeMode: 'dark' } });
 reporter.unmount();
 ```
 
-The example forwarding endpoint must be implemented by the separate Rails
-routes/adapter items. `config` is passed unchanged to upstream, including
+The example endpoint must resolve to the protected Rails Engine mount. `config` is passed unchanged to upstream, including
 `fetch`, retry, policy deadline, session provider, redaction hooks, and screenshot
 settings. Same-origin mode requires `projectId`, `environment`, an absolute-path
 API URL, and no report token/session-token provider. The upstream endpoint
 normalizer appends `/api/mobile-bug-reports` to base paths; pass a complete
 `.../api/mobile-bug-reports` URL when using that exact mounted intake path.
-CSRF wrapping and navigation handling belong to the adapter, not this bundle.
+The bundled adapter wraps helper requests automatically; manual callers must use
+the exported CSRF wrapper shown above and provide Rails CSRF metadata.
 
 | API | Contract |
 | --- | --- |
@@ -72,7 +74,7 @@ Cleanup runs upstream effect cleanup, including aborting mount-time policy
 discovery and cancelling dialog animation frames. Removing the owned root also
 removes its delegated React listeners from the live document. React retains its
 single shared document `selectionchange` listener after first mount; repeated
-mounts do not add more. There are no script-load listeners. Upstream submit,
+mounts do not add more. The Rails adapter installs bounded script-load lifecycle listeners. Upstream submit,
 manual refresh, and history requests already in flight are not all universally
 cancelled by unmount: unmount is not a cancellation or rollback API. Do not reset
 a session during a submission if its result must be presented to the user.

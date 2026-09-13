@@ -45,8 +45,8 @@ relative to the installed SDK and environment identity overrides are ignored.
 
 Without a `source_fingerprint` field, schema 1 retains the legacy contract:
 every runtime and source checksum is SHA-256 of the exact file bytes, including
-private contributor versions and JSON formatting. The checked-in manifest
-currently retains this behavior; activation is a separate follow-up item.
+private contributor versions and JSON formatting. The current manifest explicitly opts into `private-contributor-v1`; raw byte
+hashes of all candidate files are retained separately in the parity deliverables.
 
 Explicitly setting `"source_fingerprint": "private-contributor-v1"` selects
 version-stable fingerprints for `package.json` and `package-lock.json` only.
@@ -90,6 +90,12 @@ the contributor fingerprints as well. Neither command rebuilds runtime assets.
 
 ## Local commands
 
+These are tool capabilities, not grants to finalize or publish source. The current
+rails-parity stage permits snapshot/checksum updates and source checks only.
+Do not run synthetic-commit/package-install tests as a substitute for public HTTPS
+Git/full-SHA/lockfile installation. No commit, push, tag, PR or deployment is granted.
+
+
 ```sh
 # Offline contributor verification, including frontend inputs; no node_modules.
 ruby scripts/verify_release.rb
@@ -117,7 +123,7 @@ except the explicitly excluded contributor versions/formatting in the opt-in mod
 Legacy manifests also reject version-only edits to `package.json` and `package-lock.json`.
 After the final package version update (including worker-owned version bumps),
 run `npm test` to verify upstream identity, sources and byte-for-byte bundle
-reproducibility, then `ruby scripts/verify_release.rb --write-snapshot` and
+reproducibility, then `ruby scripts/verify_release.rb --write-snapshot --source-fingerprint private-contributor-v1` and
 `ruby scripts/verify_release.rb --git` before committing the snapshot.
 The existing Node contract still verifies installed upstream identity and sources;
 this Ruby contract adds an offline package check without replacing that build check.

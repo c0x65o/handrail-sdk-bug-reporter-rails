@@ -279,14 +279,14 @@ class NotificationTest < Minitest::Test
     refute @calls.last[2].key?("x-handrail-application-session-token")
   end
 
-  def test_disabled_and_rejected_or_malformed_intake_never_attempt_child
+  def test_disabled_and_rejected_intake_never_attempt_child
     result = client(:enabled => false).submit(report)
     assert_equal :disabled, result.status
     assert_nil result.notification_subscription
     assert_nil result.notification_warning
     assert_empty @calls
     assert_empty @resolved
-    [[422, '{}', :submission_rejected], [200, 'null', :malformed_response]].each do |status, bytes, code|
+    [[422, '{}', :submission_rejected]].each do |status, bytes, code|
       before = @calls.length
       error = assert_raises(SDK::Error) do
         client { |*_| { :status => status, :body => bytes } }.submit(report)

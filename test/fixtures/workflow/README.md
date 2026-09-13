@@ -1,10 +1,13 @@
+> Historical evidence below predates the current parity candidate. Current forwarding
+> preserves upstream 4xx/5xx statuses (the lifecycle fixture now expects 503, not
+> the older mapped 502). Fresh browser verification is unavailable in this worker
+> because its Playwright Chromium executable is missing; see docs/rails-parity.md.
+
 # Rails workflow browser fixture
 
 From the Rails repository root, with the locked Ruby/Node dependencies installed:
 
 ```sh
-bundle install
-node node_modules/playwright/cli.js install chromium
 npm run test:browser:workflow
 ```
 
@@ -14,8 +17,9 @@ scratch (it preserves the pinned SDK build identity). `RUBY`, `BUNDLE_PATH`,
 locally installed runtimes. Missing gems or Chromium fail the file; no tests skip.
 
 The file starts a fresh Rails/WEBrick process on an ephemeral loopback port and a
-fresh browser context for each of exactly three journeys. It renders the real
-helper, CSRF metadata, and an authenticated encrypted HttpOnly cookie session,
+fresh browser context for each journey. It renders the real
+helper and CSRF metadata, then explicitly transitions from anonymous to an
+admin fixture session through a CSRF-protected POST using an encrypted HttpOnly cookie,
 then serves the packaged asset from the Rails controller. Only the static asset
 action is exempt from the host controller's JavaScript CSRF restriction; all
 Engine routes retain their real guards and Rails CSRF verifier.
@@ -31,7 +35,23 @@ and the existing Ruby no-network support rejects outbound sockets even if a
 future change bypasses the HTTP seam. Teardown checks the server's exit status
 so a swallowed network attempt cannot pass.
 
-Journeys:
+Current additions (authored browser assertions remain unexecuted until a supported
+browser runtime is available): accepted malformed/empty intake reaches thank-you
+with exactly one upstream intake; empty subscription warns with one child call;
+admin/nonadmin/anonymous/revoked states cover all eight routes and unauthorized
+pages contain no reporter. Page loads never create or restore an admin principal.
+The factory explicitly authorizes the fixture's admin role, separately from its
+Known User resolver. These are synthetic session states, not real QA accounts.
+
+`node --test-reporter=tap test/frontend/mounted_acceptance.test.mjs` exercises the
+same real Rails host with the pinned JS client over a stdin/Rack bridge, without
+browser binaries, managed services or sockets. It checks acceptance semantics,
+call counts, valid-CSRF denials and actual helper output. This proves boundary
+behavior only; rendered UI, live ownership, notification delivery and deduplication
+remain independent QA work. Never install browsers or start managed services under
+this repair request. Main Avery must bind supported runtime access first.
+
+Original journeys:
 
 1. A file claiming PNG with invalid bytes fails before HTTP. Real `pixel.png`
    bytes and explicit consent produce one accepted report, one subscription to

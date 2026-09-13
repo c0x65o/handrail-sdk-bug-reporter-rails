@@ -83,6 +83,18 @@ class ReporterRenderingChecks < Minitest::Test
     assert_empty render_options(:enabled => false).css("[data-handrail-bug-reporter], script")
   end
 
+  def test_host_authorization_hides_helper_without_resolving_credentials
+    permitted = false
+    Rails.application.config.handrail_bug_reporter_factory = Handrail::BugReporter::Factory.new(
+      @factory.configuration, :authorize_request => lambda { |request| permitted && request.path == "/view" },
+      :resolve_application_session_token => lambda { |_| @calls << :resolver })
+    assert_empty render_options.css("[data-handrail-bug-reporter], script")
+    permitted = true
+    assert_equal 1, render_options.css("[data-handrail-bug-reporter]").length
+    permitted = false
+    assert_empty render_options.css("[data-handrail-bug-reporter], script")
+  end
+
   def test_context_features_and_scoped_appearance_round_trip_hostile_strings
     options = { :label => HOSTILE, :heading => HOSTILE, :show_history => false,
       :allow_screenshots => true, :load_policy_on_mount => false, :history_page_size => 37,

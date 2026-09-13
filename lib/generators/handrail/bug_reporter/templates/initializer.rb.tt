@@ -23,6 +23,14 @@ configuration = Handrail::BugReporter::Configuration.new(
 
 Rails.application.config.handrail_bug_reporter_factory = Handrail::BugReporter::Factory.new(
   configuration,
+  :authorize_request => lambda do |request|
+    # Replace false with your trusted host admin authorization check. For example:
+    # admin = request.env["my_app.authenticated_principal"]
+    # admin && admin.admin? == true
+    # Only host authentication middleware may populate that principal.
+    # This gates EVERY reporter route and helper; hiding a button is insufficient.
+    false
+  end,
   :resolve_application_session_token => lambda do |request|
     # nil retains anonymous reporting. To enable Known User reporting, replace
     # nil with your trusted host authentication lookup, for example:

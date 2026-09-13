@@ -282,14 +282,14 @@ test('real Rails token rotation across POST/PUT/DELETE and an actual SDK transie
     };
     window.fetch = async (input, init) => {
       const response = await native(input, init);
-      if (response.status === 502 && init?.method === 'POST') await rotateFixtureToken();
+      if (response.status === 503 && init?.method === 'POST') await rotateFixtureToken();
       return response;
     };
   });
   await open(page); await send(page); await host.capture('rotated-retry-success');
   const result = await page.evaluate(async () => {
     const posts = fixture.calls.filter(row => row.url === '/fixture/api/mobile-bug-reports' && row.method === 'POST');
-    const retryValid = posts.length === 2 && posts[0].status === 502 && posts[1].status === 201 &&
+    const retryValid = posts.length === 2 && posts[0].status === 503 && posts[1].status === 201 &&
       posts[0].headers['x-csrf-token'] !== posts[1].headers['x-csrf-token'] &&
       posts.every(row => row.credentials === 'same-origin') && posts[0].body === posts[1].body;
     const wrapped = HandrailBugReporter.createCsrfFetch(window.fetch.bind(window));
@@ -323,7 +323,7 @@ test('disposal after transient failure suppresses the queued SDK retry', { timeo
     const native = window.fetch;
     window.fetch = async (input, init) => {
       const response = await native(input, init);
-      if (response.status === 502 && init?.method === 'POST') HandrailBugReporter.rails.teardown();
+      if (response.status === 503 && init?.method === 'POST') HandrailBugReporter.rails.teardown();
       return response;
     };
   });
@@ -331,7 +331,7 @@ test('disposal after transient failure suppresses the queued SDK retry', { timeo
   await roots(page, 0);
   await page.clock.runFor(60_000);
   const attempts = await page.evaluate(() => fixture.calls.filter(row => row.method === 'POST' && row.url.endsWith('/api/mobile-bug-reports')).map(row => row.status));
-  assert.deepEqual(attempts, [502]);
+  assert.deepEqual(attempts, [503]);
   assert.equal((await host.audit()).filter(row => row.method === 'POST').length, 1);
   await host.finish();
 });

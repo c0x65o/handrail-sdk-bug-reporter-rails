@@ -7,29 +7,28 @@ and [compatibility smoke coverage](#compatibility-smoke-coverage) for verified s
 
 ## Installation and release identity
 
-Public HTTPS Bundler Git **tag syntax template only — not currently installable**:
-replace `<VERIFIED_RAILS_RELEASE_TAG>` only after verifying an actual matching
-Rails distribution tag, gem version and package provenance.
+Install only from public HTTPS Git pinned to a **full commit SHA**, with a matching
+`Gemfile.lock`. This example is a placeholder, not an installable candidate:
 
 ```ruby
-# Gemfile — placeholder, not an existing release recommendation
+# Gemfile — resolve the authorized committed revision before installing
 gem 'handrail-bug-reporter',
     git: 'https://github.com/c0x65o/handrail-sdk-bug-reporter-rails.git',
-    tag: '<VERIFIED_RAILS_RELEASE_TAG>',
+    ref: '<VERIFIED_FULL_40_CHARACTER_RAILS_COMMIT_SHA>',
     require: 'handrail/bug_reporter'
 ```
 
-For Handrail-owned application installations, dependency policy requires the
-public HTTPS repository pinned by **full commit SHA**, with a matching lockfile.
-Use `ref: '<VERIFIED_FULL_40_CHARACTER_RAILS_COMMIT_SHA>'` in place of `tag:`;
-that value is also a placeholder, not an installable revision. Resolve and verify
-the intended committed SDK revision when an installation is owner-directed.
+For a new installation resolve the latest committed SDK revision; for an upgrade
+honor any frozen revision. Run the host's normal `bundle install` and asset build,
+and retain the lockfile whose Git `revision` exactly equals the selected SHA.
+Do not substitute a tag, branch, registry gem, tarball, local path or workspace
+source, or add a separate packaging/publishing step. Existing source test harnesses
+are implementation checks, not evidence of a compliant SDK installation.
 
-After selecting a real revision, run the host's normal `bundle install`.
-`Gemfile.lock` records the Git source's resolved `revision` SHA, even when the
-Gemfile uses a tag. Retain and review that lockfile with the Gemfile; subsequent
-installs use its revision until an intentional dependency update. A tag name
-alone is not immutable release evidence.
+The current parity candidate is **uncommitted** on Rails base
+`42f70f0a3bedf5573f79988d75789b13e55f8bcd`; it cannot yet be installed by a public
+Git commit pin. Source finalization/publication needs separate authorization.
+See the [current parity matrix and QA handoff](docs/rails-parity.md).
 
 The current [release manifest](release-manifest.json) records Rails gem version
 **0.4.49** with `source_snapshot` provenance and null Rails release `commit`/`ref`.
@@ -49,8 +48,10 @@ upgraded the bundle to JS v0.4.50. The [current release manifest](release-manife
 and [upstream identity](frontend/upstream.json) record that current mapping.
 
 See the [release contract](docs/release-contract.md) for checksum, source and
-distribution-tag verification. Real Rails release tagging and installation into
-Bluecotton or Monuvision are later owner-directed operations.
+distribution-tag verification. Any source publication and consumer installation are later, separately authorized
+operations. Notify the owner only after independent verified parity, then pause
+for explicit continuation. Monuvision must succeed before BlueCotton starts. Both
+consumers must expose the reporter only on admin screens to authenticated admins.
 
 ## Generate server configuration and mount
 
@@ -79,9 +80,30 @@ environment or missing required value leaves forwarding misconfigured (503)
 without preventing host boot; there is no fallback to production.
 
 It stores a `Handrail::BugReporter::Factory` at
-`Rails.application.config.handrail_bug_reporter_factory`. Its
-`resolve_application_session_token` callback defaults to `nil` for anonymous
-reporting, subject to upstream policy. For Known User reporting, replace that
+`Rails.application.config.handrail_bug_reporter_factory`. Its generated
+`authorize_request` callback defaults to `false`: the helper renders nothing and
+every reporter route denies access until the host supplies a trusted admin check.
+The Engine inherits `ActionController::Base`, **not the host ApplicationController**;
+host controller `before_action` filters do not automatically protect the mount.
+For example, if existing host authentication middleware sets the principal:
+
+```ruby
+:authorize_request => lambda do |request|
+  admin = request.env["my_app.authenticated_principal"]
+  admin && admin.admin? == true
+end
+```
+
+Adapt that lookup to the real host authentication API. Return literal `true` only
+for permitted admins; false, nil, other values, and exceptions deny access with
+403 `bug_reporting_forbidden`. The callback runs for every route and helper render,
+independently of the upstream session resolver. Keep the helper in admin views only.
+For compatibility, factories that omit this option retain externally guarded mount
+behavior; existing Handrail installations must supply the callback or an equivalent
+verified host guard covering every engine route. Hiding the launcher is insufficient.
+
+The separate `resolve_application_session_token` callback defaults to `nil`, which
+supplies no upstream Known User identity. For Known User reporting, replace that
 callback with the host's trusted authentication lookup returning the current
 Handrail application-session token, or `nil` when signed out. The template's
 principal lookup is an application integration example, not an SDK-provided
@@ -91,6 +113,9 @@ JSON, parameters or arbitrary cookies as identity. Normal authenticated host
 sessions may identify the principal on the server; the application-session token
 and report token remain server-only. History ownership and notification
 eligibility are enforced upstream; anonymous reporting does not grant them.
+A missing/invalid/raising resolver falls back to no upstream session token for
+ordinary operations, as in JS. This is not local denial or proof of ownership;
+verify the real upstream identity policy independently.
 
 Engine mounting is opt-in:
 
@@ -117,8 +142,8 @@ and the [route definitions](config/routes.rb).
 
 The generator does not edit layouts or insert launchers. Deliberately place
 `<%= csrf_meta_tags %>` in the host layout's `<head>`, keep Rails CSRF protection
-enabled, and retain the host's normal session cookies (including for anonymous
-visitors). Place the helper once in the chosen view/layout:
+enabled, and retain the host's normal session cookies (for authenticated admin
+users). Place the helper once in the authenticated admin view/layout:
 
 ```erb
 <%= handrail_bug_reporter(
@@ -262,9 +287,13 @@ hash with string/symbol keys and requires nonblank title/description. Configurat
 owns project/environment. The immutable result exposes `status` (`:submitted` or
 `:disabled`), `status_code`, `bug_id`, parsed `response`, `notification_subscription`
 and `notification_warning`. Invalid input/configuration, upstream rejection,
-transport failure or malformed success raises `Handrail::BugReporter::Error`;
+transport failure raises `Handrail::BugReporter::Error`;
 handle its bounded `code`, `status_code` and `request_id` in the host. Successful
-Ruby responses must be JSON objects, a deliberately stricter rule than JS.
+Ruby success accepts any valid JSON value, including arrays and primitives.
+Empty or malformed success returns `response: nil` while preserving `:submitted`
+and the upstream status, matching JS acceptance. Only an object with a canonical
+`bug_id` can trigger a child subscription; requested consent without that ID or an
+active inline result yields a warning, never replay of the accepted report.
 
 Built-in redaction covers sensitive keys, not secrets embedded in arbitrary text;
 use trusted `redaction_hooks` for application-specific text redaction. Submission
@@ -329,7 +358,10 @@ ActiveRecord, a database, Node or live upstream HTTP.
 
 Every dependency patch is pinned in [matrix.json](test/compatibility/matrix.json)
 and the [appraisal gemfiles](gemfiles). With the selected Ruby and Bundler installed,
-run `ruby test/compatibility/run.rb rails_7_2` (substitute the target cell).
+the historical runner is `test/compatibility/run.rb` (select the target cell).
+It creates synthetic local Git commits, so it must not be used under the current
+no-commit/public-HTTPS-only installation contract. Independent acceptance needs
+an authorized committed candidate and a public HTTPS SHA-pinned host lockfile.
 See the test README for commands, installation/precompile evidence and limitations.
 For Rails 4.2, `ruby test/compatibility/bootstrap_rails_4_2.rb` builds the pinned
 runtime in private scratch space and runs the smoke without Docker or system
@@ -337,12 +369,12 @@ runtime changes. The [retained acceptance record](test/compatibility/evidence/ra
 includes source/package hashes, the exact lockfile and execution artifacts.
 For Rails 5.2, `ruby test/compatibility/bootstrap_rails_5_2.rb` uses the same shared
 bootstrap with Ruby 2.5.9; its [retained acceptance record](test/compatibility/evidence/rails_5_2-2026-09-10/README.md)
-proves the current Git-installed package, exact lock, Node-free precompilation
+records that historical Git-installed package, exact lock, Node-free precompilation
 and real cookie-session/CSRF behavior.
 For Rails 6.1, `ruby test/compatibility/bootstrap_rails_6_1.rb` builds Ruby 2.7.8
 and installs Bundler 2.4.22 with cell-specific checksum pins. Its
 [retained acceptance record](test/compatibility/evidence/rails_6_1-2026-09-10/README.md)
-verifies the current Git-installed package, exact dependency lock, Node-free
+records that historical Git-installed package, exact dependency lock, Node-free
 Sprockets 4.2.1 precompilation and real cookie-session/CSRF behavior.
 The authored compatibility workflow has not been executed on hosted CI.
 

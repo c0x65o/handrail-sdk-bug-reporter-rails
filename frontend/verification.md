@@ -1,3 +1,8 @@
+> Historical source record only. Current JS reference is
+> 7dfb33f548448f864cf957f19d96f8b5a27bc787 (0.4.50); the current Rails asset is
+> 241154 bytes, SHA-256 2e2f999cf20760913f1af917bf7cb51d1cc21d0005f15ca74236438b2f04216f.
+> Current source checks and independent-QA limitations are in docs/rails-parity.md.
+
 # Browser asset verification — 2026-09-09
 
 Selected item: `f404084e-3c21-44d8-b78d-85a7c09610ee`.

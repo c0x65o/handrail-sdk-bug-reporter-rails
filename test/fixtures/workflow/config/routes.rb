@@ -1,6 +1,7 @@
 require_relative "../lifecycle_controller"
 Rails.application.routes.draw do
   root :to => "workflow#show"
+  post "/fixture-session", :to => "workflow#change_session"
   get "/javascripts/handrail_bug_reporter.js", :to => "workflow#asset"
   get "/lifecycle/assets/:name.js", :to => "lifecycle#asset"
   post "/lifecycle/rotate", :to => "lifecycle#rotate"

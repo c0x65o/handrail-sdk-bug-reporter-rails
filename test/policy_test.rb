@@ -368,7 +368,7 @@ class PolicyTest < Minitest::Test
     2.times { release << true }
     assert_equal ["maintainer", "requester"], threads.map { |thread| thread.value.role }
     assert_equal original_state, clients.map { |client| client.instance_variables.sort }
-    assert_equal [:@configuration, :@resolver, :@transport].sort, shared.instance_variables.sort
+    assert_equal [:@authorization_configured, :@authorize_request, :@configuration, :@resolver, :@transport].sort, shared.instance_variables.sort
     assert_equal [:@clock, :@configuration, :@http, :@sleeper].sort,
       shared.instance_variable_get(:@transport).instance_variables.sort
   ensure

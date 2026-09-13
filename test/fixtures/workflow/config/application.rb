@@ -23,9 +23,6 @@ class WorkflowController < ActionController::Base
   helper Handrail::BugReporterHelper
 
   def show
-    # Fixture authentication stands for an already signed-in host user. Only the
-    # resolver translates this encrypted cookie principal to a Handrail token.
-    session[:principal] = "workflow-private-principal"
     response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'"
     render :inline => <<~HTML
       <!doctype html><html><head><title>Rails workflow fixture</title>
@@ -35,6 +32,15 @@ class WorkflowController < ActionController::Base
         :context => { :route => '/checkout', :app_version => '1.2.3' } %>
       </body></html>
     HTML
+  end
+
+  # Test-only session transition, protected by real Rails CSRF. No QA accounts.
+  def change_session
+    state = params[:state]
+    return head :bad_request unless %w[admin nonadmin anonymous revoked].include?(state)
+    session[:role] = state
+    session[:principal] = state == "anonymous" ? nil : "workflow-private-principal"
+    render :json => { :state => state }
   end
 
   def asset

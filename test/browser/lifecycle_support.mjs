@@ -1,3 +1,4 @@
+import { loginAdmin } from './workflow_session.mjs';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
@@ -117,6 +118,7 @@ export async function fixture(t, scenario = 'submission') {
       return result;
     };
   });
+  await loginAdmin(page, origin);
   async function audit() {
     return (await readFile(auditPath, 'utf8').catch(() => '')).trim().split('\n').filter(Boolean).map(JSON.parse);
   }
@@ -131,7 +133,7 @@ export async function fixture(t, scenario = 'submission') {
     async finish() {
       assert.deepEqual(external, []); assert.deepEqual(errors, []);
       const unexpected = network.filter(row => row.status >= 400 && !(scenario === 'lifecycle_retry' &&
-        ((row.method === 'POST' && row.path === endpoint && row.status === 502) ||
+        ((row.method === 'POST' && row.path === endpoint && row.status === 503) ||
          (row.method === 'PUT' && row.path.endsWith('/archive') && row.status === 403))));
       assert.deepEqual(unexpected, [], 'Only explicitly scripted/rejected responses may fail');
       assert.deepEqual((await audit()).filter(row => row.kind === 'fixture_error'), []);

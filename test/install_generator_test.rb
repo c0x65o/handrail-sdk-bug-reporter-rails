@@ -96,6 +96,7 @@ class InstallGeneratorTest < ScaffoldTestCase
       raise "Clients must be request scoped" unless first.is_a?(Handrail::BugReporter::Client) && !first.equal?(second)
       resolver = factory.instance_variable_get(:@resolver)
       raise "Default authentication must stay anonymous" unless resolver.respond_to?(:call) && resolver.call(request).nil?
+      raise "Generated reporter must deny access until configured" if factory.authorized?(request)
       configuration = factory.configuration
       puts JSON.generate(:status => configuration.status, :project_id => configuration.project_id,
         :environment => configuration.environment, :endpoints => configuration.endpoints,

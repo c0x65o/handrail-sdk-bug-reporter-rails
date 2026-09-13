@@ -7,6 +7,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
+import { loginAdmin, changeSession } from './workflow_session.mjs';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const endpoint = '/fixture/api/mobile-bug-reports';
@@ -104,6 +105,7 @@ async function fixture(t, scenario) {
   });
   await page.clock.install({ time: now });
   await page.clock.pauseAt(now);
+  await loginAdmin(page, origin);
   const document = await page.goto(origin);
   assert.equal(document.status(), 200);
   publicOnly(await document.text());
@@ -161,7 +163,10 @@ async function fixture(t, scenario) {
       assert.equal(response.headers['cache-control'], 'private, no-store');
       publicOnly(response);
       const failure = scenario === 'subscription_failure' && new URL(response.url).pathname.endsWith('/subscription');
-      assert.equal(response.status, failure ? 422 : new URL(response.url).pathname === endpoint ? 201 : 200);
+      const path = new URL(response.url).pathname;
+      const empty = (scenario === 'accepted_empty' && path === endpoint) ||
+        (scenario === 'subscription_empty' && path.endsWith('/subscription'));
+      assert.equal(response.status, failure ? 422 : empty ? 204 : path === endpoint ? 201 : 200);
     }
     assert.ok(requests.some(row => new URL(row.url).pathname === '/javascripts/handrail_bug_reporter.js'));
     assert.ok(protectedRequests.some(row => row.method === 'GET' && new URL(row.url).pathname === `${endpoint}/policy`));
@@ -312,4 +317,59 @@ test('My Bugs query, cursor, detail, archive/restore and current-query refresh',
     assert.equal(result.requests.filter(row => row.method === method && new URL(row.url).pathname === path).length, 1);
     assert.equal(result.calls.filter(row => row.method === method && new URL(row.url).pathname === path.replace('/fixture', '')).length, 1);
   }
+});
+
+for (const scenario of ['accepted_malformed', 'accepted_empty', 'subscription_empty']) {
+  test(`${scenario}: accepted report reaches thank-you without repeat intake`, { timeout: 60_000 }, async t => {
+    const host = await fixture(t, scenario);
+    await fillReport(host.page);
+    const [response] = await Promise.all([
+      host.page.waitForResponse(r => new URL(r.url()).pathname === endpoint && r.request().method() === 'POST'),
+      host.page.getByRole('button', { name: 'Send report', exact: true }).click(),
+    ]);
+    assert.equal(response.status(), scenario === 'accepted_empty' ? 204 : 201);
+    if (scenario === 'accepted_malformed') assert.equal(await response.text(), 'null');
+    if (scenario === 'accepted_empty') assert.equal(await response.text(), '');
+    await host.page.getByRole('heading', { name: 'Thanks for submitting this bug' }).waitFor();
+    await host.page.getByRole('alert').filter({ hasText: 'Your bug is saved, but email updates could not be enabled.' }).waitFor();
+    await host.page.clock.runFor(2_000);
+    const result = await host.finish();
+    const intake = result.calls.filter(row => new URL(row.url).pathname === '/api/mobile-bug-reports');
+    assert.equal(intake.length, 1);
+    const request = result.requests.find(row => new URL(row.url).pathname === endpoint);
+    assert.equal(intake[0].body.event_id, JSON.parse(request.body).event_id);
+    assert.ok(intake[0].body.event_id);
+    const child = result.calls.filter(row => new URL(row.url).pathname.endsWith('/subscription'));
+    assert.equal(child.length, scenario === 'subscription_empty' ? 1 : 0);
+  });
+}
+
+test('workflow authorization states protect eight routes and hide unauthorized reporter', { timeout: 60_000 }, async t => {
+  const host = await fixture(t, 'submission');
+  const routes = [['POST', ''], ['GET', '/policy'], ['GET', '/mine'], ['GET', `/bugs/${bugId}`],
+    ['POST', `/bugs/${bugId}/subscription`], ['PUT', `/bugs/${bugId}/archive`],
+    ['DELETE', `/bugs/${bugId}/archive`], ['POST', '/mine/archive-closed']];
+  for (const state of ['admin', 'nonadmin', 'anonymous', 'revoked']) {
+    await changeSession(host.page, state);
+    if (state !== 'admin') {
+      await host.page.goto(host.origin);
+      assert.equal(await host.page.locator('[data-handrail-bug-reporter="1"]').count(), 0);
+      assert.equal(await host.page.getByRole('button', { name: 'Report a bug', exact: true }).count(), 0);
+    }
+    for (const [method, suffix] of routes) {
+      const before = (await host.audit()).filter(row => ['http', 'identity'].includes(row.kind)).length;
+      const response = await host.page.evaluate(async ({ method, path }) => {
+        const response = await fetch(path, { method, headers: { 'content-type': 'application/json',
+          'x-csrf-token': document.querySelector('meta[name="csrf-token"]').content },
+          ...(method === 'GET' ? {} : { body: JSON.stringify({ title: 'Authorization fixture',
+            description: 'Authorized only', reporter_notification: { notify_on_resolution: true } }) }) });
+        return { status: response.status, body: await response.json() };
+      }, { method, path: endpoint + suffix });
+      assert.equal(response.status, state === 'admin' ? suffix === '' ? 201 : 200 : 403);
+      if (state !== 'admin') assert.equal(response.body.error, 'bug_reporting_forbidden');
+      const after = (await host.audit()).filter(row => ['http', 'identity'].includes(row.kind)).length;
+      assert.equal(after - before, state === 'admin' ? 2 : 0);
+    }
+  }
+  assert.deepEqual((await host.audit()).filter(row => row.kind === 'fixture_error'), []);
 });

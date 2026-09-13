@@ -204,11 +204,11 @@ class MountedHistoryChecks < Minitest::Test
   end
 
   def test_failures_still_return_private_generic_json
-    [200, 302, 400, 500].each do |status|
+    [302, 400, 500].each do |status|
       @responses = [{ :status => status, :body => "private-diagnostic" }] * 2
       response = call_app("GET", ROOT_PATH + "/mine")
-      assert_equal 502, response[0]
-      assert_equal({ "error" => "bug_reporter_upstream_failed" }, JSON.parse(response[2]))
+      assert_equal(status >= 400 ? status : 502, response[0])
+      assert_equal({ "error" => status >= 400 ? "bug_reporting_rejected" : "bug_reporting_unavailable" }, JSON.parse(response[2]))
       assert_private(response)
     end
     Rails.application.config.handrail_bug_reporter_factory = nil

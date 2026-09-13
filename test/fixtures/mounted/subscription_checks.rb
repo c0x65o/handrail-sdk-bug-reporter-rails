@@ -259,14 +259,17 @@ class MountedSubscriptionChecks < Minitest::Test
     end
   end
 
-  def test_unreadable_successes_are_child_failures_without_parent_intake
-    [nil, "", PRIVATE_VALUES.join(" "), "{\"x\":\"\xff\"}".b].each do |bytes|
-      @calls.clear
-      @logs.truncate(0)
-      @logs.rewind
-      @responses = [{ :status => 200, :body => bytes, :headers => { "x-request-id" => PRIVATE_VALUES[2] } }]
-      assert_failure(post_consent, 502, "response_unreadable", "bug_reporting_unavailable")
-      assert_equal 1, @calls.length
+  def test_accepted_empty_and_malformed_successes_preserve_status_without_parent_intake
+    [nil, "", PRIVATE_VALUES.join(" "), "\xff".b].each do |bytes|
+      [200, 201, 204].each do |status|
+        @calls.clear
+        @responses = [{ :status => status, :body => bytes }]
+        result = post_consent
+        assert_equal status, result[0]
+        assert_equal(status == 204 || bytes.nil? || bytes == "" ? "" : "null", result[2])
+        assert_equal 1, @calls.length
+        assert_empty events
+      end
     end
   end
 

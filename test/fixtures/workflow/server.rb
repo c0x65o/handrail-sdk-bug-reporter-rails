@@ -8,14 +8,9 @@ require_relative "http_boundary"
 # fails even if a future change accidentally bypasses the injected boundary.
 require_relative "../../support/no_network"
 
-scenario = ENV.fetch("WORKFLOW_SCENARIO")
-abort "Unknown workflow scenario" unless %w[submission subscription_failure history lifecycle_retry].include?(scenario)
-boundary = WorkflowHTTP.new(scenario, ENV.fetch("WORKFLOW_AUDIT"))
-configuration = Handrail::BugReporter::Configuration.new(
-  :api_base_url => "https://handrail.invalid/api", :project_id => "project-123",
-  :environment => " StAgInG ", :report_token => WorkflowHTTP::REPORT_TOKEN, :max_attempts => 1)
-Rails.application.config.handrail_bug_reporter_factory = Handrail::BugReporter::Factory.new(
-  configuration, :http => boundary, :resolve_application_session_token => boundary.method(:resolve))
+require_relative "factory"
+Rails.application.config.handrail_bug_reporter_factory = WorkflowFactory.build(
+  ENV.fetch("WORKFLOW_SCENARIO"), ENV.fetch("WORKFLOW_AUDIT"))
 Rails.application.initialize!
 $stdout.sync = true
 Rackup::Handler::WEBrick.run(Rails.application, :Host => "127.0.0.1", :Port => 0,

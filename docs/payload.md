@@ -1,8 +1,8 @@
 # Ruby payload contract
 
 `Handrail::BugReporter::Payload` prepares one report without Rails, Git, HTTP,
-or runtime environment lookups. Require it explicitly; the shared gem entry
-point is owned by the configuration/client work.
+or runtime environment lookups. Require it explicitly for standalone preparation,
+or use the implemented `Client#submit` API through `handrail/bug_reporter`.
 
 ```ruby
 require "handrail/bug_reporter/payload"
@@ -18,10 +18,11 @@ payload = Handrail::BugReporter::Payload.new(
 body = payload.to_json
 ```
 
-Use the configuration sibling's `project_id` and `environment` readers, as above.
+Use the configuration's `project_id` and `environment` readers, as above.
 Both must be nonblank strings. Project is trimmed; environment is trimmed and
 lowercased. Caller/hook fields cannot override either value. Credentials never
-enter this API. The client and transport integration remain separate tasks.
+enter this API. `Client#submit` constructs the payload once; `Transport` reuses
+its serialized bytes while resolving current request identity on each attempt.
 
 Reuse the same payload instance for retries. `to_h` and `as_json` return its
 deeply frozen snapshot; `to_json` serializes that snapshot. Hooks and event ID

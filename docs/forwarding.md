@@ -7,14 +7,18 @@ one immutable factory at host boot, using server-owned settings:
 ```ruby
 # Host initializer, after requiring "handrail/bug_reporter"
 configuration = Handrail::BugReporter::Configuration.new(
-  :api_base_url => ENV.fetch("HANDRAIL_BUG_REPORTER_API_URL"),
-  :project_id => ENV.fetch("HANDRAIL_BUG_REPORTER_PROJECT_ID"),
+  :api_base_url => ENV.fetch("HANDRAIL_API_URL"),
+  :project_id => ENV.fetch("HANDRAIL_PROJECT_ID"),
   :environment => Rails.env,
-  :report_token => ENV.fetch("HANDRAIL_BUG_REPORTER_TOKEN")
+  :report_token => ENV.fetch("HANDRAIL_BUG_REPORT_TOKEN")
 )
 
 Rails.application.config.handrail_bug_reporter_factory = Handrail::BugReporter::Factory.new(
   configuration,
+  :authorize_request => lambda do |request|
+    admin = request.env["my_app.authenticated_principal"]
+    admin && admin.admin? == true
+  end,
   :resolve_application_session_token => lambda do |request|
     # Replace this application-specific example with your existing authenticated
     # principal lookup. Only the host's authentication layer may set this value.
@@ -27,12 +31,29 @@ Rails.application.config.handrail_bug_reporter_factory = Handrail::BugReporter::
 mount Handrail::BugReporter::Engine => "/api/mobile-bug-reports"
 ```
 
+The host authorizer must return literal true only for authenticated admins, using
+the host's real principal API. It gates every supported reporter route and helper;
+errors fail closed. Generated configuration defaults to deny. Omitted callbacks
+preserve externally guarded mounts for compatibility; host ApplicationController
+filters are not inherited by this engine. Omission itself allows access; each
+integration requires an explicit callback or a verified equivalent external guard
+covering the whole mount. Render helpers only on admin screens.
+
 The resolver must use authenticated host context, never a caller's Authorization,
 report-token, session-token header, arbitrary cookie, or JSON field. It receives
 the current Rails request on each transport attempt. No resolver means no upstream
 application-session credential. Configure `environment` to the host's actual
 Handrail environment binding when that differs from `Rails.env`. The factory also
 accepts the existing transport options, including `:http` for an HTTP boundary.
+For ordinary operations, a missing/invalid/raising resolver falls back to no upstream
+session token, matching JS. That fallback proves neither ownership nor notification
+eligibility and does not replace host authorization. Independently verify real
+upstream Known User policy before adoption.
+
+These environment names match the generated initializer and README. This manual
+example uses `ENV.fetch` and `Rails.env`; the generated initializer instead uses
+optional ENV reads and an explicit environment map so missing/unmapped settings
+leave forwarding unavailable without stopping host boot.
 
 Submissions require `Content-Type: application/json`, the host's normal Rails
 session cookie, and `X-CSRF-Token` containing a Rails-generated authenticity token
@@ -40,7 +61,7 @@ session cookie, and `X-CSRF-Token` containing a Rails-generated authenticity tok
 Rails' exception strategy and remains mandatory even if the host disables its own
 forgery checks. The SDK does not change the session store, expose session cookies
 to JavaScript, or create a sign-in flow. A host without a usable Rails session
-cannot submit. Browser adapter and helper integration are separate tasks.
+cannot submit. The browser adapter supplies the current CSRF metadata token on same-origin writes.
 
 The engine-local request guard rejects a mismatched Origin or cross-site fetch
 metadata for both routes. An absent Origin still requires a valid CSRF token for
@@ -65,12 +86,27 @@ resolving fresh session credentials for each attempt.
 Responses use `private, no-store`. Unsupported routes/methods, invalid input,
 cross-site/CSRF failures, missing configuration, and upstream failures return
 generic JSON errors; Rails suppresses the body for HEAD as required by HTTP.
-Upstream errors become 502, disabled configuration becomes 404, and missing or
-invalid configuration becomes 503. Upstream response headers, cookies, and
-authentication are not relayed. History and subscription child routes are not
-implemented by this item.
+Upstream 4xx/5xx statuses are retained with `bug_reporting_rejected`, matching
+current JS; this preserves ownership errors and avoids retrying permanent report
+rejections as transient 502s. Network failures return 502
+`bug_reporting_unavailable`; redirects are never followed and also return 502.
+Disabled configuration becomes 404, and missing/invalid configuration becomes 503. Upstream response headers, cookies, and
+authentication are not relayed. History and subscription child routes are implemented; see
+[history forwarding](history-forwarding.md) and `config/routes.rb`. Successful
+JSON is validated and forwarded without numeric reserialization, including
+primitives and arrays. All empty successful responses, including subscription 204,
+retain their status. Malformed success bodies become JSON `null` at the original
+2xx status, so an accepted operation cannot become a retryable 502. Unlike the JS
+proxy's raw malformed text, Rails suppresses those potentially private diagnostics.
+A child subscription still needs an explicit active result: empty/malformed child
+success yields a client warning while the accepted report remains submitted.
+This prevents replay at the response boundary; live upstream deduplication is
+unverified. Unsafe paths and redirects remain intentional containment limits.
 
-## Focused verification — 2026-09-09
+## Historical focused verification — 2026-09-09
+
+These results describe older source, not acceptance of the current candidate.
+Current implementation evidence is in [rails-parity.md](rails-parity.md).
 
 Initial checkout: `main`, `f78ed1554410f4ea5e272357029a37a8488a21aa`, with
 `.gitignore` modified and foundational files untracked. That sibling work was

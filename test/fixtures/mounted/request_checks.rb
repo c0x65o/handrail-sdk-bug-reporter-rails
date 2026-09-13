@@ -163,16 +163,27 @@ class MountedForwardingChecks < Minitest::Test
     end
   end
 
-  def test_upstream_errors_redirects_and_unreadable_successes_are_generic
-    [400, 401, 403, 429, 500, 302, 200].each do |status|
+  def test_upstream_errors_and_redirects_are_generic
+    [400, 401, 403, 429, 500, 302].each do |status|
       @calls.clear
       @responses = [{ :status => status, :body => "private-diagnostic", :headers => { "set-cookie" => "evil=1" } }] * 2
       response = call_app("POST", ROOT_PATH, "{}")
-      assert_equal 502, response[0], response[2]
-      assert_equal({ "error" => "bug_reporter_upstream_failed" }, JSON.parse(response[2]))
+      assert_equal(status >= 400 ? status : 502, response[0], response[2])
+      assert_equal({ "error" => status >= 400 ? "bug_reporting_rejected" : "bug_reporting_unavailable" }, JSON.parse(response[2]))
       assert_private(response)
       refute_includes response[2], "private-diagnostic"
     end
+  end
+
+  def test_empty_success_and_submission_wire_precision_match_js
+    @responses << { :status => 204, :body => nil }
+    response = call_app("POST", ROOT_PATH, "{}")
+    assert_equal 204, response[0]
+    assert_equal "", response[2]
+    bytes = '{"bug_id":"bug-123","precise":0.12345678901234567890123456789}'
+    @responses << { :status => 201, :body => bytes }
+    response = call_app("POST", ROOT_PATH, "{}")
+    assert_equal bytes, response[2]
   end
 
   def test_unconfigured_and_disabled_mounts_fail_closed
@@ -189,7 +200,7 @@ class MountedForwardingChecks < Minitest::Test
       @responses = [error, error]
       response = call_app("POST", ROOT_PATH, "{}")
       assert_equal 502, response[0], response[2]
-      assert_equal({ "error" => "bug_reporter_upstream_failed" }, JSON.parse(response[2]))
+      assert_equal({ "error" => "bug_reporting_unavailable" }, JSON.parse(response[2]))
       assert_private(response)
     end
   end

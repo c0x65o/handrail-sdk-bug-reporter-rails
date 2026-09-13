@@ -31,7 +31,7 @@ module MountedForwardingSupport
     @cookie = @cookie.split(";", 2).first
   end
 
-  def configure(options = {})
+  def configure(options = {}, factory_options = {})
     config = SDK::Configuration.new({ :api_base_url => "https://upstream.example/prefix/api",
       :project_id => "server/project + one", :environment => " StAgInG ",
       :report_token => "hbr_server_fixture", :max_attempts => 2, :retry_delay_ms => 0 }.merge(options))
@@ -49,7 +49,7 @@ module MountedForwardingSupport
       principal && "#{principal}-#{@resolved.length}"
     end
     Rails.application.config.handrail_bug_reporter_factory = SDK::Factory.new(config,
-      :http => boundary, :resolve_application_session_token => resolver)
+      { :http => boundary, :resolve_application_session_token => resolver }.merge(factory_options))
   end
 
   def wire

@@ -1,7 +1,6 @@
 # Fixture-only variants. The original workflow page remains unchanged.
 class LifecycleController < WorkflowController
   def show
-    session[:principal] = "workflow-private-principal"
     response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'"
     @navigation = %w[ordinary turbo turbolinks].include?(params[:navigation]) ? params[:navigation] : "ordinary"
     @variant = params[:variant]

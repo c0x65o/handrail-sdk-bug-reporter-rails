@@ -49,12 +49,9 @@ module Handrail
         return render_error(503, "bug_reporting_unavailable") unless factory.is_a?(Factory)
         return render_error(404, "bug_reporting_disabled") if factory.configuration.status == :disabled
         return render_error(503, "bug_reporting_unavailable") unless factory.configuration.status == :ready
+        return render_error(403, "bug_reporting_forbidden") unless factory.authorized?(request)
         response = yield Forwarding.new(factory, request)
-        return render_subscription(response) if ownership_status == :subscription
-        body = JSON.parse(response.body)
-        # Validate JSON, then preserve history wire bytes (including future
-        # versioned fields and numeric precision) for the browser parser.
-        render :json => (ownership_status ? response.body : body), :status => response.status_code
+        render_success(response)
       rescue Error => error
         if ownership_status == :subscription
           return render_error(400, "invalid_report") if error.code == :invalid_subscription
@@ -64,28 +61,29 @@ module Handrail
         end
         # Match the JS forwarding error contract without exposing upstream
         # diagnostics or changing the public Ruby client's exception behavior.
-        if ownership_status && [401, 403].include?(error.status_code)
+        if error.status_code && error.status_code.between?(400, 599)
           render_error(error.status_code, "bug_reporting_rejected")
         else
-          render_error(502, "bug_reporter_upstream_failed")
+          render_error(502, "bug_reporting_unavailable")
         end
-      rescue JSON::ParserError, TypeError
-        render_error(502, "bug_reporter_upstream_failed")
       end
 
       def render_error(status, code)
         render :json => { :error => code }, :status => status
       end
 
-      def render_subscription(response)
+      def render_success(response)
+        # Acceptance must never become a retryable error due to JSON parsing.
+        # Keep valid JSON bytes (including primitives) to preserve wire precision;
+        # suppress malformed diagnostics while retaining the upstream 2xx status.
         bytes = response.body
+        return head(response.status_code) if bytes.nil? || bytes == ""
         bytes = bytes.dup.force_encoding(Encoding::UTF_8) if bytes.is_a?(String)
         raise TypeError unless bytes.is_a?(String) && bytes.valid_encoding?
         JSON.parse(bytes)
         render :json => bytes, :status => response.status_code
       rescue JSON::ParserError, TypeError, EncodingError, ArgumentError
-        log_subscription_failure("response_unreadable", 502)
-        render_error(502, "bug_reporting_unavailable")
+        render :json => "null", :status => response.status_code
       end
 
       def log_subscription_failure(stage, status)

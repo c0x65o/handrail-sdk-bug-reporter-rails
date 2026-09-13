@@ -19,7 +19,7 @@ module Handrail
           @notification_subscription = subscription
           @notification_warning = warning && warning.dup.freeze
           @response = freeze_response(response)
-          value = response && response["bug_id"]
+          value = response.is_a?(Hash) && response["bug_id"]
           @bug_id = value.is_a?(String) && !value.strip.empty? ? value.strip.freeze : nil
           freeze
         end
@@ -160,19 +160,18 @@ module Handrail
       end
 
       def parse_submission_response(response)
-        # Deliberately stricter than JS submit: empty, invalid or non-object JSON
-        # is a malformed response, not a submitted result with a null response.
+        # Match JS acceptance: empty/malformed bodies yield nil, while valid
+        # JSON values remain results. Never invite replay of an accepted intake.
         begin
           body = response.body
           # Net::HTTP can deliver binary strings; validate JSON's UTF-8 bytes.
           body = body.dup.force_encoding(Encoding::UTF_8) if body.is_a?(String)
           parsed = JSON.parse(body) if body.is_a?(String) && body.valid_encoding?
-          return parsed if parsed.is_a?(Hash)
+          return parsed
         rescue JSON::ParserError, EncodingError, ArgumentError
           # Never retain parser messages or causes containing upstream bytes.
         end
-        raise Error.new(:malformed_response, response.status_code,
-          :request_id => response.request_id), :cause => nil
+        nil
       end
     end
 
@@ -183,12 +182,24 @@ module Handrail
       def initialize(configuration, options = {})
         @configuration = configuration
         @resolver = options[:resolve_application_session_token]
+        @authorize_request = options.fetch(:authorize_request, nil)
+        @authorization_configured = options.key?(:authorize_request)
         @transport = Transport.new(configuration, options)
         freeze
       end
 
       def for_request(request = nil)
         Client.new(@configuration, @transport, request, @resolver)
+      end
+
+      # Existing hosts may guard the entire mount themselves. When supplied,
+      # this callback must explicitly allow the current host-authenticated user.
+      # It is separate from upstream identity and never cached across requests.
+      def authorized?(request)
+        return true unless @authorization_configured
+        @authorize_request.respond_to?(:call) && @authorize_request.call(request).equal?(true)
+      rescue StandardError
+        false
       end
 
       def inspect
