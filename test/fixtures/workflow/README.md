@@ -1,7 +1,10 @@
-> Historical evidence below predates the current parity candidate. Current forwarding
-> preserves upstream 4xx/5xx statuses (the lifecycle fixture now expects 503, not
-> the older mapped 502). Fresh browser verification is unavailable in this worker
-> because its Playwright Chromium executable is missing; see docs/rails-parity.md.
+> The dated 2026-09-09 records below are historical. Current forwarding preserves
+> upstream 4xx/5xx statuses (the lifecycle fixture expects 503, not the older
+> mapped 502). Later validation work reports 33 passing TAP tests and 54 identical
+> Rails/direct-JS image pairs, plus separate scrolled mobile previews differing
+> by zero/two pixels. This supersedes the earlier worker's missing-browser limit;
+> it does not establish acceptance or live-service behavior. See the
+> [current evidence and attribution](../../../docs/rails-parity.md#verification-and-installation-evidence).
 
 # Rails workflow browser fixture
 
@@ -35,8 +38,8 @@ and the existing Ruby no-network support rejects outbound sockets even if a
 future change bypasses the HTTP seam. Teardown checks the server's exit status
 so a swallowed network attempt cannot pass.
 
-Current additions (authored browser assertions remain unexecuted until a supported
-browser runtime is available): accepted malformed/empty intake reaches thank-you
+Current assertion scope (later execution is attributed in the parity evidence):
+accepted malformed/empty intake reaches thank-you
 with exactly one upstream intake; empty subscription warns with one child call;
 admin/nonadmin/anonymous/revoked states cover all eight routes and unauthorized
 pages contain no reporter. Page loads never create or restore an admin principal.
@@ -47,9 +50,12 @@ Known User resolver. These are synthetic session states, not real QA accounts.
 same real Rails host with the pinned JS client over a stdin/Rack bridge, without
 browser binaries, managed services or sockets. It checks acceptance semantics,
 call counts, valid-CSRF denials and actual helper output. This proves boundary
-behavior only; rendered UI, live ownership, notification delivery and deduplication
-remain independent QA work. Never install browsers or start managed services under
-this repair request. Main Avery must bind supported runtime access first.
+behavior only. Later browser results have separate attribution; full independent
+media inspection, live ownership, notification delivery and deduplication remain
+unverified here. Use this README and [the adapter procedure](../../../docs/browser_adapter.md)
+for disposable fixtures. Browser installation and managed-service operations are
+outside the documentation correction's scope; dated setup commands below record
+historical work, not authority or a requirement to repeat it.
 
 Original journeys:
 

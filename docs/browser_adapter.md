@@ -99,10 +99,15 @@ gem build/install with no Node or Git. The current dependency is JS v0.4.50 at
 from host CSS. The [style fixture](../test/browser/reporter_style.md) verifies
 all fields alongside consent against the pinned direct React renderer.
 
-A linked clean real-browser QA campaign is still required before dispatcher
-completion. Extend the existing Rails-mounted workflow fixture task
-`f699bf72-d540-46a9-a75d-5261cb8b1b66` with this procedure, using its local test
-transport and supported Rails/navigation matrix:
+The [current parity evidence](rails-parity.md#verification-and-installation-evidence)
+attributes later disposable-fixture browser results to validation work
+`8d33d1fb-30a6-46d7-9683-31ce5789553e`. Independent inspection of the complete
+corresponding media and normal readiness review remain required; passing reports
+are not acceptance. Reuse those results when candidate/reference bytes match.
+This document and the [workflow fixture README](../test/fixtures/workflow/README.md)
+are the disposable-fixture procedures; the earlier `docs/HANDRAIL.md` reference
+was mistaken. Use the following scope to assess retained coverage and any actual
+gaps, using the local test transport and supported Rails/navigation matrix:
 
 1. Render `csrf_meta_tags` and the helper on two ordinary fixture pages, first
    without Turbo/Turbolinks. Test deferred and post-readiness script loading.

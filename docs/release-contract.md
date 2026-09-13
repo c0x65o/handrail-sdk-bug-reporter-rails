@@ -28,6 +28,16 @@ The JS repository's tracked generated release.ts is not an input.
   to the source commit. Missing tags, branch refs, short SHAs, version/ref mismatches
   and dirty source trees are rejected by Git verification.
 
+`source_snapshot` does not mean the containing repository revision is uncommitted
+or unavailable for installation. Independent QA installed public HTTPS Git commit
+`783e3aa0321a7e0b6bec1143d75c780e3f955b25` with its matching host lockfile and
+normal asset precompilation while retaining null Rails release commit/ref and base
+`42f70f0a3bedf5573f79988d75789b13e55f8bcd`. See the
+[installation evidence](rails-parity.md#verification-and-installation-evidence).
+An installable source snapshot is not an accepted release. Handrail installations
+use full commit pins; the distribution-tag capabilities below do not change that
+policy or require a separate packaging/publication step.
+
 For an eventual distribution tag, the natural sequence is source commit A, then
 manifest-only commit B attesting A, then a version tag pointing at B. Runtime
 identity is `commit:A`; it does not pretend that A is B. `--tag` verifies the

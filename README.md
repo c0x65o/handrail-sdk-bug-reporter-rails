@@ -8,13 +8,13 @@ and [compatibility smoke coverage](#compatibility-smoke-coverage) for verified s
 ## Installation and release identity
 
 Install only from public HTTPS Git pinned to a **full commit SHA**, with a matching
-`Gemfile.lock`. This example is a placeholder, not an installable candidate:
+`Gemfile.lock`. This exact source snapshot passed disposable-host installation QA:
 
 ```ruby
-# Gemfile — resolve the authorized committed revision before installing
+# Gemfile — verified snapshot; resolve the revision again for a new installation
 gem 'handrail-bug-reporter',
     git: 'https://github.com/c0x65o/handrail-sdk-bug-reporter-rails.git',
-    ref: '<VERIFIED_FULL_40_CHARACTER_RAILS_COMMIT_SHA>',
+    ref: '783e3aa0321a7e0b6bec1143d75c780e3f955b25',
     require: 'handrail/bug_reporter'
 ```
 
@@ -25,14 +25,24 @@ Do not substitute a tag, branch, registry gem, tarball, local path or workspace
 source, or add a separate packaging/publishing step. Existing source test harnesses
 are implementation checks, not evidence of a compliant SDK installation.
 
-The current parity candidate is **uncommitted** on Rails base
-`42f70f0a3bedf5573f79988d75789b13e55f8bcd`; it cannot yet be installed by a public
-Git commit pin. Source finalization/publication needs separate authorization.
-See the [current parity matrix and QA handoff](docs/rails-parity.md).
+Independent QA installed Rails commit
+`783e3aa0321a7e0b6bec1143d75c780e3f955b25` from public HTTPS Git with a matching
+lockfile and passed normal `bundle exec rake assets:precompile --trace` on
+Ruby 3.1.2 / Rails 7.2.3.2 / Bundler 2.3.7 / Sprockets 4.4.1. The retained
+`installation-results.json` embeds the complete fixture Gemfile and lockfile;
+that host uses `require: false` and explicitly loads the SDK. The example above
+uses the SDK's actual require path for application boot. See the
+[parity matrix, evidence identities and QA handoff](docs/rails-parity.md).
+This proves an installable source snapshot, not an accepted release or consumer
+readiness. The subsequent documentation patch is retained separately from this
+installed commit; it changes no runtime code or browser asset.
 
 The current [release manifest](release-manifest.json) records Rails gem version
 **0.4.49** with `source_snapshot` provenance and null Rails release `commit`/`ref`.
-Its base commit is not a release of the current working-tree implementation.
+Its recorded base `42f70f0a3bedf5573f79988d75789b13e55f8bcd` remains snapshot
+provenance; neither that base nor null release identity prevents installing the
+containing source commit. Private frontend tooling is **0.4.58** (historically
+0.4.57 in the earlier repair); neither private version is a Rails gem release.
 The local `v0.4.50` tag's `version.rb` declares **0.4.49**; it is not a verified
 matching release and is not recommended here. The gem version is independent of
 the bundled **JS v0.4.50**, `refs/tags/v0.4.50`, at
@@ -48,9 +58,9 @@ upgraded the bundle to JS v0.4.50. The [current release manifest](release-manife
 and [upstream identity](frontend/upstream.json) record that current mapping.
 
 See the [release contract](docs/release-contract.md) for checksum, source and
-distribution-tag verification. Any source publication and consumer installation are later, separately authorized
-operations. Notify the owner only after independent verified parity, then pause
-for explicit continuation. Monuvision must succeed before BlueCotton starts. Both
+distribution-tag verification. Further source publication and consumer installation
+remain separately authorized operations. Notify the owner only after independent
+verified parity, then pause for explicit continuation. Monuvision must succeed before BlueCotton starts. Both
 consumers must expose the reporter only on admin screens to authenticated admins.
 
 ## Generate server configuration and mount
@@ -338,9 +348,14 @@ did not verify all ordinary form labels; the later
 [v0.4.50 field-label regression record](test/browser/reporter_style.md#field-label-regression-verification--2026-09-09)
 reports twelve matrix cases / twenty-four renders against the upgraded bundle.
 Historical payload and original browser results do not establish current browser
-acceptance. The linked lifecycle/CSRF QA campaign and CSS parity acceptance
-campaign remain separate checklist items; local passes do not establish campaign
-acceptance.
+acceptance. Later validation work reports 33 passing TAP tests and 54 pixel-identical
+Rails/direct-JS pairs across 1280x900, 1280x720 and 390x900 in light/dark themes,
+plus separate scrolled mobile previews differing by zero/two pixels. These are
+attributed disposable-fixture results; full independent media inspection and
+readiness review remain pending. See [current evidence and limitations](docs/rails-parity.md#verification-and-installation-evidence)
+and the procedures in [browser_adapter.md](docs/browser_adapter.md) and the
+[workflow fixture README](test/fixtures/workflow/README.md). Managed HTTPS access,
+live ownership, notification delivery and deduplication remain unverified.
 
 ## Compatibility smoke coverage
 
@@ -360,8 +375,11 @@ Every dependency patch is pinned in [matrix.json](test/compatibility/matrix.json
 and the [appraisal gemfiles](gemfiles). With the selected Ruby and Bundler installed,
 the historical runner is `test/compatibility/run.rb` (select the target cell).
 It creates synthetic local Git commits, so it must not be used under the current
-no-commit/public-HTTPS-only installation contract. Independent acceptance needs
-an authorized committed candidate and a public HTTPS SHA-pinned host lockfile.
+no-commit/public-HTTPS-only installation contract. The current public HTTPS
+SHA-pinned host installation and matching lockfile are recorded in the
+[parity evidence](docs/rails-parity.md#verification-and-installation-evidence);
+the legacy records below retain their original scope and do not establish
+current-candidate acceptance on those older runtimes.
 See the test README for commands, installation/precompile evidence and limitations.
 For Rails 4.2, `ruby test/compatibility/bootstrap_rails_4_2.rb` builds the pinned
 runtime in private scratch space and runs the smoke without Docker or system
