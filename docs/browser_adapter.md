@@ -79,11 +79,13 @@ render Rails `csrf_meta_tags`; the helper never serializes a token into options.
 
 ## Verification and browser QA handoff
 
-Run the focused build and tests from the Rails checkout:
+First verify selected names and setup effects with the retained correction driver
+described in [test/README.md](../test/README.md#current-sdk_parity-checks-2026-09-13).
+The equivalent focused build/test commands from the Rails checkout are:
 
 ```sh
 node scripts/build.mjs
-node --test --test-concurrency=1 test/frontend/rails_adapter.test.mjs test/frontend/bundle.test.mjs
+node --test --test-concurrency=1 --test-skip-pattern='^RubyGems builds and installs the prebuilt asset with no Node or Git available$' test/frontend/rails_adapter.test.mjs test/frontend/bundle.test.mjs
 git diff --check
 ```
 
@@ -94,20 +96,21 @@ removed markers/islands, refreshed configuration/context, custom launcher
 preservation/replacement, repeatable teardown, CSRF methods/URL/header forms,
 token rotation in actual upstream retries, and manual API regressions. Bundle
 checks verify byte reproducibility, immutable upstream source and identity, and
-gem build/install with no Node or Git. The current dependency is JS v0.4.50 at
+source load behavior. The original run executed the archive-install test contrary to its exclusion
+claim. The corrected fresh selection excludes it under the public HTTPS Git
+installation policy; the original installation effects are preserved in
+[evidence corrections](evidence-corrections.md). The current dependency is JS v0.4.50 at
 `7dfb33f548448f864cf957f19d96f8b5a27bc787`, which isolates reporter field labels
 from host CSS. The [style fixture](../test/browser/reporter_style.md) verifies
 all fields alongside consent against the pinned direct React renderer.
 
 The [current parity evidence](rails-parity.md#verification-and-installation-evidence)
-attributes later disposable-fixture browser results to validation work
-`8d33d1fb-30a6-46d7-9683-31ce5789553e`. Independent inspection of the complete
-corresponding media and normal readiness review remain required; passing reports
-are not acceptance. Reuse those results when candidate/reference bytes match.
-This document and the [workflow fixture README](../test/fixtures/workflow/README.md)
-are the disposable-fixture procedures; the earlier `docs/HANDRAIL.md` reference
-was mistaken. Use the following scope to assess retained coverage and any actual
-gaps, using the local test transport and supported Rails/navigation matrix:
+records fresh disposable-fixture checks and representative inspected images for
+this candidate. Independent review remains required; passing developer results
+are not acceptance. The following procedure and dated fixture records describe
+coverage to review, not authority to create a campaign or managed service. Use
+[this document](browser_adapter.md) and the [workflow fixture README](../test/fixtures/workflow/README.md)
+for disposable-fixture procedures; the earlier `docs/HANDRAIL.md` reference was mistaken.
 
 1. Render `csrf_meta_tags` and the helper on two ordinary fixture pages, first
    without Turbo/Turbolinks. Test deferred and post-readiness script loading.

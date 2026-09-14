@@ -85,7 +85,7 @@ From this repository, with Node >=18, npm and Git available:
 
 ```sh
 npm run setup
-npm test
+node --test --test-concurrency=1 --test-skip-pattern='^RubyGems builds and installs the prebuilt asset with no Node or Git available$' test/frontend/*.test.mjs
 git diff --check
 ```
 
@@ -95,10 +95,13 @@ upstream release generator, because an npm Git preparation checkout can lack
 Git metadata. A disposable repository-local npm cache prevents reuse of an
 artifact compiled earlier with an empty/stale identity. The cache is deleted
 afterward. No separate SDK packaging/publishing step is needed. For wrapper-only
-edits after setup, run `npm run build` and `npm test`.
+edits after setup, run `npm run build` and the filtered checks above. For fresh verification, first inspect and validate selection using
+[test/README.md](../test/README.md#current-sdk_parity-checks-2026-09-13). The
+RubyGems archive-install test is incompatible with the current public-HTTPS-Git-only
+installation contract; do not count its exclusion as a pass.
 
 The dependency and lockfile use public HTTPS Git with full SHA
-`96b293248611594c388d0fab3af63b1b2d1aae5c` (`v0.4.49`), not a tag dependency.
+`7dfb33f548448f864cf957f19d96f8b5a27bc787` (`v0.4.50`), not a tag dependency.
 `frontend/upstream.json` records SHA-256 hashes read from that exact reference
 checkout. Before bundling, the build verifies the installed package version,
 embedded release identity, both distributed source maps' original SDK sources,
@@ -114,9 +117,12 @@ no license grant and leaves the gem's licensing metadata unchanged.
 The focused tests run the actual delivered script in a DOM-free VM and JSDOM
 without host React, exercise the real provider/Button/Dialog with HTTP boundary
 fixtures, verify load-time inactivity, options, session reset, cleanup and
-identity on a headless submission, and rebuild for byte equality. A RubyGems
-build/install subprocess with empty `PATH` proves the gem includes identical
-asset bytes without Node/Git or install extensions. No database is involved.
+identity on a headless submission, and rebuild for byte equality. The original developer run **executed** the RubyGems archive build/install
+subprocess despite claiming exclusion. It built a temporary gem and installed it
+with Gem::Installer; those original effects and logs remain recorded. Only the
+corrected fresh selection excludes it. The current public HTTPS
+Git install and normal Node-free precompile evidence is in
+[rails-parity.md](../docs/rails-parity.md#verification-and-installation-evidence). No database is involved.
 
 This is build-contract coverage, not full Rails browser or visual parity.
 The script target is ES2020; runtime browser APIs and upstream modern CSS are

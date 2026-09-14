@@ -1,10 +1,9 @@
-> The dated 2026-09-09 records below are historical. Current forwarding preserves
-> upstream 4xx/5xx statuses (the lifecycle fixture expects 503, not the older
-> mapped 502). Later validation work reports 33 passing TAP tests and 54 identical
-> Rails/direct-JS image pairs, plus separate scrolled mobile previews differing
-> by zero/two pixels. This supersedes the earlier worker's missing-browser limit;
-> it does not establish acceptance or live-service behavior. See the
-> [current evidence and attribution](../../../docs/rails-parity.md#verification-and-installation-evidence).
+> Current sdk_parity run (2026-09-13): 32 browser TAP tests pass across style,
+> lifecycle and workflow fixtures; the final style capture rerun also passes.
+> See the [current report](../../../docs/rails-parity.md) for exact candidate,
+> exclusions, inspected images and independent-review limits. Dated results and
+> campaign references below are historical, not current acceptance or execution
+> authority. No managed service or QA campaign is a prerequisite for this stage.
 
 # Rails workflow browser fixture
 
@@ -182,8 +181,8 @@ The twelve tests assert:
    pass through without injection. Foreign inputs are intercepted **before
    native fetch**, with no external delivery. TRACE is a seam assertion because
    browsers forbid native TRACE fetches; it is not a Rails route integration.
-8. Mounted submission fails once at the Ruby HTTP seam with 503 (mapped by the
-   existing forwarding contract to browser 502), then succeeds with the exact
+8. Mounted submission fails once at the Ruby HTTP seam with 503 (preserved by the
+   current forwarding contract as browser 503), then succeeds with the exact
    same body/credentials and a newly issued Rails CSRF token on the SDK retry.
    Protected `POST /lifecycle/rotate` resets the real session's token and commits
    Rails' new token normally. PUT/DELETE rotate again and succeed. A stale token
@@ -192,7 +191,7 @@ The twelve tests assert:
 
 Each test starts a fresh loopback process and browser context. Existing server
 no-network guards, browser external-request blocking and CSP remain active.
-HTTP failures are accepted only for the explicitly scripted 502 and stale-token
+HTTP failures are accepted only for the explicitly scripted 503 and stale-token
 403 in retry scenarios. Startup/browser launch are bounded by 30 seconds,
 individual tests by 60 seconds (navigation: 90), and server shutdown escalates
 after 5 seconds. Cleanup runs even on assertion failures and checks server exit.

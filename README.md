@@ -8,7 +8,8 @@ and [compatibility smoke coverage](#compatibility-smoke-coverage) for verified s
 ## Installation and release identity
 
 Install only from public HTTPS Git pinned to a **full commit SHA**, with a matching
-`Gemfile.lock`. This exact source snapshot passed disposable-host installation QA:
+`Gemfile.lock`. The historical snapshot below is an example, not the current
+candidate selection; see [current checks and readiness](docs/rails-parity.md).
 
 ```ruby
 # Gemfile — verified snapshot; resolve the revision again for a new installation
@@ -41,8 +42,8 @@ The current [release manifest](release-manifest.json) records Rails gem version
 **0.4.49** with `source_snapshot` provenance and null Rails release `commit`/`ref`.
 Its recorded base `42f70f0a3bedf5573f79988d75789b13e55f8bcd` remains snapshot
 provenance; neither that base nor null release identity prevents installing the
-containing source commit. Private frontend tooling is **0.4.58** (historically
-0.4.57 in the earlier repair); neither private version is a Rails gem release.
+containing source commit. Private frontend tooling is **0.4.59** (historically
+0.4.57/0.4.58 in earlier work); these private versions are not Rails gem releases.
 The local `v0.4.50` tag's `version.rb` declares **0.4.49**; it is not a verified
 matching release and is not recommended here. The gem version is independent of
 the bundled **JS v0.4.50**, `refs/tags/v0.4.50`, at

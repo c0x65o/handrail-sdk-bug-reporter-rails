@@ -1,8 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join, resolve, relative, isAbsolute, sep } from 'node:path';
+import { createHash } from 'node:crypto';
 import { chromium } from 'playwright';
 import { assertReporterFormLayout } from './reporter-form-layout.mjs';
-import { upstream } from '../../scripts/contract.mjs';
+import { root, upstream } from '../../scripts/contract.mjs';
 import { startStyleFixture, fixturePath, endpoint, cases, context } from './reporter_style.fixture.mjs';
 
 const consentName = 'Email me when this bug is fixed';
@@ -69,6 +72,14 @@ function assertLayout(actual, theme, width, height) {
 }
 
 test('Rails helper/packaged adapter CSS parity with verified JS v0.4.50', async t => {
+  // Optional review evidence from the actual checked UI, never a managed service.
+  const output = process.env.STYLE_ARTIFACT_DIR && resolve(process.env.STYLE_ARTIFACT_DIR);
+  if (output) {
+    const fromRoot = relative(root, output);
+    assert.ok(fromRoot.startsWith(`..${sep}`) || isAbsolute(fromRoot),
+      'STYLE_ARTIFACT_DIR must be outside the source checkout');
+    await mkdir(output, { recursive: true });
+  }
   const fixture = await startStyleFixture();
   let browser;
   try {
@@ -78,6 +89,7 @@ test('Rails helper/packaged adapter CSS parity with verified JS v0.4.50', async 
       for (const { theme, absent, expected } of cases) {
         await t.test(`${width}×${height} ${theme}, context ${absent ? 'absent' : 'provided'}`, async cell => {
           const measurements = [];
+          const images = [];
           const page = await browser.newPage({ viewport: { width, height },
             deviceScaleFactor: 1, colorScheme: theme, reducedMotion: 'reduce', locale: 'en-US', timezoneId: 'UTC',
             serviceWorkers: 'block' });
@@ -92,6 +104,15 @@ test('Rails helper/packaged adapter CSS parity with verified JS v0.4.50', async 
             return route.abort('blockedbyclient');
           });
           const url = renderer => `${fixture.origin}${fixturePath}?renderer=${renderer}&theme=${theme}&absent=${absent}&private_query=never-collected#private-fragment`;
+          const capture = async (renderer, state) => {
+            if (!output) return;
+            // Navigation retains pointer coordinates from the preceding renderer.
+            // Compare the same non-hovered state, including native checkboxes.
+            await page.mouse.move(0, 0);
+            const path = `${width}x${height}-${theme}-${absent ? 'absent' : 'provided'}-${state}-${renderer}.png`;
+            const bytes = await page.screenshot({ path: join(output, path), animations: 'disabled' });
+            images.push({ renderer, state, path, sha256: createHash('sha256').update(bytes).digest('hex') });
+          };
           try {
             await page.goto(url('host'));
             const hostBefore = await hostMetrics(page);
@@ -126,6 +147,7 @@ test('Rails helper/packaged adapter CSS parity with verified JS v0.4.50', async 
               assert.deepEqual(await assertReporterFormLayout(page), fieldsBefore,
                 'late hostile rules do not alter reporter fields');
               assert.deepEqual(afterLateCSS, beforeLateCSS, 'late hostile rules do not alter SDK metrics');
+              await capture(renderer, 'form');
               assert.deepEqual(await hostMetrics(page), hostBefore, 'SDK reset stays scoped');
               const attached = page.locator('[data-handrail-bug-context] section').first();
               const contextValues = await attached.locator('strong').allTextContents();
@@ -169,6 +191,11 @@ test('Rails helper/packaged adapter CSS parity with verified JS v0.4.50', async 
               });
               assert.deepEqual(decoded, { blob: true, complete: true, width: 32, height: 24 });
               await assertReporterFormLayout(page);
+              if (output) {
+                // Avoid capturing midway through the host's smooth scrolling.
+                await preview.evaluate(image => image.scrollIntoView({ block: 'center', behavior: 'instant' }));
+                await capture(renderer, 'preview');
+              }
               await checkbox.focus();
               await page.keyboard.press('Escape');
               await dialog.waitFor({ state: 'detached' });
@@ -181,6 +208,10 @@ test('Rails helper/packaged adapter CSS parity with verified JS v0.4.50', async 
             assert.deepEqual(errors, []);
             assert.deepEqual(external, []);
             assert.deepEqual(fixture.unexpected, []);
+            if (output) await writeFile(join(output, `${width}x${height}-${theme}-${absent ? 'absent' : 'provided'}.json`),
+              JSON.stringify({ node: process.version, chromium: browser.version(), rails: fixture.railsVersion,
+                upstream, viewport: { width, height }, theme, absent, measurements, images,
+                errors, external, passed: true }, null, 2));
           } finally { await page.close(); }
         });
       }

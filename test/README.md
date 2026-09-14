@@ -13,6 +13,67 @@ The scaffold harness covers gem metadata, loading, Engine registration, and an
 unmounted Rails host boot. Focused mounted request and package checks are described
 in [forwarding.md](../docs/forwarding.md). These do not establish browser parity.
 
+## Current sdk_parity checks (2026-09-13)
+
+The original negative-lookahead instructions did **not** exclude the frontend
+archive-install callback or the JS npm-pack callback. Both executed; see
+[evidence corrections](../docs/evidence-corrections.md). Do not reuse those filters
+or the old totals as fresh results. Keep existing locked dependencies.
+
+The retained `reproduction-scripts.json` artifact includes editable
+`run-checks.py`, `compare-images.cjs` and extraction instructions. Extract the
+scripts into a temporary directory, then run from the multi-repo workspace:
+
+```sh
+python3 "$TMPDIR/sdk-evidence-tools/run-checks.py" "$PWD" "$TMPDIR/sdk-checks" preflight
+# Inspect sdk-checks/selection.json and the retained setup-side-effects.md first.
+python3 "$TMPDIR/sdk-evidence-tools/run-checks.py" "$PWD" "$TMPDIR/sdk-checks" checks
+python3 "$TMPDIR/sdk-evidence-tools/run-checks.py" "$PWD" "$TMPDIR/sdk-checks" browser
+```
+
+Use a fresh output directory; the driver refuses to overwrite command logs. The
+preflight hashes source, enumerates Ruby methods without executing test bodies,
+records all Node names (including generated cases) and proves both Node skip
+patterns using harmless canaries. Execution rejects source/selection drift,
+checks every actual Node/Ruby name and requires nonzero Ruby results. Ruby package
+files are never loaded; packaged view/generator methods are removed only from the
+disposable driver's runnable selection, with no source-test changes. Node uses
+positive, full-name skip patterns:
+
+```text
+--test-skip-pattern=^RubyGems builds and installs the prebuilt asset with no Node or Git available$
+--test-skip-pattern=^npm pack contains matching metadata and every public export$
+```
+
+Pass each entire option as one shell argument. Node omits these excluded cases
+from TAP on the verified Node 22.23.1; zero skips is not exclusion proof. The
+manifest, canaries, setup inspection and executed-name comparison supply that
+proof. Do not invoke broad `npm test`, `npm run check`, `rake test`, the package
+helpers or compatibility install/bootstrap runners for this scope.
+
+The checks mode runs ordinary Rails/JS builds and JS source/contract compilation,
+permitted tests, direct child fixtures, release and structural compatibility
+checks sequentially. Builds rewrite output through their normal pipeline; no SDK
+installation occurs. Child fixture results overlap Ruby wrappers and are listed
+separately, never summed into unique coverage. Every command/output, seed, version,
+excluded name and fresh result is retained. R2 remains an independent execution
+capability blocker, not a developer-check failure or a managed-service need.
+
+The browser command requires installed Chromium. If absent, the documented local
+setup is `PLAYWRIGHT_BROWSERS_PATH="$TMPDIR/sdk-checks/browsers" node node_modules/playwright/cli.js install chromium`;
+use that same environment variable for the checks. No managed service, database,
+QA campaign or HTTPS fixture is required for these disposable SDK checks.
+Keep image directories outside source. Style capture preserves viewport images
+and measurements for both renderers; it normalizes pointer position and completes
+scrolling before capturing the attachment preview. Full current results, explicit
+exclusions, installation provenance and independent-review limits are in
+[rails-parity.md](../docs/rails-parity.md).
+
+Everything below is historical harness documentation. Commands that create
+synthetic commits or package/install archives are not authorized by this stage.
+The source-loaded Gemfile's PATH entry is development configuration, not a consumer
+installation or compliant Git lockfile.
+
 ## Compatibility bounds
 
 - `required_ruby_version >= 2.3` and `railties >= 4.2, < 8.0` are provisional
