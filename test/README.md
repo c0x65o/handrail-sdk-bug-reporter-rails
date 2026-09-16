@@ -13,7 +13,49 @@ The scaffold harness covers gem metadata, loading, Engine registration, and an
 unmounted Rails host boot. Focused mounted request and package checks are described
 in [forwarding.md](../docs/forwarding.md). These do not establish browser parity.
 
-## Current sdk_parity checks (2026-09-13)
+## Current readiness evidence (updated 2026-09-16 UTC)
+
+Use [the current handoff](../docs/readiness-handoff.md) and
+[machine-readable evidence index](../docs/readiness-evidence.json) for precise
+source, receipt and retained report identities. Per planner-supplied canonical
+findings, action `0a4dae06-b47d-4673-8a61-6fe526b3685f` is settled; validation work
+request `a648bc8f-75a2-469e-844e-d075e72140e7`, run
+`c146ca6b-1061-4f72-a18b-7cb461aadcde`, completed
+`2026-09-16T04:37:29.344Z` with evidence-mode status **passed**. Inventories and
+all 23 runtime hashes matched; independent Ruby 199 tests / 7242 assertions,
+Rails frontend 23, JS 59, browser 32 TAP tests and build/typecheck/load passed.
+Executor visibility and independent receipts have been obtained. This follow-up
+verified the supplied attachment/source hashes, reused unchanged-source evidence,
+and did not rerun tests or inspect unavailable native receipt bytes.
+
+Exact limits: `validation_verified=false`,
+`verification_scope=source_or_saved_evidence`, native assertions `[]`.
+Browser execution used fallback fonts; requested Arial rendered as FreeMono, so
+typography equivalence remains unverified. Package exclusions below still apply.
+Source/build/load evidence does not prove current public HTTPS Git installation
+at a full SHA with a matching lockfile. Consumer compatibility, installation,
+real admin authorization and provider persistence/email remain pending. Separate
+`sdk_review` acceptance and explicit owner trial direction are subsequent work.
+
+### Historical reproduction handoff — 2026-09-15
+
+The original handoff supplied `reproduction-scripts.json` with editable
+preparation/selection/check drivers and developer logs from disposable sibling
+copies using locked dependencies. Those scripts/logs are historical references,
+not files attached or rerun by this documentation follow-up. No SDK archive
+installation or synthetic commit runner is part of that selection.
+
+The original continuation used `handrail_run_read_only_tests` with `profile=sdk`
+in a read-only validation work request. Its writable developer probe was rejected
+for eligibility and therefore directed reviewers to obtain executor visibility
+and independent receipts. That request is now superseded by the canonical result
+above. No owner enablement or platform work is needed. The missing-result run
+`74b45ab0-b487-4626-8424-3f660e1f87c3` remains inconclusive; the original development
+`follow_up_required` result remains unchanged.
+
+<a id="current-sdk_parity-checks-2026-09-13"></a>
+
+## Historical sdk_parity checks (2026-09-13)
 
 The original negative-lookahead instructions did **not** exclude the frontend
 archive-install callback or the JS npm-pack callback. Both executed; see
@@ -56,8 +98,8 @@ permitted tests, direct child fixtures, release and structural compatibility
 checks sequentially. Builds rewrite output through their normal pipeline; no SDK
 installation occurs. Child fixture results overlap Ruby wrappers and are listed
 separately, never summed into unique coverage. Every command/output, seed, version,
-excluded name and fresh result is retained. R2 remains an independent execution
-capability blocker, not a developer-check failure or a managed-service need.
+excluded name and fresh result is retained. At that checkpoint R2 was an
+independent execution capability blocker. That restriction is historical; see the current SDK-profile instructions above.
 
 The browser command requires installed Chromium. If absent, the documented local
 setup is `PLAYWRIGHT_BROWSERS_PATH="$TMPDIR/sdk-checks/browsers" node node_modules/playwright/cli.js install chromium`;

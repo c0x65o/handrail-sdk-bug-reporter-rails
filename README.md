@@ -5,6 +5,10 @@ The browser uses the JS reporter through protected, same-origin Rails routes;
 the host keeps upstream credentials on the server. See [capability evidence](#capability-evidence)
 and [compatibility smoke coverage](#compatibility-smoke-coverage) for verified scope.
 
+Current readiness: [2026-09-15 handoff](docs/readiness-handoff.md). The current
+source is prepared for independent SDK review; developer checks and historical
+installation records do not establish independent acceptance or consumer readiness.
+
 ## Installation and release identity
 
 Install only from public HTTPS Git pinned to a **full commit SHA**, with a matching
@@ -26,13 +30,16 @@ Do not substitute a tag, branch, registry gem, tarball, local path or workspace
 source, or add a separate packaging/publishing step. Existing source test harnesses
 are implementation checks, not evidence of a compliant SDK installation.
 
-Independent QA installed Rails commit
+The historical repository report attributes an independent QA installation to
+Rails commit
 `783e3aa0321a7e0b6bec1143d75c780e3f955b25` from public HTTPS Git with a matching
-lockfile and passed normal `bundle exec rake assets:precompile --trace` on
-Ruby 3.1.2 / Rails 7.2.3.2 / Bundler 2.3.7 / Sprockets 4.4.1. The retained
+lockfile and a passing normal `bundle exec rake assets:precompile --trace` on
+Ruby 3.1.2 / Rails 7.2.3.2 / Bundler 2.3.7 / Sprockets 4.4.1. That report says
 `installation-results.json` embeds the complete fixture Gemfile and lockfile;
-that host uses `require: false` and explicitly loads the SDK. The example above
-uses the SDK's actual require path for application boot. See the
+that historical host used `require: false` and explicitly loaded the SDK.
+Those saved artifact bytes were not supplied to this assignment; this is an
+attributed historical result, not a fresh installation or lockfile inspection.
+The example above uses the SDK's actual require path for application boot. See the
 [parity matrix, evidence identities and QA handoff](docs/rails-parity.md).
 This proves an installable source snapshot, not an accepted release or consumer
 readiness. The subsequent documentation patch is retained separately from this
@@ -42,8 +49,8 @@ The current [release manifest](release-manifest.json) records Rails gem version
 **0.4.49** with `source_snapshot` provenance and null Rails release `commit`/`ref`.
 Its recorded base `42f70f0a3bedf5573f79988d75789b13e55f8bcd` remains snapshot
 provenance; neither that base nor null release identity prevents installing the
-containing source commit. Private frontend tooling is **0.4.59** (historically
-0.4.57/0.4.58 in earlier work); these private versions are not Rails gem releases.
+containing source commit. Private frontend tooling is **0.4.60** (historically
+0.4.57/0.4.58/0.4.59 in earlier work); these private versions are not Rails gem releases.
 The local `v0.4.50` tag's `version.rb` declares **0.4.49**; it is not a verified
 matching release and is not recommended here. The gem version is independent of
 the bundled **JS v0.4.50**, `refs/tags/v0.4.50`, at
@@ -376,7 +383,7 @@ Every dependency patch is pinned in [matrix.json](test/compatibility/matrix.json
 and the [appraisal gemfiles](gemfiles). With the selected Ruby and Bundler installed,
 the historical runner is `test/compatibility/run.rb` (select the target cell).
 It creates synthetic local Git commits, so it must not be used under the current
-no-commit/public-HTTPS-only installation contract. The current public HTTPS
+no-commit/public-HTTPS-only installation contract. The historical public HTTPS
 SHA-pinned host installation and matching lockfile are recorded in the
 [parity evidence](docs/rails-parity.md#verification-and-installation-evidence);
 the legacy records below retain their original scope and do not establish

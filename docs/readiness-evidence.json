@@ -1,0 +1,523 @@
+{
+  "schema_version": 1,
+  "task_id": "61ce47fd-96c9-4942-ae9d-573da0eae084",
+  "work_request_id": "ce707792-5681-4be2-a6eb-2e474920f035",
+  "date": "2026-09-16 UTC",
+  "verdict": "bounded_documentation_handoff_completed; sdk_review_acceptance_and_owner_direction_pending",
+  "rails_head": "7df0290f23159884178c888f2d5e4c8ec380d723",
+  "historical_base": "15cc5a3f299263e6a498613de34a84857ba9c3d4",
+  "js_head": "7dfb33f548448f864cf957f19d96f8b5a27bc787",
+  "runtime_files_unchanged": 23,
+  "implementation_changes": false,
+  "test_attribution": "checks, ruby, node_exclusions and browser statistics retain 2026-09-15 developer evidence; canonical_validation separately attributes later independent execution to planner-supplied findings; no tests rerun by this documentation worker",
+  "checks": [
+    {
+      "id": "runtime-ruby",
+      "argv": [
+        "bundle3.1",
+        "exec",
+        "ruby",
+        "-e",
+        "require \"rails\"; require \"rack\"; require \"sprockets\"; require \"minitest\"; puts RUBY_DESCRIPTION; puts \"RubyGems #{Gem::VERSION}; Bundler #{Bundler::VERSION}\"; Gem.loaded_specs.sort.each { |n,s| puts \"#{n} #{s.version}\" }"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "runtime-node",
+      "argv": [
+        "node",
+        "-e",
+        "console.log(process.versions); for (const n of ['react','react-dom','playwright','esbuild','jsdom']) console.log(n,require(n+'/package.json').version)"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "bundle-check",
+      "argv": [
+        "bundle3.1",
+        "check"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "rails-build",
+      "argv": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "ruby",
+      "argv": [
+        "bundle3.1",
+        "exec",
+        "ruby",
+        "-Ilib",
+        "-Itest",
+        "/opt/handrail/.handrail/codex-runs/f10ca779-4e9e-4f96-b044-ea5490046346/tmp/sdk-readiness/ruby-selection.rb"
+      ],
+      "exit_code": 0,
+      "expected_tests": 199,
+      "counts_verified": true
+    },
+    {
+      "id": "rails-skip-canary",
+      "argv": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-skip-pattern=^RubyGems builds and installs the prebuilt asset with no Node or Git available$",
+        "/opt/handrail/.handrail/codex-runs/f10ca779-4e9e-4f96-b044-ea5490046346/tmp/sdk-readiness/rails-skip-canary.mjs"
+      ],
+      "exit_code": 0,
+      "expected_tests": 1,
+      "counts_verified": true
+    },
+    {
+      "id": "js-skip-canary",
+      "argv": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-skip-pattern=^npm pack contains matching metadata and every public export$",
+        "/opt/handrail/.handrail/codex-runs/f10ca779-4e9e-4f96-b044-ea5490046346/tmp/sdk-readiness/js-skip-canary.mjs"
+      ],
+      "exit_code": 0,
+      "expected_tests": 1,
+      "counts_verified": true
+    },
+    {
+      "id": "rails-frontend",
+      "argv": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=1",
+        "--test-skip-pattern=^RubyGems builds and installs the prebuilt asset with no Node or Git available$",
+        "test/frontend/bundle.test.mjs",
+        "test/frontend/mounted_acceptance.test.mjs",
+        "test/frontend/rails_adapter.test.mjs"
+      ],
+      "exit_code": 0,
+      "expected_tests": 23,
+      "counts_verified": true
+    },
+    {
+      "id": "js-build",
+      "argv": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "js-typecheck",
+      "argv": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "js-contract-types",
+      "argv": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "-p",
+        "tsconfig.contracts.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "js-tests",
+      "argv": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=1",
+        "--test-skip-pattern=^npm pack contains matching metadata and every public export$",
+        "test/package-contracts.test.mjs",
+        "test/react-ui.test.mjs",
+        "test/react.test.mjs",
+        "test/reporter.test.mjs",
+        "test/server.test.mjs"
+      ],
+      "exit_code": 0,
+      "expected_tests": 59,
+      "counts_verified": true
+    },
+    {
+      "id": "release",
+      "argv": [
+        "ruby",
+        "scripts/verify_release.rb",
+        "--git"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "matrix-structure",
+      "argv": [
+        "ruby",
+        "test/compatibility/check_matrix.rb"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "browser-style",
+      "argv": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=1",
+        "test/browser/reporter_style.test.mjs"
+      ],
+      "exit_code": 0,
+      "expected_tests": 13,
+      "counts_verified": true
+    },
+    {
+      "id": "browser-lifecycle",
+      "argv": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=1",
+        "test/browser/reporter_lifecycle.test.mjs"
+      ],
+      "exit_code": 0,
+      "expected_tests": 12,
+      "counts_verified": true
+    },
+    {
+      "id": "browser-workflow",
+      "argv": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=1",
+        "test/browser/reporter_workflow.test.mjs"
+      ],
+      "exit_code": 0,
+      "expected_tests": 7,
+      "counts_verified": true
+    },
+    {
+      "id": "npm-version",
+      "argv": [
+        "npm",
+        "--version"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "js-tool-versions",
+      "argv": [
+        "node",
+        "-e",
+        "for(const n of ['react','react-dom','typescript','tsup','esbuild','playwright']) console.log(n,require(n+'/package.json').version)"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "rails-dependencies",
+      "argv": [
+        "npm",
+        "ls",
+        "--all",
+        "--json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "js-dependencies",
+      "argv": [
+        "npm",
+        "ls",
+        "--all",
+        "--json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "package-inventory-load",
+      "argv": [
+        "bundle3.1",
+        "exec",
+        "ruby",
+        "-Ilib",
+        "-rjson",
+        "-e",
+        "spec=Gem::Specification.load(\"handrail-bug-reporter.gemspec\"); abort \"missing spec\" unless spec; require \"handrail/bug_reporter\"; puts JSON.pretty_generate(:files=>spec.files.sort,:ruby=>spec.required_ruby_version.to_s,:dependencies=>spec.dependencies.map(&:to_s),:root=>Handrail::BugReporter::Engine.root.to_s)"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "mounted-request",
+      "argv": [
+        "bundle3.1",
+        "exec",
+        "ruby",
+        "-Ilib",
+        "-Itest",
+        "test/fixtures/mounted/request_checks.rb"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "mounted-accepted_response",
+      "argv": [
+        "bundle3.1",
+        "exec",
+        "ruby",
+        "-Ilib",
+        "-Itest",
+        "test/fixtures/mounted/accepted_response_checks.rb"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "mounted-authorization",
+      "argv": [
+        "bundle3.1",
+        "exec",
+        "ruby",
+        "-Ilib",
+        "-Itest",
+        "test/fixtures/mounted/authorization_checks.rb"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "mounted-subscription",
+      "argv": [
+        "bundle3.1",
+        "exec",
+        "ruby",
+        "-Ilib",
+        "-Itest",
+        "test/fixtures/mounted/subscription_checks.rb"
+      ],
+      "exit_code": 0
+    },
+    {
+      "id": "mounted-history",
+      "argv": [
+        "bundle3.1",
+        "exec",
+        "ruby",
+        "-Ilib",
+        "-Itest",
+        "test/fixtures/mounted/history_checks.rb"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "ruby": {
+    "tests": 199,
+    "assertions": 7242,
+    "seed": 61047,
+    "excluded_files": [
+      "test/package_contract_test.rb",
+      "test/forwarding_package_test.rb"
+    ],
+    "excluded_methods": [
+      "ViewHelperTest#test_packaged_gem_renders_host_views_with_fingerprinted_assets",
+      "InstallGeneratorTest#test_built_package_can_discover_generate_and_boot_using_its_own_templates"
+    ]
+  },
+  "node_exclusions": [
+    "RubyGems builds and installs the prebuilt asset with no Node or Git available",
+    "npm pack contains matching metadata and every public export"
+  ],
+  "browser": {
+    "chromium": "149.0.7827.55",
+    "playwright": "1.61.1",
+    "style_cells": 12,
+    "style_tap_tests": 13,
+    "lifecycle_tests": 12,
+    "workflow_tests": 7,
+    "pngs": 48,
+    "pairs": 24,
+    "identical_pairs": 16,
+    "differing_preview_pairs": 8,
+    "differing_pixels_total": 54,
+    "maximum_channel_delta": 9,
+    "attribution": "developer automated layout and exact RGBA comparison; three pairs manually inspected",
+    "typography_equivalence": "unverified",
+    "canonical_validation_font_limit": "Requested Arial rendered as FreeMono; fallback fonts used"
+  },
+  "historical": {
+    "R1": "Original 24/60 passed including incorrectly excluded side-effect callbacks; preserved, not retroactively filtered. Prior correction results and zero-run failures remain attributed history.",
+    "R2": "Old scripts/test-*.mjs restriction superseded by current profile=sdk. Original failed attempt preserved.",
+    "independent_verdicts": {
+      "sdk_parity_coverage": "historical PASS",
+      "sdk_behavior_and_package": "historical FAIL",
+      "sdk_browser_parity": "historical UNVERIFIED",
+      "readiness_and_consumer_handoff": "historical FAIL"
+    },
+    "historical_saved_artifact_bytes_supplied": false,
+    "repository_legacy_evidence": "Read acceptance JSON, locks, snapshots, smoke logs and hashed all files; decoded gzip assets. Each legacy package differs from current package in nine files; no fresh legacy runtime acceptance.",
+    "public_git_install": "Historical reports only; no new installation or anonymous fetch. Existing dependency hashes/source maps verified.",
+    "executor_2026_09_15": {
+      "profile": "sdk",
+      "inspect_attempt": "rejected",
+      "error": "This tool requires its own active read-only validation work request.",
+      "candidate_sha256": null,
+      "request_key": null,
+      "actual_executor_checkout_visibility": "unverified",
+      "next": "Existing sdk_review read-only work request: inspect, prove both Git references visible, then run exact selections using returned hash and unique request_key. No owner enablement or platform work."
+    },
+    "development_work_request": {
+      "id": "585ce275-b440-4c90-acb2-55f44d42fa20",
+      "result_status": "follow_up_required",
+      "status_preserved": true,
+      "attribution": "planner-supplied canonical assignment; original result bytes not attached"
+    },
+    "missing_result_run": {
+      "id": "74b45ab0-b487-4626-8424-3f660e1f87c3",
+      "finding": "inconclusive; missing result",
+      "status_rewritten": false,
+      "attribution": "planner-supplied canonical assignment"
+    },
+    "retained_deliverables_2026_09_15": [
+      "readiness-documentation.md",
+      "source-inventory.json",
+      "source-diff.txt",
+      "evidence-index.json",
+      "developer-evidence.json",
+      "reproduction-scripts.json",
+      "browser-captures.json",
+      "desktop-preview-rails.png",
+      "desktop-preview-js.png",
+      "mobile-preview-rails.png",
+      "mobile-preview-js.png"
+    ],
+    "original_date": "2026-09-15 America/Chicago",
+    "original_test_attribution": "fresh developer checks on disposable copies of initial clean HEADs; final changes documentation only"
+  },
+  "executor": {
+    "profile": "sdk",
+    "actual_executor_checkout_visibility": "obtained per planner-supplied canonical validation",
+    "independent_receipts": "obtained; see canonical_validation.native_receipts",
+    "historical_probe": "preserved in historical.executor_2026_09_15",
+    "next": "Separate sdk_review assesses existing canonical evidence and limits; do not repeat the settled visibility/receipt request or rerun broad tests for this documentation handoff."
+  },
+  "missing_checks": [
+    "Separate sdk_review acceptance and readiness conclusion",
+    "Typography equivalence: requested Arial rendered as FreeMono",
+    "Fresh public HTTPS Git install/fetch and matching consumer lock at selected committed candidate",
+    "Current candidate on legacy/consumer runtimes",
+    "Actual consumer admin authorization, CSS/CSP and provider persistence/email",
+    "Firefox/WebKit and native BFCache"
+  ],
+  "retained_deliverables": [
+    "docs/readiness-handoff.md",
+    "docs/rails-parity.md",
+    "test/README.md",
+    "readiness-documentation.md",
+    "evidence-index.json",
+    "source-inventory.json",
+    "documentation-diff.txt",
+    "verification-report.json"
+  ],
+  "acceptance_note": "Manifest paths and raw-byte SHA-256 values are checked locally; server retention and independent task acceptance remain separate. This bounded handoff does not accept SDK readiness or authorize consumer work.",
+  "input_artifacts": [
+    {
+      "id": "4fea48b1-d745-5b1f-aa3f-9cd8c0227fdd",
+      "path": "readiness-documentation.md",
+      "sha256": "9c9d7ab461767ef9ee4bd2417e1b3b2e6764bea29634b2a9743e31ca46afbbdb",
+      "work_request_id": "585ce275-b440-4c90-acb2-55f44d42fa20",
+      "bytes_inspected": true,
+      "sha256_verified": true
+    },
+    {
+      "id": "0751184a-e720-50f1-a5eb-0f168384695e",
+      "path": "evidence-index.json",
+      "sha256": "076efcdcb64083ca64568709f8a4fc2eb406852bf6ebad82bc800e09404380b7",
+      "work_request_id": "585ce275-b440-4c90-acb2-55f44d42fa20",
+      "bytes_inspected": true,
+      "sha256_verified": true
+    },
+    {
+      "id": "09a45792-61ba-5c75-a01a-d68aa00aa8c0",
+      "path": "source-inventory.json",
+      "sha256": "6a8deea0f8f6f801a7c9f1c0df35c0f9d68842cface24f9fff12fc4bce233083",
+      "work_request_id": "585ce275-b440-4c90-acb2-55f44d42fa20",
+      "bytes_inspected": true,
+      "sha256_verified": true
+    }
+  ],
+  "canonical_validation": {
+    "attribution": "Canonical findings supplied by the planner in this work request; report, result and native receipt bytes unavailable to this worker, not personally inspected or rerun",
+    "action_id": "0a4dae06-b47d-4673-8a61-6fe526b3685f",
+    "action_state": "settled",
+    "work_request_id": "a648bc8f-75a2-469e-844e-d075e72140e7",
+    "run_id": "c146ca6b-1061-4f72-a18b-7cb461aadcde",
+    "completed_at": "2026-09-16T04:37:29.344Z",
+    "evidence_mode_status": "passed",
+    "validation_verified": false,
+    "verification_scope": "source_or_saved_evidence",
+    "native_assertions": [],
+    "reported_results": {
+      "inventories_match": true,
+      "runtime_hashes_match": 23,
+      "ruby": {
+        "tests": 199,
+        "assertions": 7242
+      },
+      "rails_frontend_tests": 23,
+      "js_tests": 59,
+      "browser_tap_tests": 32,
+      "build_typecheck_load": "passed"
+    },
+    "native_receipts": {
+      "rails": "ee51869136890847a5701dbd5be073e0ba03a8f42ef0f5a13a9397ae6597c869",
+      "js": "cfeeb7faee32f7a6309b7f745578db8b344737a84bcf6851fb9e020a3bf0b5b4",
+      "browser": "f897927b424ce0ad7f60ce4ac8d9db38e0ed55f5dc422cb403902c5a2e0bfaa4"
+    },
+    "retained_evidence": [
+      {
+        "path": "inspection-report.md",
+        "id": "5e5a9a19-b08d-4e51-b2e5-12e671387990",
+        "sha256": "302b85c376a9084e8e5bbcc45ec1fbb12f1464f050e46f86c528e7c595b34642"
+      },
+      {
+        "path": "result.json",
+        "id": "8534513e-bee3-4bd6-a367-f7b360089bb2",
+        "sha256": "db9ee590342fd1b505e376f34d53600af2239df893a4275e7d69b6d8b62fd0a4"
+      }
+    ],
+    "browser_fonts": {
+      "fallback_fonts_used": true,
+      "requested": "Arial",
+      "rendered": "FreeMono",
+      "typography_equivalence": "unverified"
+    },
+    "sdk_acceptance": false
+  },
+  "documentation_follow_up": {
+    "runtime_or_js_changes": false,
+    "broad_tests_rerun": false,
+    "starting_inventory_match": {
+      "rails_files": 191,
+      "js_files": 27,
+      "mismatches": []
+    },
+    "runtime_hashes_rechecked": 23,
+    "source_inventory": "source-inventory.json",
+    "focused_diff": "documentation-diff.txt",
+    "verification_report": "verification-report.json",
+    "subsequent_parent_work": [
+      "sdk_review",
+      "owner notification and explicit Monuvision trial direction/environment",
+      "successful Monuvision verification before conditional BlueCotton adoption"
+    ],
+    "installation_boundary": "Source/build/load checks and historical installation attribution do not prove current consumer installation. Use public HTTPS Git at a full commit SHA with matching package-manager lockfile and normal install/build pipeline."
+  }
+}

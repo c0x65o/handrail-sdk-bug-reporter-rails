@@ -1,10 +1,31 @@
-# SDK evidence corrections — 2026-09-13
+# SDK evidence corrections
+
+## Current attribution correction — 2026-09-15
+
+The report below is preserved as the 2026-09-13 author's record. This assignment
+received **no saved artifacts or worker reports**, so its statements that artifacts
+were attached, read, hash-verified or independently inspected are historical
+attributions, not actions performed now. Repository evidence was inspected and
+new bounded developer checks were run; see [current handoff](readiness-handoff.md).
+Original 24/60 totals, forbidden side effects, zero-run attempts and the R2 failed
+request remain historical results. The positive skip patterns remain applicable.
+
+The `scripts/test-*.mjs` executor limitation is superseded by `profile=sdk`.
+A fresh inspect call from this writable development worker returned:
+`This tool requires its own active read-only validation work request.`
+That is an assignment eligibility limit, not a failure of SDK test-path support.
+Use the existing independent `sdk_review` work request without an owner-enablement
+question. Actual executor checkout visibility, test receipts and acceptance are
+still unverified here. No old result is promoted to independent acceptance.
+
+## Preserved correction report — 2026-09-13
 
 Developer correction for `f805ff6b-3bf1-409a-9fb1-f908e8e76115`, independent review
 `b906468f-a407-4afe-8a50-9f802a0fb971` and saved rework
 `3c37abaf-466f-40f4-911b-fdf79114a212`, within the existing `sdk_parity` stage.
 **Developer corrections and checks are complete; independent acceptance and owner
-direction remain pending. R2 is not resolved.** No concrete runtime defect was
+direction remained pending at that checkpoint. The then-current R2 restriction
+was not resolved in that run (superseded as described above).** No concrete runtime defect was
 established, so runtime source, shipped asset, tests and prior capture patch are
 preserved. This correction changes documentation only.
 
@@ -183,7 +204,7 @@ The exact four saved criteria and complete source-linked matrix remain in
 | `sdk_browser_parity` | UNVERIFIED overall | Missing fresh comparisons now retained; original mobile finding preserved; R2 remains |
 | `readiness_and_consumer_handoff` | FAIL — checkpoint readiness | Corrections available for review; independent acceptance, owner notification/direction pending |
 
-**R2 — blocking independent reproduction capability.** The review worker's shell
+**Historical R2 — unavailable independent reproduction in that run.** The review worker's shell
 contract prohibited fixture/output/state writes. Its supported
 `handrail_run_read_only_tests` inspection rejected actual JS reporter/server/React
 paths with `Select 1–20 explicit scripts/test-*.mjs files.` No compatible candidate
@@ -191,8 +212,8 @@ hash, run/request key or saved test receipt was returned. The full attached revi
 preserves this exact failed-tool evidence. The separately named raw
 `tool-inspection.json` was not supplied to this correction; its contents/hash are
 not invented. These developer checks do not resolve R2 and no independent runner
-was retried. Resolve the named contract mismatch through existing authorized
-controls before another independent test attempt. Do not bypass read-only
+was retried. That named contract mismatch is now historical; use the current SDK profile
+in the existing read-only review stage for a fresh attempt. Do not bypass read-only
 restrictions, create replacement platform infrastructure, a managed service, QA
 campaign or HTTPS fixture to declare this fixed.
 

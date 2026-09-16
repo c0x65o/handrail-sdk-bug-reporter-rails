@@ -1,4 +1,48 @@
-# Rails parity and first-trial readiness — 2026-09-13
+# Rails parity and first-trial readiness
+
+## Current handoff — updated 2026-09-16 UTC
+
+Task `61ce47fd-96c9-4942-ae9d-573da0eae084`: use the
+[current readiness handoff](readiness-handoff.md) and
+[machine-readable evidence index](readiness-evidence.json). Rails HEAD is
+`7df0290f23159884178c888f2d5e4c8ec380d723`; JS remains
+`7dfb33f548448f864cf957f19d96f8b5a27bc787`. The original 2026-09-15 reconciliation
+began clean; this follow-up preserves its documentation edits, which exactly match
+the attached final inventory. The historical patch below is now committed;
+private frontend tooling is 0.4.60, while the gem remains 0.4.49. Runtime and asset
+bytes have no drift from the documented base `15cc5a3...`.
+
+The source-linked matrix below still describes that runtime. Its current check
+attribution is given in the handoff by row; “pass” in the preserved historical
+narrative means the original author's result. No historical artifact IDs below
+were supplied as files in this assignment. Claims about attachments, inspected
+images, verified hashes or independent verdicts below are attributed records of
+that earlier work, not fresh byte inspections. The 2026-09-15 developer logs and
+PNGs are separately attributed in the handoff.
+Independent acceptance remains pending.
+
+The old R2 `scripts/test-*.mjs` restriction and the 2026-09-15 writable-worker
+eligibility rejection are historical. Per planner-supplied canonical findings,
+action `0a4dae06-b47d-4673-8a61-6fe526b3685f` is settled; validation work request
+`a648bc8f-75a2-469e-844e-d075e72140e7`, run
+`c146ca6b-1061-4f72-a18b-7cb461aadcde`, completed
+`2026-09-16T04:37:29.344Z` with evidence-mode status **passed**. Matching inventories,
+all 23 runtime hashes, independent Ruby 199/7242, Rails frontend 23, JS 59,
+browser 32 TAP tests and build/typecheck/load checks are reported passed.
+Executor visibility and receipts have been obtained. Receipt IDs and retained
+report/result IDs and hashes are in the [handoff](readiness-handoff.md#current-canonical-validation--2026-09-16-utc)
+and evidence index; their bytes were not supplied to this documentation worker.
+No tests were rerun here.
+
+Keep `validation_verified=false`, `verification_scope=source_or_saved_evidence`,
+and native assertions `[]`. Browser fonts fell back from requested Arial to
+FreeMono; typography equivalence remains unverified. The missing-result run
+`74b45ab0-b487-4626-8424-3f660e1f87c3` remains inconclusive and the original
+development `follow_up_required` result is unchanged. Separate `sdk_review`
+acceptance, owner direction and current consumer verification remain pending;
+no owner enablement or platform development is needed for this documentation work.
+
+## Historical report — 2026-09-13
 
 Original developer evidence for work request `60c927b3-f9c2-4761-a735-daaa40910f9a`, task
 `3792a40e-44d3-47ef-83b9-d7a6e78b8906`, existing `sdk_parity` stage. The retained
@@ -46,8 +90,11 @@ and owner direction remain pending. This is not permission to integrate a consum
 
 ## Source-linked parity matrix
 
-JS links bind the immutable reference. Relative Rails links bind to the candidate
-inventory. “Pass” refers to this worker's checks, not independent acceptance.
+JS links bind the immutable reference. Relative Rails links bind unchanged runtime
+source at current HEAD. Historical pass statements below are attributed to the
+2026-09-13 developer, with fresh 2026-09-15 coverage mapped in the current handoff.
+The later canonical independent execution above supports those unchanged sources
+within its stated limits; none of these records grants SDK acceptance.
 
 | Behavior / required evidence | JS reference | Rails equivalent and current result | Difference or remaining evidence |
 | --- | --- | --- | --- |
@@ -60,7 +107,7 @@ inventory. “Pass” refers to this worker's checks, not independent acceptance
 | Attachments/screenshots | [screenshot normalization](https://github.com/c0x65o/handrail-sdk-bug-reporter-js/blob/7dfb33f548448f864cf957f19d96f8b5a27bc787/src/reporter.ts#L797), [UI](https://github.com/c0x65o/handrail-sdk-bug-reporter-js/blob/7dfb33f548448f864cf957f19d96f8b5a27bc787/src/react-ui.tsx) | Shared browser File/Blob handling; [Ruby Screenshot](../lib/handrail/bug_reporter/screenshot.rb)/[tests](../test/screenshot_test.rb): pass one PNG/JPEG, 20 MiB bound, explicit permission, signature/MIME/base64/IO failures. Browser workflow verifies invalid claimed PNG, genuine PNG/JPEG, exact forwarded bytes; style capture decodes visible preview. | Ruby accepts bounded IO/bytes/base64, not browser File objects. Neither test proves remote storage. No additional attachment type or automatic capture is inferred. |
 | Notification consent | [submit/subscribeToUpdates](https://github.com/c0x65o/handrail-sdk-bug-reporter-js/blob/7dfb33f548448f864cf957f19d96f8b5a27bc787/src/reporter.ts#L1559) | [Notification](../lib/handrail/bug_reporter/notification.rb), [native tests](../test/notification_test.rb), [child route checks](../test/fixtures/mounted/subscription_checks.rb), frontend/browser workflows: pass unchecked policy-gated consent, literal true, recipient-injection stripping, canonical child ID and saved-parent success after child failure. | No actual email or provider delivery occurred. Child failure warns without replaying parent intake. |
 | Errors, retries and success bodies | [forwarding error contract](https://github.com/c0x65o/handrail-sdk-bug-reporter-js/blob/7dfb33f548448f864cf957f19d96f8b5a27bc787/src/server.ts#L525), [client retries](https://github.com/c0x65o/handrail-sdk-bug-reporter-js/blob/7dfb33f548448f864cf957f19d96f8b5a27bc787/src/reporter.ts#L2079) | Transport/controller/native tests plus mounted response matrix: pass original 4xx/5xx statuses, generic sanitized errors, network 502, transient retry list, stable body/event and fresh identity. Empty/malformed 2xx still accepts; valid JSON precision survives forwarding. | Malformed accepted JSON is suppressed to `null` in Rails, whereas JS forwarding returns raw bytes. Native normalization/number/string/nesting semantics differ as described below. |
-| Appearance | [public React UI](https://github.com/c0x65o/handrail-sdk-bug-reporter-js/blob/7dfb33f548448f864cf957f19d96f8b5a27bc787/src/react-ui.tsx) | [entry](../frontend/entry.jsx), helper, [style fixture](../test/browser/reporter_style.test.mjs): pass all 12 viewport/theme/context cells against direct upstream React, including hostile late CSS, fields, consent, keyboard focus, context privacy and decoded preview. Representative captures inspected and retained. | Shared bytes/build success alone are not visual proof. Comparison is the same pinned React 18.3.1 fixture, not arbitrary host CSS or React versions. Pixel comparisons and scope below. |
+| Appearance | [public React UI](https://github.com/c0x65o/handrail-sdk-bug-reporter-js/blob/7dfb33f548448f864cf957f19d96f8b5a27bc787/src/react-ui.tsx) | [entry](../frontend/entry.jsx), helper, [style fixture](../test/browser/reporter_style.test.mjs): pass all 12 viewport/theme/context cells against direct upstream React, including hostile late CSS, fields, consent, keyboard focus, context privacy and decoded preview. Representative captures inspected and retained. | Shared bytes/build success alone are not visual proof. Comparison is the same pinned React 18.3.1 fixture, not arbitrary host CSS or React versions. Pixel comparisons and scope below. Canonical independent execution used FreeMono for requested Arial; typography equivalence remains unverified. |
 | Mount/unmount and navigation | [React provider](https://github.com/c0x65o/handrail-sdk-bug-reporter-js/blob/7dfb33f548448f864cf957f19d96f8b5a27bc787/src/react.ts) | [Rails adapter](../frontend/rails_adapter.js), [DOM tests](../test/frontend/rails_adapter.test.mjs), [browser lifecycle](../test/browser/reporter_lifecycle.test.mjs): pass initial/deferred/late and duplicate scripts, custom launcher ownership, ordinary/Turbo/Turbolinks navigation, one poll/root, cancellation, retired-retry suppression, token rotation and fresh route context. | Rails adapter adds lifecycle cancellation. Manual mounts remain caller-owned. An aborted request is not a server rollback. Actual browser BFCache and older navigation libraries are unverified. |
 
 ## Verification and installation evidence
@@ -236,32 +283,32 @@ not a prerequisite added to this SDK milestone.
 
 ## Four saved criteria and independent handoff
 
-| Saved criterion | Developer result | Still required |
+| Saved criterion | Current evidence and preserved history | Still required |
 | --- | --- | --- |
-| `sdk_parity_coverage` | Independent source coverage PASS is preserved. Exact-source matrix above accounts for all requested behavior and language differences; current inventories and patch retained. | Independent source/matrix review; resolve any demonstrated mismatch without importing historical authority. |
-| `sdk_behavior_and_package` | Original independent evidence acceptance FAIL (R1/R2); corrected developer results are separate. Permitted unit/contract/frontend/build/load checks pass; public Git base installation and lock/precompile verified separately. Exclusions and compatibility bounds explicit. | Independent review of check coverage/exclusions; exact consumer Ruby/lock and later selected committed candidate must be verified before trial. |
-| `sdk_browser_parity` | Independent overall UNVERIFIED (R2); inspected mobile border finding preserved. Real disposable browser behavior passes; current direct-JS comparison and representative inspected PNGs retained. | Independent visual/behavior review; missing browser/runtime combinations remain unverified. Shared bytes alone are insufficient. |
-| `readiness_and_consumer_handoff` | Independent checkpoint readiness FAIL remains pending resolution. This report identifies review gates, limitations and missing provider/consumer evidence. | Repeat independent acceptance is not performed by this developer worker; owner notification and explicit Monuvision direction remain pending. No consumer trial/adoption is authorized or complete. |
+| `sdk_parity_coverage` | Historical source coverage PASS preserved; current matrix, inventories and 23 runtime hashes reconcile with canonical validation. | Separate `sdk_review` source/matrix acceptance. |
+| `sdk_behavior_and_package` | Original FAIL (R1/R2) preserved. Later canonical independent Ruby 199/7242, frontend 23, JS 59 and build/typecheck/load passed with package exclusions. Historical public Git installation remains separately attributed. | Review coverage/exclusions; verify current consumer runtime and selected full-SHA HTTPS Git installation with matching lockfile before trial. |
+| `sdk_browser_parity` | Original UNVERIFIED and mobile-border finding preserved. Later canonical independent browser execution passed 32 TAP tests; Arial rendered as FreeMono. | Review visual/behavioral limits; typography equivalence and missing browser/runtime combinations remain unverified. |
+| `readiness_and_consumer_handoff` | Historical readiness FAIL and original development `follow_up_required` preserved. This bounded follow-up updates the handoff and receipt attribution only. | Separate `sdk_review` acceptance, owner notification and explicit Monuvision direction; consumer compatibility, installation, real admin authorization and provider persistence/email remain pending. |
 
-No demonstrated runtime implementation blocker remains in the exercised SDK scope.
-The concrete readiness gate includes **R2 — blocking independent reproduction
-capability**: the review worker could not execute Ruby/JS/browser checks under its
-read-only contract. Its supported inspection rejected the actual test files with
-`Select 1–20 explicit scripts/test-*.mjs files.` No run/request key or saved test
-receipt exists. The full attached review retains this failed-tool evidence; the
-raw `tool-inspection.json` was not attached to this correction. Developer checks
-do not resolve R2. Resolve it through existing authorized controls before another
-independent attempt; do not bypass read-only restrictions or build infrastructure.
-Compatibility limits and unavailable provider/consumer evidence are not silently
-waived and are not converted into a default infrastructure prerequisite. If a
-reviewer requires an unverified combination, obtain that exact runtime as a scoped
-check; do not begin platform repair or broad bootstrap work by inference.
+Historical R2 record: the review worker could not reproduce the tests and its
+inspection returned `Select 1–20 explicit scripts/test-*.mjs files.` No run/request
+key or saved test receipt was reported. The original author attributed that
+failure to an attached review; neither that attachment nor `tool-inspection.json`
+is supplied here. Preserve the failed attempt and independent verdict, but do not
+carry the old executor restriction forward as a current blocker. The current SDK
+profile supports these commands in a disposable copy under the existing read-only
+review stage. The 2026-09-15 eligibility failure and continuation remain dated
+history in the handoff; the later canonical validation obtained visibility and execution receipts.
+This documentation worker cannot confer independent acceptance.
+Compatibility and consumer/provider gaps remain bounded to their recorded scope.
 
 For independent review: verify artifact manifest hashes; inspect the source
 inventory and patch against both exact commits; read all command results including
 failure/recovery and explicit exclusions; inspect the selected PNG pairs and
-behavioral JSON; reproduce commands from [test/README.md](../test/README.md) and the
-retained editable scripts with the same locked toolchains. For a fresh install,
+behavioral JSON; assess the canonical independent findings and their stated limits.
+Reuse the unchanged-source evidence; [test/README.md](../test/README.md) and retained
+editable scripts are reproduction references if a demonstrated gap warrants a
+focused follow-up, not a request for another broad rerun. For a fresh install,
 resolve the latest public committed SHA; for an upgrade, honor a frozen revision.
 Always use full-SHA HTTPS Git, matching normal package-manager lock and ordinary
 install/build pipeline. Do not use an uncommitted patch as an install revision.
