@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "work_request_id": "538069e0-d4aa-4f6c-914e-438c5297a65a",
+  "files": [
+    {
+      "path": "validation-handoff.md",
+      "sha256": "73311ce64cef9e766b60ddbb418b79e8c5cad45b69fda1ea3d6ba7d9de0fefcd",
+      "bytes": 10146
+    },
+    {
+      "path": "reproduce-validation.rb.txt",
+      "sha256": "eeb566398bee769e95d762c4a6d8e54472b05c39c59df975182845af7ad087f6",
+      "bytes": 10549
+    },
+    {
+      "path": "command-receipts.json",
+      "sha256": "522495455d8fda32cc978a770524b4e16784748a1e73b1b319b30e78f438133e",
+      "bytes": 687104
+    },
+    {
+      "path": "locks-and-smoke-evidence.json",
+      "sha256": "eeba82a872f80448b0b41ab59fd867f81cd45e0c052111d8b4f13cfd2905cf67",
+      "bytes": 102563
+    },
+    {
+      "path": "source-provenance.json",
+      "sha256": "97a02b0bcc915d6a65b3329954e2a93a4ad88365525b155d89e5c19e516f36e0",
+      "bytes": 75227
+    },
+    {
+      "path": "verified-inputs.json",
+      "sha256": "e1a84f612f33a5c556b6e2ebe5bee34c1903d179eb364ed812d07e266da74c36",
+      "bytes": 28668
+    }
+  ],
+  "note": "Index covers six retained handoff files. manifest.json separately covers this index. Hashes verify bytes, not independent acceptance."
+}
