@@ -1,12 +1,11 @@
 # Scaffold verification
 
-Current-stage constraint: records below are historical, tied to their recorded
-source hashes. They are not independent acceptance of the current candidate.
-The compatibility runner creates synthetic local Git commits and several package
-tests build/install gem archives. Do not execute those paths under the current
-no-commit/public-HTTPS-Git-only installation contract. Source-loaded real Rails
-request tests remain useful implementation evidence; they prove no installation.
-See [current parity evidence](../docs/rails-parity.md).
+Current candidate: see [Rails 8.1 compatibility](../docs/rails-8.1-compatibility.md)
+for the Ruby 3.4.5 / Rails 8.1.3 / Rack 3.2.6 / Bundler 2.6.9 locked closure,
+full Rake suite, defaults-enabled fixtures and exact reproduction commands.
+This SDK compatibility assignment uses disposable package/install harnesses;
+synthetic Git objects and gem archives are never consumer installation sources.
+All records below remain historical within their recorded source/runtime limits.
 
 
 The scaffold harness covers gem metadata, loading, Engine registration, and an

@@ -6,8 +6,8 @@
     "provenance": "source_snapshot",
     "commit": null,
     "ref": null,
-    "base_commit": "42f70f0a3bedf5573f79988d75789b13e55f8bcd",
-    "base_ref": "commit:42f70f0a3bedf5573f79988d75789b13e55f8bcd"
+    "base_commit": "da2327dc67796a56595286400779bb4b91d5a079",
+    "base_ref": "commit:da2327dc67796a56595286400779bb4b91d5a079"
   },
   "bundled_js": {
     "package": "@handrail/bug-reporter",
@@ -26,7 +26,7 @@
     "lib/handrail/bug_reporter.rb": "bc38b50d316c21a84e79a1f2b7022fa7e01c1347af4b370e3e367f8519ee1475",
     "lib/handrail/bug_reporter/client.rb": "608d66cb5a9d9fe2d32a185ab6c8e446036b00e7802f49f15887f4c15434eee1",
     "lib/handrail/bug_reporter/configuration.rb": "7b1f78bf5a10a0fb4e2bfb6b450b91f76f726637a98298e8d8b094917e43307b",
-    "lib/handrail/bug_reporter/engine.rb": "03392605e9ee970d1831a622ac3159b2c27cbb2768b8d55d9d4c804da836df14",
+    "lib/handrail/bug_reporter/engine.rb": "d7910b07025a509b9586dce8fd01d7f0cc6248d2039e3511cb7e011387a479dc",
     "lib/handrail/bug_reporter/forwarding.rb": "92652eff1e1e2b56c2498ade2d3d47dea7530efe79e646e0257116af8ce295d9",
     "lib/handrail/bug_reporter/forwarding_guard.rb": "a7c3fad96f69d75c66c1e9ba2ef780cc9fbf576792943319a194d02a0e852402",
     "lib/handrail/bug_reporter/history.rb": "214fdf7be03d9d4df6283505a31d610dad112b1580edaa6c30f62833bb0db36a",
@@ -44,7 +44,7 @@
     "frontend/entry.jsx": "fd59bfc5c1245002bc9f047b9bc91c1916e9e381cb18635dd047ab4d9992dd02",
     "frontend/rails_adapter.js": "f5cb49f28025d06442492a48cfe945377290ef1f22497fb1c4a480940132a1e7",
     "frontend/upstream.json": "bcc7b9bb4ca824dc62534c2e5fc184dc56c12478958a40fa9e12dc70edd11f8c",
-    "handrail-bug-reporter.gemspec": "d496b0a952cfe3d11bfb319e97496f20942e219eb5ff40519afa20338bfd36fd",
+    "handrail-bug-reporter.gemspec": "283f3fa82280d16f6ea184344450fcb47820acf8fb415fc1eb28fe4ca19219eb",
     "package-lock.json": "54c6ad9063066fbcf26475ce85ec349c7dbefc4291bc0923c884632a20ca0171",
     "package.json": "c052127689339b2e29155e7b98be28939eeb84077bf2c21f2a353f9a9bba0275",
     "scripts/build.mjs": "37a30a7d1a2196f932e1308bca389736568cb76c1a0d28e6e591135697890316",

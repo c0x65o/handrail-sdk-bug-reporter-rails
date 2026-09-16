@@ -46,7 +46,7 @@ workflow = YAML.load_file(File.join(root, ".github/workflows/rails-compatibility
 rows = workflow.fetch("jobs").fetch("smoke").fetch("strategy").fetch("matrix").fetch("include")
 expected = matrix.map { |name, cell| { "cell" => name, "ruby" => cell.fetch("ruby"), "bundler" => cell.fetch("bundler") } }
 raise "Workflow matrix drift" unless rows == expected
-puts "CONFIG PASS: workflow matches all four exact runtime/Bundler pairs"
+puts "CONFIG PASS: workflow matches all #{matrix.length} exact runtime/Bundler pairs"
 
 # Optional online metadata audit, useful even when a target interpreter is absent.
 # Fetch generic ruby gemspecs (the JSON API may return a Java platform variant).

@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
 
   # Provisional compatibility bounds; see test/README.md for verified coverage.
   spec.required_ruby_version = ">= 2.3"
-  spec.add_runtime_dependency "railties", ">= 4.2", "< 8.0"
+  spec.add_runtime_dependency "railties", ">= 4.2", "< 8.2"
 
   # Do not require Git, Rails, or network access to evaluate/package the gem.
   spec.files = Dir.chdir(File.dirname(__FILE__)) do

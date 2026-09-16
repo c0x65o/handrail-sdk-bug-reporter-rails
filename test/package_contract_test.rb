@@ -16,7 +16,7 @@ class PackageContractTest < Minitest::Test
   def command(*args)
     options = args.last.is_a?(Hash) ? args.pop : {}
     env = {}
-    ENV.keys.grep(/\ABUNDLE_|\ARUBY(?:OPT|LIB)\z|\AGIT_/).each { |key| env[key] = nil }
+    ENV.keys.grep(/\ABUNDLE_|\ABUNDLER_SETUP\z|\ARUBY(?:OPT|LIB)\z|\AGIT_/).each { |key| env[key] = nil }
     env.merge!(options.delete(:env) || {})
     out, err, status = Open3.capture3(env, *args, options)
     assert status.success?, "#{args.inspect}: #{out}\n#{err}"

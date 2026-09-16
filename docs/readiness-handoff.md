@@ -1,5 +1,8 @@
 # Rails SDK readiness handoff — updated 2026-09-16 UTC
 
+Current runtime work: [Rails 8.1 compatibility candidate](rails-8.1-compatibility.md).
+This earlier parity handoff retains its historical scope and exclusions.
+
 Task `61ce47fd-96c9-4942-ae9d-573da0eae084`; documentation follow-up
 `ce707792-5681-4be2-a6eb-2e474920f035` to development work request
 `585ce275-b440-4c90-acb2-55f44d42fa20`. This bounded handoff enables the separate

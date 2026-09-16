@@ -6,6 +6,7 @@ require_relative "../../../../app/helpers/handrail/bug_reporter_helper"
 
 module WorkflowHost
   class Application < Rails::Application
+    config.load_defaults ENV["HANDRAIL_TEST_RAILS_DEFAULTS"] unless ENV["HANDRAIL_TEST_RAILS_DEFAULTS"].to_s.empty?
     config.root = File.expand_path("..", __dir__)
     config.eager_load = false
     config.cache_classes = true
@@ -15,11 +16,16 @@ module WorkflowHost
     config.hosts = ["127.0.0.1"]
     config.session_store :cookie_store, :key => "_workflow_host", :httponly => true
     config.action_controller.allow_forgery_protection = true
+    # This fixture defines controllers before boot. Apply its explicit policy
+    # after Rails installs the load_defaults CSRF callbacks on the base class.
+    config.after_initialize do
+      WorkflowController.protect_from_forgery :with => :exception, :except => :asset
+      WorkflowController.skip_forgery_protection :only => :asset
+    end
   end
 end
 
 class WorkflowController < ActionController::Base
-  protect_from_forgery :with => :exception, :except => :asset
   helper Handrail::BugReporterHelper
 
   def show

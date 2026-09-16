@@ -5,7 +5,8 @@ The browser uses the JS reporter through protected, same-origin Rails routes;
 the host keeps upstream credentials on the server. See [capability evidence](#capability-evidence)
 and [compatibility smoke coverage](#compatibility-smoke-coverage) for verified scope.
 
-Current readiness: [2026-09-15 handoff](docs/readiness-handoff.md). The current
+Current compatibility candidate: [Rails 8.1 report](docs/rails-8.1-compatibility.md).
+Earlier readiness: [2026-09-15 handoff](docs/readiness-handoff.md). The current
 source is prepared for independent SDK review; developer checks and historical
 installation records do not establish independent acceptance or consumer readiness.
 
@@ -47,9 +48,9 @@ installed commit; it changes no runtime code or browser asset.
 
 The current [release manifest](release-manifest.json) records Rails gem version
 **0.4.49** with `source_snapshot` provenance and null Rails release `commit`/`ref`.
-Its recorded base `42f70f0a3bedf5573f79988d75789b13e55f8bcd` remains snapshot
+Its recorded base `da2327dc67796a56595286400779bb4b91d5a079` remains snapshot
 provenance; neither that base nor null release identity prevents installing the
-containing source commit. Private frontend tooling is **0.4.60** (historically
+containing source commit. Private frontend tooling is **0.4.61** (historically
 0.4.57/0.4.58/0.4.59 in earlier work); these private versions are not Rails gem releases.
 The local `v0.4.50` tag's `version.rb` declares **0.4.49**; it is not a verified
 matching release and is not recommended here. The gem version is independent of
@@ -67,8 +68,9 @@ and [upstream identity](frontend/upstream.json) record that current mapping.
 
 See the [release contract](docs/release-contract.md) for checksum, source and
 distribution-tag verification. Further source publication and consumer installation
-remain separately authorized operations. Notify the owner only after independent
-verified parity, then pause for explicit continuation. Monuvision must succeed before BlueCotton starts. Both
+remain separately authorized operations. Report independent SDK review and
+limitations before the already-directed Monuvision development trial.
+Monuvision must succeed before BlueCotton starts. Both
 consumers must expose the reporter only on admin screens to authenticated admins.
 
 ## Generate server configuration and mount
@@ -367,7 +369,7 @@ live ownership, notification delivery and deduplication remain unverified.
 
 ## Compatibility smoke coverage
 
-The Ruby `>= 2.3` / Rails `>= 4.2, < 8.0` bounds are provisional. The scoped
+The Ruby `>= 2.3` / Rails `>= 4.2, < 8.2` bounds are provisional. The scoped
 [Git-install smoke harness](test/README.md#legacy-appraisal-smoke) verifies gem
 loading, installed Sprockets assets and real cookie-session/CSRF requests without
 ActiveRecord, a database, Node or live upstream HTTP.
@@ -377,13 +379,15 @@ ActiveRecord, a database, Node or live upstream HTTP.
 | `rails_4_2` | 2.3.8 | 4.2.11.3 | 2.3.26 | Passed 2026-09-10: 77 assertions, zero failures/errors/skips |
 | `rails_5_2` | 2.5.9 | 5.2.8.1 | 2.3.26 | Passed 2026-09-10: 77 assertions, zero failures/errors/skips |
 | `rails_6_1` | 2.7.8 | 6.1.7.10 | 2.4.22 | Passed 2026-09-10: 77 assertions, zero failures/errors/skips |
-| `rails_7_2` | 3.1.2 | 7.2.3.2 | 2.3.7 | Passed 2026-09-09: 74 assertions, zero skips |
+| `rails_7_2` | 3.1.2 | 7.2.3.2 | 2.3.7 | Historical: passed 2026-09-09; current checks in the Rails 8.1 report |
+| `rails_8_1` | 3.4.5 | 8.1.3 (Rack 3.2.6) | 2.6.9 | Current candidate: full Ruby suite and package/precompile smoke; see [report](docs/rails-8.1-compatibility.md) |
 
 Every dependency patch is pinned in [matrix.json](test/compatibility/matrix.json)
 and the [appraisal gemfiles](gemfiles). With the selected Ruby and Bundler installed,
-the historical runner is `test/compatibility/run.rb` (select the target cell).
-It creates synthetic local Git commits, so it must not be used under the current
-no-commit/public-HTTPS-only installation contract. The historical public HTTPS
+the runner is `test/compatibility/run.rb` (select the target cell).
+It creates synthetic Git objects only in disposable SDK harnesses, without
+committing the registered checkout. Those fixtures and test gem archives are not
+consumer installation sources; consumer installs require public HTTPS Git. The historical public HTTPS
 SHA-pinned host installation and matching lockfile are recorded in the
 [parity evidence](docs/rails-parity.md#verification-and-installation-evidence);
 the legacy records below retain their original scope and do not establish
@@ -404,8 +408,9 @@ records that historical Git-installed package, exact dependency lock, Node-free
 Sprockets 4.2.1 precompilation and real cookie-session/CSRF behavior.
 The authored compatibility workflow has not been executed on hosted CI.
 
-Neither Bluecotton nor Monuvision is verified compatible: their actual
-`Gemfile.lock` and Ruby versions must be supplied and matched before adoption.
+Neither BlueCotton nor Monuvision has been installed or verified by this SDK task.
+Monuvision's Ruby 3.4.5 / Rails 8.1.3 / Rack 3.2.6 / Bundler 2.6.9 now have an SDK
+cell; compare its complete lock (including JSON 2.9.1 in this cell) before trial.
 These smoke results do not establish browser workflow or CSS parity.
 
 Ruby **2.3.8 / Rails 4.2.11.3**, **2.5.9 / Rails 5.2.8.1**,
@@ -413,8 +418,8 @@ Ruby **2.3.8 / Rails 4.2.11.3**, **2.5.9 / Rails 5.2.8.1**,
 acceptance (77, 77, 77 and 74 assertions respectively, zero failures/errors/skips).
 Other combinations within the declared dependency bounds remain unverified;
 authored CI is not executed support evidence. Exact Bluecotton and Monuvision
-versions were unavailable; compare each application's Ruby version and
-`Gemfile.lock` before adoption.
+versions were unavailable in those historical runs; the current Monuvision
+runtime target and remaining gaps are in the [Rails 8.1 report](docs/rails-8.1-compatibility.md).
 
 Older Rails support does not imply obsolete-browser support. The bundle targets
 ES2020 and requires browser `fetch`, `Headers`, `URL`, `AbortController` and

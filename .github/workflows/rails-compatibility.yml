@@ -13,6 +13,9 @@ on:
       - 'gemfiles/**'
       - 'test/compatibility/**'
       - 'test/dummy/**'
+      - 'test/fixtures/**'
+      - 'test/*_test.rb'
+      - 'Rakefile'
       - 'test/support/no_network.rb'
       - '.github/workflows/rails-compatibility.yml'
 
@@ -39,6 +42,9 @@ jobs:
           - cell: rails_7_2
             ruby: '3.1.2'
             bundler: '2.3.7'
+          - cell: rails_8_1
+            ruby: '3.4.5'
+            bundler: '2.6.9'
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
@@ -49,7 +55,18 @@ jobs:
       - name: Installed Git gem, Sprockets, and CSRF smoke
         env:
           TMPDIR: ${{ runner.temp }}
+          HANDRAIL_TEST_RAILS_DEFAULTS: ${{ matrix.cell == 'rails_8_1' && '8.1' || '' }}
         run: ruby test/compatibility/run.rb '${{ matrix.cell }}'
+      - name: Full Ruby suite on Rails 8.1 defaults
+        if: matrix.cell == 'rails_8_1'
+        env:
+          HANDRAIL_TEST_RAILS_DEFAULTS: '8.1'
+          BUNDLE_FORCE_RUBY_PLATFORM: 'true'
+          BUNDLE_FROZEN: 'true'
+        run: |
+          export BUNDLE_GEMFILE="$PWD/gemfiles/rails_8_1.gemfile"
+          bundle install --jobs 2 --retry 2
+          bundle exec rake test
       - name: Preserve exact resolved lock and snapshot evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -59,4 +76,6 @@ jobs:
           path: |
             ${{ runner.temp }}/handrail-${{ matrix.cell }}-*/host/Gemfile*
             ${{ runner.temp }}/handrail-${{ matrix.cell }}-*/snapshot.json
+            ${{ runner.temp }}/handrail-${{ matrix.cell }}-*/acceptance.json
+            ${{ runner.temp }}/handrail-${{ matrix.cell }}-*/smoke.log
             ${{ runner.temp }}/handrail-${{ matrix.cell }}-*/host/public/assets/**

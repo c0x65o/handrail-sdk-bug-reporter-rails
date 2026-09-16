@@ -1,4 +1,5 @@
 require "logger"
+require "rails"
 require "rails/engine"
 require "action_dispatch"
 require "handrail/bug_reporter/forwarding_guard"

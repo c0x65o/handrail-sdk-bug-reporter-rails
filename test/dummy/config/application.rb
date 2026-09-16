@@ -6,6 +6,7 @@ require "handrail/bug_reporter"
 
 module CompatibilityHost
   class Application < Rails::Application
+    config.load_defaults ENV["HANDRAIL_TEST_RAILS_DEFAULTS"] unless ENV["HANDRAIL_TEST_RAILS_DEFAULTS"].to_s.empty?
     config.root = File.expand_path("..", File.dirname(__FILE__))
     config.eager_load = false
     config.cache_classes = true

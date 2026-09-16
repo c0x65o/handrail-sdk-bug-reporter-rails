@@ -50,7 +50,7 @@ export async function fixture(t, scenario = 'submission') {
   });
   server = spawn(process.env.RUBY || 'ruby', ['test/fixtures/workflow/server.rb'], {
     cwd: root, stdio: ['ignore', 'pipe', 'pipe'],
-    env: { ...process.env, BUNDLE_GEMFILE: join(root, 'Gemfile'), BUNDLE_FROZEN: 'true',
+    env: { ...process.env, BUNDLE_GEMFILE: process.env.BUNDLE_GEMFILE || join(root, 'Gemfile'), BUNDLE_FROZEN: 'true',
       WORKFLOW_SCENARIO: scenario, WORKFLOW_AUDIT: auditPath }
   });
   const ready = await new Promise((resolve, reject) => {

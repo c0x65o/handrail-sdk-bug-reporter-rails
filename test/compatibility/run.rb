@@ -45,7 +45,7 @@ work = Dir.mktmpdir("handrail-#{name}-")
 puts "EVIDENCE: #{work} (retained for inspection; safe to remove after review)"
 # Eliminate inherited source-tree overrides and Bundler local/Git settings.
 env = {}
-ENV.keys.grep(/\ABUNDLE_|\ARUBY(?:OPT|LIB)\z|\AGIT_/).each { |key| env[key] = nil }
+ENV.keys.grep(/\ABUNDLE_|\ABUNDLER_SETUP\z|\ARUBY(?:OPT|LIB)\z|\AGIT_/).each { |key| env[key] = nil }
 evidence = {
   "cell" => name, "started_at" => Time.now.utc.iso8601,
   "source_revision" => capture(env, "git", "-C", root, "rev-parse", "HEAD"),

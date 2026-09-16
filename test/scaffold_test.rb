@@ -23,6 +23,9 @@ class ScaffoldTest < ScaffoldTestCase
         raise "Missing packaged libraries" unless (required - spec.files).empty?
         raise "Ruby target excluded" unless spec.required_ruby_version.satisfied_by?(Gem::Version.new("2.3.0"))
         raise "Rails target excluded" unless spec.runtime_dependencies.first.requirement.satisfied_by?(Gem::Version.new("4.2.0"))
+        requirement = spec.runtime_dependencies.first.requirement
+        raise "Rails 8.1 target excluded" unless requirement.satisfied_by?(Gem::Version.new("8.1.3"))
+        raise "Untested Rails minor admitted" if requirement.satisfied_by?(Gem::Version.new("8.2.0"))
         puts "gemspec OK"
       RUBY
       assert_equal "gemspec OK\n", output

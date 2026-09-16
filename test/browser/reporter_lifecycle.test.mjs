@@ -58,6 +58,14 @@ for (const navigation of ['ordinary', 'turbo', 'turbolinks']) {
       assert.equal(await page.locator('[role="dialog"]').count(), 0);
       if (navigation !== 'ordinary') assert.equal(await page.evaluate(() => fixture.documentId), documentId, 'Library visit must retain the JavaScript document');
       else assert.notEqual(await page.evaluate(() => fixture.documentId), documentId, 'Ordinary navigation loads a document');
+      if (navigation === 'turbolinks') {
+        // Turbolinks writes its snapshot in a deferred task after rendering.
+        // Wait for that real cache write before testing restoration.
+        await page.waitForFunction(({ url, cycle }) => {
+          const snapshot = Turbolinks.controller.getCachedSnapshotForLocation(new Turbolinks.Location(url));
+          return snapshot?.bodyElement.dataset.cacheStamp === String(cycle);
+        }, { url: `${host.origin}/lifecycle/turbolinks/first`, cycle });
+      }
       const documentsBeforeBack = host.network.filter(row => row.path.endsWith('/first')).length;
       await page.goBack(); await page.waitForURL(/\/first$/);
       await page.waitForFunction(() => document.body.dataset.fixturePage === 'first'); await roots(page);
@@ -76,7 +84,9 @@ for (const navigation of ['ordinary', 'turbo', 'turbolinks']) {
       assert.ok(caches.length >= 3);
       assert.ok(caches.every(e => e.roots === 0), 'Actual library before-cache removes reporter roots');
     }
-    await page.clock.pauseAt(new Date());
+    // Pause ahead of the browser's own clock before starting the poll timer.
+    // Node wall time can already be in its past after real navigation work.
+    await page.clock.pauseAt(await page.evaluate(() => Date.now() + 60_000));
     await page.getByRole('button', { name: 'Report a bug', exact: true }).click();
     await page.locator('[data-handrail-bug-view-switch="history"]').click();
     await page.waitForFunction(() => fixture.intervals.size === 1);
