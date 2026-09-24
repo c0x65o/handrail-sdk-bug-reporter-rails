@@ -1,4 +1,163 @@
-# Rails SDK readiness handoff — updated 2026-09-16 UTC
+# Rails SDK readiness handoff — updated 2026-09-24 UTC
+
+## Current findings — 2026-09-24 UTC
+
+This documentation-only assignment (`c02bb228-6883-4557-b801-313c3b8fd555`, run
+`aaa04796-c10c-42a7-b900-1490c8438112`) retains the reconciled SDK evidence for
+independent review and the subsequent **Monuvision staging** handoff. The selected
+Rails revision is **`d4e2c7f278a971eab8ff8e87299ef8f72149dde9`**; JS remains
+`7dfb33f548448f864cf957f19d96f8b5a27bc787`. Both starting checkouts were clean.
+Their Git trees are `e0125e6a0f633cd92874f39d2c81c7f4571e0267` and
+`955a77c7d91dc4b417288b779246f6330759da91`, respectively.
+
+The attached reconciliation index and byte audit match their supplied SHA-256
+values; their original artifact IDs/hashes are in [the evidence index](readiness-evidence.json).
+All 101 indexed local source files match the inspected-source hashes. All 23
+release runtime hashes, eight build fingerprints and five pinned upstream source
+hashes also match. Build fingerprints use the existing `private-contributor-v1`
+normalization, which excludes matching private npm version declarations; raw
+package hashes are checked separately. The gem remains 0.4.49, private frontend
+tooling is 0.4.63 and bundled JS is 0.4.50. The manifest remains `source_snapshot`
+with null release commit/ref; it is not a new release attestation.
+
+Reconciliation WR `5c8dd6d5-c7ed-410f-90d0-db5b7850dd8e`, run
+`710ad408-ba24-4794-9d12-1dc09af0c44f`, finished
+`2026-09-24T10:59:46.769Z`. Its bounded source/evidence pass and validation-log
+matrix/index did not update repository documentation or execute runtime tests.
+This assignment supplies those documentation changes. No runtime, build, browser,
+installation or provider check was rerun here, and no original PNG was inspected.
+
+### Retained results and attribution
+
+The following are separate selections, never additive totals. Native saved
+outcomes for `d73fb33e`, `6444b0fe` and `999fa90e` were read through
+`get_work_request`; their command logs and original image bytes were not fetched
+again. The two attached files are indexes/audits, not the logs they name.
+
+| Record | Retained finding and scope |
+| --- | --- |
+| Independent parity WR `d73fb33e-8b46-40c2-bbc5-b6250331b6d5`, run `387a0916-9339-435e-8ce4-ae9951bf774c`, completed 2026-09-16T05:44:17.492Z | Passed within the original source/fixture scope: filtered Ruby 199 tests / 7242 assertions; Rails frontend 23; JS 59; browser style/lifecycle/workflow 13/12/7; build/typecheck/release/load. Its package exclusions remain intact. |
+| Independent compatibility WR `6444b0fe-1753-4406-9a47-a1a979d90148`, run `86ab1ed9-7689-417e-aa7c-2869c9d04344`, completed 2026-09-16T22:16:00.335Z | Historical `blocked_env`: target Ruby unavailable; existing-runtime full suite 226 tests / 7633 assertions, **9 failures**, 0 errors/skips (missing CA and incomplete exported Git trees). Separately passed Rails 7.2 frontend 24, browser 32, mounted checks, build/release checks; inspected four supplied PNGs. Those passes do not turn the failed full suite into a pass. |
+| Preparation WR `538069e0-d4aa-4f6c-914e-438c5297a65a`; independent reproduction WR `bb714316-bded-4e13-906d-df24fa8a8f39` | Later ordinary-worker preparation and independent reproduction resolved the runtime/CA/Git-export gaps. Independent totals are attributed through the final review below: Ruby 3.4.5 / Rails 8.1.3 / Rack 3.2.6 / Bundler 2.6.9 / JSON 2.9.1 full suite **226 / 8406**, and Ruby 3.1.2 / Rails 7.2.3.2 / Rack 3.2.7 / Bundler 2.3.7 full suite **226 / 8406**, each 0 failures/errors/skips. See [reproduction and exact locks](validation-environment.md). |
+| Same independent reproduction, separate selections | Target mounted request 18/1080, authorization 7/1872, history 13/2948, subscription 17/2006, accepted response 1/2852; existing package contracts 21/1065. All passed; these overlap the full suites. JSON 2.9.1 installed package/precompile/session-CSRF smoke **1/77** and separate SDK-only JSON 2.21.1 smoke **1/77** passed; neither establishes the entire consumer dependency closure. |
+| Final independent review WR `999fa90e-286b-486d-b4a8-51d4553e9e73`, run `a1774862-9876-411e-82d2-ccfc0e0293a6`, completed 2026-09-16T23:12:17.038Z | Passed source/saved-evidence assessment supporting selected Rails `d4e2c7f…`. Verified five delivered artifact hashes, 54 command-output hashes and 18 lock/smoke hashes; reused the independently executed `6fe35a72a689aebb3e5f627f1e56deda0a7f590e` evidence after source/package/dependency equivalence. Two fresh metadata/package checks passed in that review, not fresh Rails 8.1 behavioral or visual tests. |
+
+The final review's source comparison found four preparation/documentation additions
+and private npm version changes (0.4.62 → 0.4.63) after `6fe35a7…`, with no
+production/rendering/dependency-pin drift. This checkout confirms that comparison.
+Earlier R1/R2 failures, failed 226/7633 regression, missing-result run
+`74b45ab0-b487-4626-8424-3f660e1f87c3` and the original development
+`follow_up_required` remain historical outcomes. They are not current demands to
+repeat SDK implementation or the superseded executor route.
+
+Declared bounds are Ruby `>= 2.3` and railties `>= 4.2, < 8.2`, as in the
+[gemspec](../handrail-bug-reporter.gemspec). The older `< 8.0` statement is
+superseded. Bounds do not prove every admitted Ruby/Rails combination. Retain the
+[compatibility record](rails-8.1-compatibility.md) and its exact runtime/lock limits:
+JSON 3.0.2 session failure, untested Rails 8.0/other 8.1 patches/8.2+, Propshaft,
+other OS/CPU combinations and current legacy-runtime gaps are not cleared.
+
+Historical browser behavior and selected visual findings remain usable only in
+their recorded fixtures. Older Arial requests rendered as FreeMono; later Rails
+8.1 captures used Liberation Sans. Native Arial equivalence, arbitrary consumer
+CSS/CSP, Firefox/WebKit and native BFCache remain unverified. Preserve the pixel
+differences and intentional Ruby semantics in the [parity matrix](rails-parity.md#source-linked-parity-matrix).
+Unchanged assets alone do not prove consumer visual parity.
+
+### Selected consumer installation and security contract
+
+The future authorized consumer installation must use this exact public HTTPS Git
+dependency, a matching consumer `Gemfile.lock` Git revision/ref, and normal
+`bundle install` plus the application's ordinary install/asset-build pipeline:
+
+```ruby
+gem "handrail-bug-reporter",
+    git: "https://github.com/c0x65o/handrail-sdk-bug-reporter-rails.git",
+    ref: "d4e2c7f278a971eab8ff8e87299ef8f72149dde9"
+```
+
+A later documentation commit or automatic private tooling version bump does not
+change this selected consumer SDK revision. Do not select a newer HEAD merely
+because documentation was finalized. No branch/tag, registry, tarball, file/PATH
+or workspace dependency, separate packaging/publishing step or bound bypass is
+an acceptable substitute. Historical public installation at `15cc5a3…` (2/89),
+source-loaded PATH locks and synthetic fixture installation do not prove current
+public fetch or consumer installation at `d4e2c7f…`.
+
+The host must place the reporter only on admin screens and enforce authenticated
+admin authorization on **every** reporter route, including policy, history,
+detail, archive/restore and subscription. `ReportsController` inherits
+`ActionController::Base`; host `ApplicationController` filters do not implicitly
+protect it. Configure a fail-closed `authorize_request` callback or independently
+verify an equivalent mount-wide server guard. `Factory#authorized?` returns true
+when that callback is omitted for legacy mounts; omission is not admin-safe.
+`Transport#fresh_session_token` can return nil; missing/invalid identity does not
+inherently deny a route. Require a trusted, valid current application session and
+tenant on each request/attempt, expiry/revocation enforcement and real Rails CSRF.
+Keep dedicated bug report credentials server-only; never use browser identity as
+authority or reuse enhancement tokens. SDK fixtures do not establish these host
+requirements in either consumer.
+
+### Remaining Monuvision staging outcome
+
+Saved owner notification/direction and prior SDK reviews must be preserved, not
+asked for again. The former development selection is superseded for the immediate
+trial by request **`f1aa63c0-0a30-4be7-b11e-66bfea091b61`**, selecting **staging**.
+This documentation work clears no human/native gate and makes no stage-acceptance
+decision. The existing Task owns continuation; Avery supervises and independently
+inspects the result. Consumer obligations remain:
+
+1. Prepare an idempotent QA Site Admin seed task allowed only in dev/staging, with
+   no schedule, actual tenant/immutable user identity and real app authentication;
+   prevent duplicate sites and customer-user changes. Scope `qa-login-dev` and
+   `qa-login-staging` Vault profiles by project/environment; inject secrets only
+   into the seed process, never ordinary service environment rows. Retain one
+   native staging seed execution and independent authenticated-login evidence.
+2. Verify current staging schema and effective app database binding. When needed,
+   use normal ordered `bundle exec rails db:migrate`, including earlier pending
+   migrations. Never build/restart/publish the cancelled selective executor.
+   Historical development migration failures are not current staging facts.
+   Verify Known Users against actual immutable users, independently mapped email
+   and active status, SHA-256 reporter session digests, expiry and revocation.
+   Keep reporting disabled until schema, identity, mapping and dedicated server
+   credentials are verified. Preserve resources, volumes, data and sessions.
+3. Verify the selected SDK pin, matching full consumer lock and normal install/build;
+   deploy necessary changes through native CI/CD to the exact existing staging
+   web **and worker** roles. Resolve node, namespace, immutable image and
+   environment/volume bindings; retain preview-bound configuration/deployment and
+   migration/resource/runbook receipts. Preparation and rollout alone are not
+   independent application acceptance.
+4. Independently inspect actual staging admin UI/login, anonymous/nonadmin denial,
+   session/tenant/revocation boundaries, CSRF, attachments, consent and history.
+   Preserve the recorded verificationPlan; retain current native assertions,
+   inspected browser images and provider receipts. Missing checks stay unverified.
+5. Only after prerequisites and independent browser preflight pass, submit exactly
+   one report titled **[NO-OP TEST] Monuvision staging Bugs SDK smoke test**. Its
+   body must say test only, no defect, no code change requested, with marker
+   `f1aa63c0-0a30-4be7-b11e-66bfea091b61`. Check existing submission/history before
+   submission or any uncertain retry. Cover attachments/consent within that single
+   report where applicable; retain provider ID, staging/project/user attribution,
+   rendered success and history. Read-only QA does not itself submit the report.
+
+No consumer edit, service setup, deployment, seed, report submission or historical
+recovery occurred in this assignment. Production is excluded. BlueCotton remains
+conditional on verified Monuvision success and later authorized adoption with its
+own compatibility, installation and admin-only acceptance evidence.
+
+Original run `04ac09d6-3092-441b-afaf-cc818b6d5551` / WR
+`492217b7-70e9-43f1-bdd7-53e3f40cb2bf` remains unsettled. Preserve the separate
+runner/evidence maintainer dependency for authentic launch attribution and
+independent non-survival proof/native fencing; no assigned maintainer or settlement
+is asserted here. Staging planning does not recover that run. Preserve original
+receipts, cancellations, holds, optional historical diagnostics and unpublished
+conflicting repair candidates; do not replay terminal profiles or weaken guards.
+
+## Historical handoff — 2026-09-16 UTC
+
+Everything below records the earlier workers' source, results and then-pending
+gates. “Current”, “fresh”, “this worker” and “pending” within that record refer to
+its original date. The dated findings above supersede its current-status and
+installation guidance; original receipts and test selections remain unchanged.
 
 Current runtime work: [Rails 8.1 compatibility candidate](rails-8.1-compatibility.md).
 This earlier parity handoff retains its historical scope and exclusions.
@@ -9,7 +168,7 @@ Task `61ce47fd-96c9-4942-ae9d-573da0eae084`; documentation follow-up
 `sdk_review` stage. It does not accept SDK readiness or authorize consumer work.
 Runtime implementation and JS source are unchanged; no broad tests were rerun.
 
-## Current canonical validation — 2026-09-16 UTC
+## Historical canonical validation — 2026-09-16 UTC
 
 The planner reports action `0a4dae06-b47d-4673-8a61-6fe526b3685f` settled.
 Validation work request `a648bc8f-75a2-469e-844e-d075e72140e7`, run

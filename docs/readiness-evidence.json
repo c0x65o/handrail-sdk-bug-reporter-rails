@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
   "task_id": "61ce47fd-96c9-4942-ae9d-573da0eae084",
-  "work_request_id": "ce707792-5681-4be2-a6eb-2e474920f035",
-  "date": "2026-09-16 UTC",
-  "verdict": "bounded_documentation_handoff_completed; sdk_review_acceptance_and_owner_direction_pending",
-  "rails_head": "7df0290f23159884178c888f2d5e4c8ec380d723",
+  "work_request_id": "c02bb228-6883-4557-b801-313c3b8fd555",
+  "date": "2026-09-24 UTC",
+  "verdict": "bounded_documentation_handoff_completed; retained_sdk_reviews_support_selected_revision; monuvision_staging_outcome_unverified",
+  "rails_head": "d4e2c7f278a971eab8ff8e87299ef8f72149dde9",
   "historical_base": "15cc5a3f299263e6a498613de34a84857ba9c3d4",
   "js_head": "7dfb33f548448f864cf957f19d96f8b5a27bc787",
   "runtime_files_unchanged": 23,
   "implementation_changes": false,
-  "test_attribution": "checks, ruby, node_exclusions and browser statistics retain 2026-09-15 developer evidence; canonical_validation separately attributes later independent execution to planner-supplied findings; no tests rerun by this documentation worker",
+  "test_attribution": "No runtime tests rerun here. checks, ruby, node_exclusions, browser, canonical_validation, input_artifacts and documentation_follow_up retain their original 2026-09-15/16 attribution. current_findings_2026_09_24 distinguishes fresh source/hash checks from later retained independent outcomes. Historical headers and then-missing checks are preserved in historical.documentation_header_2026_09_16.",
   "checks": [
     {
       "id": "runtime-ruby",
@@ -399,34 +399,64 @@
       "mobile-preview-js.png"
     ],
     "original_date": "2026-09-15 America/Chicago",
-    "original_test_attribution": "fresh developer checks on disposable copies of initial clean HEADs; final changes documentation only"
+    "original_test_attribution": "fresh developer checks on disposable copies of initial clean HEADs; final changes documentation only",
+    "documentation_header_2026_09_16": {
+      "work_request_id": "ce707792-5681-4be2-a6eb-2e474920f035",
+      "date": "2026-09-16 UTC",
+      "verdict": "bounded_documentation_handoff_completed; sdk_review_acceptance_and_owner_direction_pending",
+      "rails_head": "7df0290f23159884178c888f2d5e4c8ec380d723",
+      "test_attribution": "checks, ruby, node_exclusions and browser statistics retain 2026-09-15 developer evidence; canonical_validation separately attributes later independent execution to planner-supplied findings; no tests rerun by this documentation worker",
+      "missing_checks": [
+        "Separate sdk_review acceptance and readiness conclusion",
+        "Typography equivalence: requested Arial rendered as FreeMono",
+        "Fresh public HTTPS Git install/fetch and matching consumer lock at selected committed candidate",
+        "Current candidate on legacy/consumer runtimes",
+        "Actual consumer admin authorization, CSS/CSP and provider persistence/email",
+        "Firefox/WebKit and native BFCache"
+      ],
+      "retained_deliverables": [
+        "docs/readiness-handoff.md",
+        "docs/rails-parity.md",
+        "test/README.md",
+        "readiness-documentation.md",
+        "evidence-index.json",
+        "source-inventory.json",
+        "documentation-diff.txt",
+        "verification-report.json"
+      ],
+      "acceptance_note": "Manifest paths and raw-byte SHA-256 values are checked locally; server retention and independent task acceptance remain separate. This bounded handoff does not accept SDK readiness or authorize consumer work."
+    },
+    "executor_next_2026_09_16": "Separate sdk_review assesses existing canonical evidence and limits; do not repeat the settled visibility/receipt request or rerun broad tests for this documentation handoff."
   },
   "executor": {
     "profile": "sdk",
     "actual_executor_checkout_visibility": "obtained per planner-supplied canonical validation",
     "independent_receipts": "obtained; see canonical_validation.native_receipts",
     "historical_probe": "preserved in historical.executor_2026_09_15",
-    "next": "Separate sdk_review assesses existing canonical evidence and limits; do not repeat the settled visibility/receipt request or rerun broad tests for this documentation handoff."
+    "next": "Reuse completed d73fb33e parity and 999fa90e compatibility review within source/runtime limits. Independently review this documentation handoff; no broad runtime rerun or repeated owner direction question. Consumer staging execution remains separate."
   },
   "missing_checks": [
-    "Separate sdk_review acceptance and readiness conclusion",
-    "Typography equivalence: requested Arial rendered as FreeMono",
-    "Fresh public HTTPS Git install/fetch and matching consumer lock at selected committed candidate",
-    "Current candidate on legacy/consumer runtimes",
-    "Actual consumer admin authorization, CSS/CSP and provider persistence/email",
-    "Firefox/WebKit and native BFCache"
+    "Independent acceptance/retention of this documentation handoff; no human/native gate cleared",
+    "Current consumer public HTTPS Git fetch at selected d4e2c7f278a971eab8ff8e87299ef8f72149dde9, matching full consumer lock and normal install/build",
+    "Current-candidate legacy and other untested runtime combinations; declared bounds are not universal runtime proof",
+    "Native Arial typography, actual consumer CSS/CSP, Firefox/WebKit and native BFCache",
+    "Monuvision staging safe Vault-bound QA seed task, one native seed execution and independent real admin login",
+    "Staging schema/app database binding, immutable identity, Known Users, dedicated server-only bug credentials and deployed web/worker SDK",
+    "Independent staging admin authorization on every route, CSRF, current session/tenant/expiry/revocation, UI, attachments, consent and history",
+    "Exactly one labeled no-op provider report after prerequisites/preflight, with accepted ID and correct attribution; provider persistence/email not proved by fixtures",
+    "Separate unresolved original-run settlement dependency; no recovery performed"
   ],
   "retained_deliverables": [
-    "docs/readiness-handoff.md",
-    "docs/rails-parity.md",
-    "test/README.md",
-    "readiness-documentation.md",
-    "evidence-index.json",
-    "source-inventory.json",
-    "documentation-diff.txt",
-    "verification-report.json"
+    "readiness-handoff.md",
+    "rails-parity.md",
+    "readiness-evidence.json",
+    "rails-8.1-compatibility.md",
+    "before-after-hashes.csv",
+    "verification-report.json",
+    "review-record-extracts.json",
+    "review-summary.md"
   ],
-  "acceptance_note": "Manifest paths and raw-byte SHA-256 values are checked locally; server retention and independent task acceptance remain separate. This bounded handoff does not accept SDK readiness or authorize consumer work.",
+  "acceptance_note": "Updated repository documents and their saved copies are the deliverables. Manifest hashes establish local bytes; Handrail retention and independent Task acceptance remain separate. This assignment does not complete Monuvision staging or clear any gate.",
   "input_artifacts": [
     {
       "id": "4fea48b1-d745-5b1f-aa3f-9cd8c0227fdd",
@@ -519,5 +549,315 @@
       "successful Monuvision verification before conditional BlueCotton adoption"
     ],
     "installation_boundary": "Source/build/load checks and historical installation attribution do not prove current consumer installation. Use public HTTPS Git at a full commit SHA with matching package-manager lockfile and normal install/build pipeline."
+  },
+  "current_findings_2026_09_24": {
+    "run_id": "aaa04796-c10c-42a7-b900-1490c8438112",
+    "scope": "Rails documentation/evidence index only; no runtime or consumer edits, deployment, service setup, seed, report submission, history recovery, commit/push or manual version bump",
+    "context": {
+      "readers": [
+        "handrail_current_context",
+        "handrail_read_work_request_context"
+      ],
+      "frozen_instruction_sources": 40,
+      "instruction_chunks_complete": true,
+      "memory_publications": 0,
+      "incomplete_request_clause_mappings": [
+        "b922b252-03ab-453f-b208-22017257495b",
+        "80dc9af4-fcf6-4e7f-8a2f-95477580c23e",
+        "204de0bc-415c-4864-83b0-c183e528a58d",
+        "44234f4e-5772-4d3b-938e-45c75f3031e7"
+      ],
+      "context_limit": "Those four older requests expose obligations but empty excerpts and source_complete=false. No missing clause is invented; the complete current assignment and latest staging/ordered-migration directions control this bounded update."
+    },
+    "source": {
+      "rails_head": "d4e2c7f278a971eab8ff8e87299ef8f72149dde9",
+      "rails_tree": "e0125e6a0f633cd92874f39d2c81c7f4571e0267",
+      "js_head": "7dfb33f548448f864cf957f19d96f8b5a27bc787",
+      "js_tree": "955a77c7d91dc4b417288b779246f6330759da91",
+      "starting_checkouts_clean": true,
+      "drift_from_attached_reconciliation": [],
+      "raw_indexed_source_hashes_matched": 101,
+      "runtime_hashes_matched": 23,
+      "build_fingerprints_matched": 8,
+      "upstream_source_hashes_matched": 5,
+      "fingerprint_mode": "private-contributor-v1; matching private npm versions excluded from normalized fingerprints, raw hashes separately checked",
+      "gem_version": "0.4.49",
+      "private_tooling_version": "0.4.63",
+      "bundled_js_version": "0.4.50",
+      "release_provenance": "source_snapshot; release commit/ref remain null",
+      "post_executed_revision": "6fe35a72a689aebb3e5f627f1e56deda0a7f590e",
+      "post_executed_changes": [
+        "docs/validation-environment.md",
+        "test/compatibility/reproduce_validation.rb",
+        "test/compatibility/evidence/validation_6444b0fe/handoff-index.json",
+        "test/compatibility/evidence/validation_6444b0fe/json-2.21.1.gemfile.lock",
+        "package.json (private version only)",
+        "package-lock.json (private versions only)"
+      ]
+    },
+    "input_artifacts": [
+      {
+        "id": "1e1b8d22-4a0f-4365-b176-ae8dc6bc0ba1",
+        "title": "evidence-index.json",
+        "sha256": "89be5e04d46aa6cec25d73032d28f00095c1bea78b5fa12d905a92a4d5035d1d",
+        "work_request_id": "5c8dd6d5-c7ed-410f-90d0-db5b7850dd8e",
+        "bytes_inspected": true,
+        "sha256_verified": true
+      },
+      {
+        "id": "fc34e27d-7f7f-43de-b706-84ba29f00c5e",
+        "title": "byte-audit.json",
+        "sha256": "427a5460d532068a8353c75108ef12ebc4a0b2dd32dd958fde6227cf738a7a79",
+        "work_request_id": "5c8dd6d5-c7ed-410f-90d0-db5b7850dd8e",
+        "bytes_inspected": true,
+        "sha256_verified": true
+      }
+    ],
+    "reconciliation": {
+      "work_request_id": "5c8dd6d5-c7ed-410f-90d0-db5b7850dd8e",
+      "run_id": "710ad408-ba24-4794-9d12-1dc09af0c44f",
+      "finished_at": "2026-09-24T10:59:46.769Z",
+      "scope": "bounded source/evidence reconciliation only; no documentation edits or runtime execution",
+      "attribution": "Planner-inspected completed result plus supplied index/byte-audit bytes; referenced validation logs are not original command/image bytes attached here"
+    },
+    "retained_results": [
+      {
+        "work_request_id": "d73fb33e-8b46-40c2-bbc5-b6250331b6d5",
+        "run_id": "387a0916-9339-435e-8ce4-ae9951bf774c",
+        "completed_at": "2026-09-16T05:44:17.492Z",
+        "status": "passed",
+        "scope": "historical independent source/disposable fixture parity",
+        "ruby": {
+          "tests": 199,
+          "assertions": 7242,
+          "selection": "original filtered suite with preserved package exclusions"
+        },
+        "rails_frontend_tests": 23,
+        "js_tests": 59,
+        "browser_selections": {
+          "style": 13,
+          "lifecycle": 12,
+          "workflow": 7
+        },
+        "build_typecheck_release_load": "passed"
+      },
+      {
+        "work_request_id": "6444b0fe-1753-4406-9a47-a1a979d90148",
+        "run_id": "86ab1ed9-7689-417e-aa7c-2869c9d04344",
+        "completed_at": "2026-09-16T22:16:00.335Z",
+        "status": "blocked_env",
+        "target_runtime": "unavailable Ruby 3.4.5; exposed Ruby 3.1.2",
+        "existing_full_ruby_suite": {
+          "tests": 226,
+          "assertions": 7633,
+          "failures": 9,
+          "errors": 0,
+          "skips": 0,
+          "cause": "three missing CA and six incomplete Git-export clone failures"
+        },
+        "separate_passes": {
+          "rails72_frontend": 24,
+          "rails72_browser": 32,
+          "inspected_retained_pngs": 4
+        },
+        "not_rewritten": true
+      },
+      {
+        "work_request_id": "538069e0-d4aa-4f6c-914e-438c5297a65a",
+        "scope": "ordinary-worker preparation/reproduction, separate from independent reproduction",
+        "repository_reference": "docs/validation-environment.md",
+        "retained_handoff_index": "test/compatibility/evidence/validation_6444b0fe/handoff-index.json"
+      },
+      {
+        "work_request_id": "bb714316-bded-4e13-906d-df24fa8a8f39",
+        "attribution": "Independent execution receipts reparsed and hash-verified by final review 999fa90e; this worker read that saved native review outcome, not original command logs. bb714316 get_work_request has no validation_last_result_json; done alone is not evidence of passing tests.",
+        "executed_rails_sha": "6fe35a72a689aebb3e5f627f1e56deda0a7f590e",
+        "target": {
+          "ruby": "3.4.5",
+          "rails": "8.1.3",
+          "rack": "3.2.6",
+          "bundler": "2.6.9",
+          "json": "2.9.1",
+          "tests": 226,
+          "assertions": 8406,
+          "failures": 0,
+          "errors": 0,
+          "skips": 0
+        },
+        "existing": {
+          "ruby": "3.1.2",
+          "rails": "7.2.3.2",
+          "rack": "3.2.7",
+          "bundler": "2.3.7",
+          "tests": 226,
+          "assertions": 8406,
+          "failures": 0,
+          "errors": 0,
+          "skips": 0
+        },
+        "mounted_overlapping": {
+          "request": [
+            18,
+            1080
+          ],
+          "authorization": [
+            7,
+            1872
+          ],
+          "history": [
+            13,
+            2948
+          ],
+          "subscription": [
+            17,
+            2006
+          ],
+          "accepted_response": [
+            1,
+            2852
+          ]
+        },
+        "existing_package_overlapping": {
+          "tests": 21,
+          "assertions": 1065
+        },
+        "separate_smokes": [
+          {
+            "json": "2.9.1",
+            "tests": 1,
+            "assertions": 77,
+            "failures": 0,
+            "errors": 0,
+            "skips": 0,
+            "scope": "SDK installed snapshot/precompile/session-CSRF only"
+          },
+          {
+            "json": "2.21.1",
+            "tests": 1,
+            "assertions": 77,
+            "failures": 0,
+            "errors": 0,
+            "skips": 0,
+            "scope": "SDK installed snapshot/precompile/session-CSRF only"
+          }
+        ]
+      },
+      {
+        "work_request_id": "999fa90e-286b-486d-b4a8-51d4553e9e73",
+        "run_id": "a1774862-9876-411e-82d2-ccfc0e0293a6",
+        "completed_at": "2026-09-16T23:12:17.038Z",
+        "status": "passed",
+        "scope": "source/saved-evidence compatibility assessment supports selected d4e2c7f revision",
+        "review_verified": {
+          "supplied_artifacts": 5,
+          "command_output_hashes": 54,
+          "lock_smoke_hashes": 18,
+          "installed_snapshot_entries": 26
+        },
+        "fresh_in_that_review": "two SDK-profile metadata/package checks; no new behavioral/browser tests",
+        "runtime_evidence": "reused after source/package/dependency equivalence",
+        "consumer_acceptance": false
+      }
+    ],
+    "record_attribution": "get_work_request saved native outcomes read for d73fb33e, 6444b0fe and 999fa90e. Independently attributed runtime results are retained, not executed by this documentation worker. Saved outcome extracts accompany the deliverables. No overlapping totals added.",
+    "reader_limit": "get_goal_completed_work_result rejected: This direct tool has no verified Task stage effect scope. Supported get_work_request reads succeeded; original raw command logs/images were not separately retrieved.",
+    "compatibility": {
+      "declared_ruby": ">= 2.3",
+      "declared_railties": ">= 4.2, < 8.2",
+      "bounds_are_not_tested_cross_product": true,
+      "target_lock_sha256": "9a93b9f808113642c41a938722be557f666a29746b01c7d6c2e6ca083f8ddbfc",
+      "root_lock_sha256": "00a62427471478375fb83c4c22deb669ec4cc2102b6b4e587441a5ec15ab253d",
+      "json2211_lock_sha256": "e6333792153bd45f8505964a69ce53d8cf6e2abecaf4128c64c852792e5ab2e8",
+      "legacy": "Historical synthetic fixtures each 1/77 on Ruby 2.3.8/Rails 4.2.11.3, Ruby 2.5.9/Rails 5.2.8.1 and Ruby 2.7.8/Rails 6.1.7.10; attached audit records 11 current raw package differences per snapshot, versus the earlier record of nine. No current legacy execution.",
+      "limits": [
+        "JSON 3.0.2 historical session failure preserved",
+        "Separate JSON 2.21.1 smoke is not the full consumer closure",
+        "No Rails 8.0/other 8.1 patches/8.2+, Propshaft or other OS/CPU claim"
+      ]
+    },
+    "visual_limits": {
+      "older_font": "requested Arial rendered FreeMono",
+      "later_font": "requested Arial rendered Liberation Sans",
+      "original_pixel_differences_preserved": true,
+      "fresh_image_inspection": false,
+      "unverified": [
+        "native Arial equivalence",
+        "consumer CSS/CSP",
+        "Firefox/WebKit",
+        "native BFCache"
+      ]
+    },
+    "installation": {
+      "url": "https://github.com/c0x65o/handrail-sdk-bug-reporter-rails.git",
+      "selected_full_sha": "d4e2c7f278a971eab8ff8e87299ef8f72149dde9",
+      "lockfile": "matching consumer Gemfile.lock Git revision/ref and complete dependency closure",
+      "pipeline": "normal bundle install and ordinary host install/asset-build",
+      "documentation_commit_changes_selected_sdk_revision": false,
+      "historical_public_install": {
+        "revision": "15cc5a3f299263e6a498613de34a84857ba9c3d4",
+        "tests": 2,
+        "assertions": 89,
+        "lock_sha256": "185e2a760e835e5ef72ba8f482418aa049af7e2a8d58de9b21eb7d727bbee7d9",
+        "current_install_proof": false
+      },
+      "path_locks_or_synthetic_fixtures_are_consumer_proof": false
+    },
+    "consumer_lock_attribution": {
+      "source": "planner inspection retained by final review; not consumer bytes fetched by this worker",
+      "monuvision_commit": "88a9a81e64640f5f6365948c0dea00a2df084bdf",
+      "sha256": "852e7a5dddde0aa8e55d3732288a1c4793b14d609bd085462a1c24a741c99b1c",
+      "proves_current_consumer_install_or_full_closure": false
+    },
+    "security": {
+      "admin_screens_only": true,
+      "host_authorization_every_route": true,
+      "real_csrf": true,
+      "trusted_current_session_and_tenant": true,
+      "server_only_dedicated_bug_credentials": true,
+      "omitted_callback_is_admin_safe": false,
+      "nil_identity_implies_route_rejection": false,
+      "source_reason": "Factory#authorized? permits omitted callbacks; Transport#fresh_session_token can yield nil. Host must fail closed for invalid session/tenant/admin state; ApplicationController filters do not implicitly protect the engine."
+    },
+    "consumer_continuation": {
+      "owner_notification_and_saved_direction": "preserved; no repeated owner decision or gate clearance",
+      "request_id": "f1aa63c0-0a30-4be7-b11e-66bfea091b61",
+      "destination": "Monuvision staging",
+      "obligations": [
+        "safe idempotent dev/staging-only unscheduled Vault-bound QA seed task; actual tenant and immutable active Site Admin; no duplicate sites/customer-user changes",
+        "one native staging seed execution and independent authenticated login",
+        "normal ordered migrations when needed, including earlier pending migrations; actual staging schema and app DB binding",
+        "Known Users immutable identity, separate email/active status, SHA-256 reporter session digests with expiry/revocation; dedicated server-only bug credentials before enablement",
+        "selected full-SHA Git pin and matching lock; normal install/build; native deployment to existing web and worker roles with exact candidate/node/namespace/image/environment/volume bindings",
+        "independent current login/admin/security/session/tenant/CSRF/UI/attachments/consent/history evidence",
+        "exactly one labeled no-op after prerequisites and independent preflight; check marker before submission or uncertain retry; retain provider ID/attribution/success/history"
+      ],
+      "vault_profiles": [
+        "qa-login-dev",
+        "qa-login-staging"
+      ],
+      "vault_injection": "project/environment scoped; seed process only, never ordinary service env rows",
+      "report_title": "[NO-OP TEST] Monuvision staging Bugs SDK smoke test",
+      "report_body": "test only, no defect, no code change requested",
+      "report_marker": "f1aa63c0-0a30-4be7-b11e-66bfea091b61",
+      "production_excluded": true,
+      "bluecotton": "conditional on verified Monuvision success and later authorized independent adoption",
+      "reporting": "disabled until schema, immutable identity, Known Users and dedicated credentials verified",
+      "verification_plan": "preserve recorded verificationPlan; native assertions, inspected images and provider receipts; unavailable checks remain unverified"
+    },
+    "historical_recovery": {
+      "run_id": "04ac09d6-3092-441b-afaf-cc818b6d5551",
+      "work_request_id": "492217b7-70e9-43f1-bdd7-53e3f40cb2bf",
+      "settlement": "unresolved",
+      "dependency": "runner/evidence maintainer: authentic original launch attribution, complete execution extent, independent non-survival evidence and native fencing; assignment not established here",
+      "preserve": [
+        "original receipts and cancellations",
+        "cancelled selective executor",
+        "terminal profile denials",
+        "holds and owner decisions",
+        "optional historical diagnostics",
+        "unpublished conflicting repair candidates"
+      ],
+      "recovery_authorized_by_this_assignment": false
+    }
   }
 }

@@ -1,4 +1,54 @@
-# Rails 8.1 compatibility candidate — 2026-09-16
+# Rails 8.1 compatibility — updated 2026-09-24
+
+## Current findings — 2026-09-24 UTC
+
+The candidate below is committed and independently reviewed. Selected Rails SHA:
+**`d4e2c7f278a971eab8ff8e87299ef8f72149dde9`**; pinned JS:
+`7dfb33f548448f864cf957f19d96f8b5a27bc787`. Current private tooling is 0.4.63;
+gem 0.4.49 and bundled JS 0.4.50 are unchanged. Declared Ruby `>= 2.3` and
+railties `>= 4.2, < 8.2` are admission bounds, not a tested cross-product.
+
+Independent review `999fa90e-286b-486d-b4a8-51d4553e9e73`, run
+`a1774862-9876-411e-82d2-ccfc0e0293a6` (2026-09-16T23:12:17.038Z), passed
+the bounded source/saved-evidence assessment. It verified equivalent runtime,
+package and dependencies against tested `6fe35a72a689aebb3e5f627f1e56deda0a7f590e`:
+only four support/document additions and private npm version metadata changed.
+The 2026-09-24 source audit again matches 23 runtime hashes and eight fingerprints.
+No SDK implementation or runtime rerun is warranted by this documentation delta.
+
+The earlier independent `6444b0fe-1753-4406-9a47-a1a979d90148` result remains
+`blocked_env`: target Ruby unavailable and existing full suite **226/7633 with
+9 failures**, caused by missing CA/incomplete exported Git trees. Later ordinary
+preparation `538069e0-d4aa-4f6c-914e-438c5297a65a` and independent reproduction
+`bb714316-bded-4e13-906d-df24fa8a8f39` resolved those execution dependencies.
+The final review attributes independent full-suite passes **226/8406** separately
+to Ruby 3.4.5/Rails 8.1.3/JSON 2.9.1 and Ruby 3.1.2/Rails 7.2.3.2, plus separate
+JSON **2.9.1** and **2.21.1** installed package/precompile/session-CSRF smokes,
+each **1/77**. Those are retained executions, not fresh tests here. Direct mounted
+and package selections overlap the full suites; never add their counts.
+The canonical target lock remains JSON 2.9.1; the separate JSON 2.21.1 smoke is
+SDK-only and does not establish the full Monuvision closure. JSON 3.0.2's historical
+session failure and all initial setup failures remain failures.
+
+Use the [current readiness handoff](readiness-handoff.md#current-findings--2026-09-24-utc)
+for precise result attribution, visual/font limits, and the public HTTPS Git
+Gemfile form pinned to `d4e2c7f278a971eab8ff8e87299ef8f72149dde9`, with matching
+consumer lockfile and normal install/build. A documentation commit does not
+change that consumer selection. Latest owner request `f1aa63c0-0a30-4be7-b11e-66bfea091b61`
+selects **Monuvision staging**, superseding the original development trial
+destination. Safe Vault-bound seed setup, one native staging seed execution,
+deployment, independent admin/login/session/tenant/CSRF/UI checks and exactly one
+labeled no-op report remain consumer obligations. Production is excluded and
+BlueCotton remains conditional. This assignment performs none of that work and
+clears no gate. Omitted authorization callbacks or nil identity resolution do not
+make a host admin-safe; every route requires host enforcement and server-only
+credentials.
+
+## Historical compatibility candidate — 2026-09-16
+
+The original implementation report follows. Its “uncommitted”, “fresh”, “this
+worker” and pending-review/development statements describe that producing run,
+not the current handoff. Preserve its selections, counts, failures and receipts.
 
 This is SDK implementation evidence for independent review, not acceptance of a
 consumer installation. The candidate starts at Rails SDK

@@ -1,6 +1,34 @@
 # Rails parity and first-trial readiness
 
-## Current handoff — updated 2026-09-16 UTC
+## Current handoff — 2026-09-24 UTC
+
+Selected Rails **`d4e2c7f278a971eab8ff8e87299ef8f72149dde9`** and JS
+`7dfb33f548448f864cf957f19d96f8b5a27bc787` match the reconciled clean starting
+checkouts. All 23 runtime hashes, eight build fingerprints and five upstream
+hashes verify. Gem 0.4.49, private tooling 0.4.63 and bundled JS 0.4.50 are separate
+identities. The [current handoff](readiness-handoff.md#current-findings--2026-09-24-utc)
+and [evidence index](readiness-evidence.json) retain full attribution, input hashes,
+installation guidance and remaining staging obligations. No runtime test or image
+inspection was performed by this documentation worker.
+
+| Readiness area | Current attributed finding | Remaining boundary |
+| --- | --- | --- |
+| Parity and source | Independent parity review `d73fb33e-8b46-40c2-bbc5-b6250331b6d5` passed its filtered Ruby 199/7242, frontend 23, JS 59 and browser 13/12/7 selections. Final review `999fa90e-286b-486d-b4a8-51d4553e9e73` supports the selected committed revision after equivalence checks. | Earlier verdicts stay historical; this update is for independent documentation review and grants no gate clearance. |
+| Behavior, package and runtime | Declared Ruby `>= 2.3`, railties `>= 4.2, < 8.2`. Independent reproduction `bb714316-bded-4e13-906d-df24fa8a8f39`, as inspected by `999fa90e`, passed separate full suites 226/8406 on Ruby 3.4.5/Rails 8.1.3/JSON 2.9.1 and Ruby 3.1.2/Rails 7.2.3.2. Separate JSON 2.9.1 and 2.21.1 installed session-CSRF smokes each passed 1/77. | The 6444b0fe regression remains failed 226/7633 with 9 failures. Later prepared execution resolves its tooling gaps without rewriting it. Bounds, fixtures and overlapping package/mounted checks do not prove every runtime or consumer closure. |
+| Browser and appearance | `6444b0fe-1753-4406-9a47-a1a979d90148` separately passed frontend 24/browser 32 on Rails 7.2 and inspected four retained PNGs. Final review reused those findings with no rendering drift. | Original pixel differences, older FreeMono and later Liberation Sans fallbacks remain; native Arial, consumer CSS/CSP, Firefox/WebKit and BFCache are unverified. |
+| Consumer handoff | Saved owner notification/direction is preserved; latest request `f1aa63c0-0a30-4be7-b11e-66bfea091b61` selects Monuvision **staging**. Use public HTTPS Git at selected full Rails SHA, matching consumer lock and normal install/build. A documentation commit does not change the selected pin. | Vault-bound safe seed task and one native seed execution, deployed web/worker SDK, login/security/UI checks and exactly one labeled no-op report remain consumer work. Production excluded; BlueCotton conditional on verified Monuvision success. |
+
+Every route needs host admin authorization, real CSRF and trusted current
+session/tenant identity; server credentials stay server-only. An omitted callback
+permits legacy access and a nil identity resolver does not guarantee rejection.
+Neither is inherently admin-safe. The source-linked matrix below retains the
+behavioral distinctions; consult the current handoff for the latest evidence.
+
+## Historical handoff — updated 2026-09-16 UTC
+
+The following original narrative and receipts are history. Its then-current HEAD,
+tooling versions, uncommitted candidates, review blockers and pending owner
+direction do not describe today's selected source or staging destination.
 
 Task `61ce47fd-96c9-4942-ae9d-573da0eae084`: use the
 [current readiness handoff](readiness-handoff.md) and
@@ -30,7 +58,7 @@ action `0a4dae06-b47d-4673-8a61-6fe526b3685f` is settled; validation work reques
 all 23 runtime hashes, independent Ruby 199/7242, Rails frontend 23, JS 59,
 browser 32 TAP tests and build/typecheck/load checks are reported passed.
 Executor visibility and receipts have been obtained. Receipt IDs and retained
-report/result IDs and hashes are in the [handoff](readiness-handoff.md#current-canonical-validation--2026-09-16-utc)
+report/result IDs and hashes are in the [handoff](readiness-handoff.md#historical-canonical-validation--2026-09-16-utc)
 and evidence index; their bytes were not supplied to this documentation worker.
 No tests were rerun here.
 
@@ -90,16 +118,16 @@ and owner direction remain pending. This is not permission to integrate a consum
 
 ## Source-linked parity matrix
 
-JS links bind the immutable reference. Relative Rails links bind unchanged runtime
-source at current HEAD. Historical pass statements below are attributed to the
-2026-09-13 developer, with fresh 2026-09-15 coverage mapped in the current handoff.
-The later canonical independent execution above supports those unchanged sources
-within its stated limits; none of these records grants SDK acceptance.
+JS links bind the immutable reference; relative Rails links resolve in the selected
+checkout. The pass statements retain the 2026-09-13 developer attribution, with
+separate 2026-09-15 selections and later independent review/reproduction attributed
+in the current handoff. The 2026-09-24 audit confirms present source identity; it
+does not rerun those selections or accept a consumer.
 
 | Behavior / required evidence | JS reference | Rails equivalent and current result | Difference or remaining evidence |
 | --- | --- | --- | --- |
 | Submission, binding, canonical IDs | [submit/buildPayload](https://github.com/c0x65o/handrail-sdk-bug-reporter-js/blob/7dfb33f548448f864cf957f19d96f8b5a27bc787/src/reporter.ts#L1504) | [Client](../lib/handrail/bug_reporter/client.rb), [Forwarding](../lib/handrail/bug_reporter/forwarding.rb), [submission tests](../test/submission_test.rb), [accepted-response checks](../test/fixtures/mounted/accepted_response_checks.rb): pass. Browser IDs survive forwarding; project/environment come from server config. Only `bug_id` supplies the canonical ID; payload is prepared once and retries reuse event/body bytes. | Native Ruby has its own source-snapshot identity. Browser identity remains JS React/browser. Live canonicalization/deduplication requires provider/consumer evidence. |
-| Trusted identity, server credentials, redaction | [server factory/forwarder](https://github.com/c0x65o/handrail-sdk-bug-reporter-js/blob/7dfb33f548448f864cf957f19d96f8b5a27bc787/src/server.ts), [recursive redactor](https://github.com/c0x65o/handrail-sdk-bug-reporter-js/blob/7dfb33f548448f864cf957f19d96f8b5a27bc787/src/reporter.ts#L688) | [Payload](../lib/handrail/bug_reporter/payload.rb), [Transport](../lib/handrail/bug_reporter/transport.rb), forwarding, [helper](../app/helpers/handrail/bug_reporter_helper.rb): pass native tests and mounted forged-body/header tests. Resolve trusted host session per attempt; do not serialize the report token or resolver. | Host must supply the real authenticated principal and application-session token. Absence/resolver failure does not establish ownership or admin permission. |
+| Trusted identity, server credentials, redaction | [server factory/forwarder](https://github.com/c0x65o/handrail-sdk-bug-reporter-js/blob/7dfb33f548448f864cf957f19d96f8b5a27bc787/src/server.ts), [recursive redactor](https://github.com/c0x65o/handrail-sdk-bug-reporter-js/blob/7dfb33f548448f864cf957f19d96f8b5a27bc787/src/reporter.ts#L688) | [Payload](../lib/handrail/bug_reporter/payload.rb), [Transport](../lib/handrail/bug_reporter/transport.rb), forwarding, [helper](../app/helpers/handrail/bug_reporter_helper.rb): pass native tests and mounted forged-body/header tests. Resolve trusted host session per attempt; do not serialize the report token or resolver. | Host must supply the real authenticated principal and application-session token. Absence/resolver failure can yield nil without denying forwarding; it does not establish ownership or admin permission. Require valid current session/tenant identity at the host boundary. |
 | Authorization and CSRF | [same-origin forwarding guard](https://github.com/c0x65o/handrail-sdk-bug-reporter-js/blob/7dfb33f548448f864cf957f19d96f8b5a27bc787/src/server.ts#L394) | [Factory#authorized?](../lib/handrail/bug_reporter/client.rb), [controller](../app/controllers/handrail/bug_reporter/reports_controller.rb), [guard](../lib/handrail/bug_reporter/forwarding_guard.rb), [authorization checks](../test/fixtures/mounted/authorization_checks.rb): pass across all eight operations, admin/nonadmin/anonymous/revoked states, forged identity and fail-closed callbacks. Real Rails CSRF remains mandatory even if host checks are disabled. | Rails adds a host callback and framework CSRF token verification. Omitted callback preserves externally guarded legacy mounts; omission alone is not admin restriction. Consumer access has not been verified. |
 | Policy, identity hydration, automation | [discoverPolicy/parsePolicy](https://github.com/c0x65o/handrail-sdk-bug-reporter-js/blob/7dfb33f548448f864cf957f19d96f8b5a27bc787/src/reporter.ts#L1400) | Shared UI discovery plus [Policy](../lib/handrail/bug_reporter/policy.rb) and [tests](../test/policy_test.rb): pass schema/binding/roles, bounded deadlines, hydration retries, risk and consent eligibility. Empty automation choices remain empty; forwarding strips automation requests. | No new automation feature inferred. Actual provider policy/eligibility remains unverified. |
 | Owned history and detail | [listBugs/getBug](https://github.com/c0x65o/handrail-sdk-bug-reporter-js/blob/7dfb33f548448f864cf957f19d96f8b5a27bc787/src/reporter.ts#L1667) | [History](../lib/handrail/bug_reporter/history.rb), [native tests](../test/history_test.rb), [mounted history](../test/fixtures/mounted/history_checks.rb), [browser workflow](../test/browser/reporter_workflow.test.mjs): pass defaults/bounds, search/sort/cursors/status/visibility, ownership failures, detail and versioned projections. | Browser receives upstream JSON bytes. Native Ruby returns Ruby projections. Expanded UI rows use list data; the workflow separately exercises public `getBug`. Real ownership/persistence is not proved by boundary responses. |
@@ -233,8 +261,9 @@ is no corresponding live-delivery or populated-consumer screenshot evidence.
 ## Compatibility choices and historical reconciliation
 
 [Frontend contract](../frontend/README.md) and [adapter contract](browser_adapter.md)
-now point to the actual JS 0.4.50 SHA and permitted filtered checks. Ruby still
-allows `>= 2.3`, Rails `>= 4.2, < 8.0`; these are provisional resolver bounds,
+pointed to the JS 0.4.50 SHA and permitted filtered checks in this historical run.
+Its Ruby `>= 2.3`, Rails `>= 4.2, < 8.0` declaration is historical: current railties
+is `>= 4.2, < 8.2` (2026-09-24 inspection). These are resolver bounds,
 not a promise that every allowed pair works. This run verifies Ruby 3.1.2,
 Rails 7.2.3.2, Bundler 2.3.7, Rack 3.2.7 and Sprockets 4.4.1. Ruby 2.3/Rails 4.2,
 Ruby 2.5/Rails 5.2 and Ruby 2.7/Rails 6.1 are unverified for this candidate; the
@@ -281,7 +310,7 @@ stage. Consumer project bindings are unresolved here and must not be copied from
 that text or guessed. The managed-route observation is historical, unprobed and
 not a prerequisite added to this SDK milestone.
 
-## Four saved criteria and independent handoff
+## Historical four saved criteria and independent handoff — 2026-09-16
 
 | Saved criterion | Current evidence and preserved history | Still required |
 | --- | --- | --- |
