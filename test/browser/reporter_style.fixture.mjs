@@ -1,3 +1,4 @@
+import { historyHtml, historyScript } from './reporter_history.fixture.mjs';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';
@@ -33,8 +34,8 @@ export const cases = ['light', 'dark'].flatMap(theme => [false, true].map(absent
 }));
 
 export async function startStyleFixture(port = 0) {
-  assert.equal(upstream.version, '0.4.50');
-  assert.equal(upstream.commit, '7dfb33f548448f864cf957f19d96f8b5a27bc787');
+  assert.equal(upstream.version, '0.5.0');
+  assert.equal(upstream.commit, '48d046430519871c55db84cb7ace7efd364814ab');
   verifyDependency(); // Pin, lock, installed identity AND source-map hashes.
   const sibling = process.env.HANDRAIL_JS_REFERENCE_REPO || resolve(root, '../handrail-sdk-bug-reporter-js');
   for (const [path, hash] of Object.entries(upstream.sourceSha256)) {
@@ -61,6 +62,7 @@ export async function startStyleFixture(port = 0) {
     entryPoints: ['test/browser/reporter_style.reference.jsx'], bundle: true, write: false,
     platform: 'browser', format: 'iife', define: { 'process.env.NODE_ENV': '"production"' } });
   const assets = new Map([
+    ['/history-fixture.js', ['text/javascript', historyScript]],
     ['/javascripts/handrail_bug_reporter.js', ['text/javascript', read('app/assets/javascripts/handrail_bug_reporter.js')]],
     ['/reference.js', ['text/javascript', reference.outputFiles[0].text]],
     ['/host.css', ['text/css', read('test/browser/reporter_style.host.css')]],
@@ -80,6 +82,10 @@ export async function startStyleFixture(port = 0) {
       const [type, body] = assets.get(url.pathname);
       res.setHeader('Content-Type', type);
       return res.end(body);
+    }
+    if (req.method === 'GET' && url.pathname === '/history-fixture') {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      return res.end(historyHtml);
     }
     if (req.method === 'GET' && url.pathname === fixturePath) {
       const index = cases.findIndex(c => c.theme === url.searchParams.get('theme') &&

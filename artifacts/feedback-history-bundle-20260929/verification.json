@@ -1,0 +1,73 @@
+{
+  "observedAt": "2026-09-29T23:39:43.629Z",
+  "upstream": {
+    "package": "@handrail/bug-reporter",
+    "version": "0.5.0",
+    "commit": "48d046430519871c55db84cb7ace7efd364814ab",
+    "ref": "commit:48d046430519871c55db84cb7ace7efd364814ab",
+    "sourceSha256": {
+      "src/identity.ts": "e92ea96c110647ab3cd2b3995899641a1f37688f70c74e879e21bbd018f65e71",
+      "src/severity.ts": "c936e4fd9ff46bfd4a7e4c92eb704de0bbbc8924cc7e7e5386c112af0d6b37dd",
+      "src/reporter.ts": "23200a2b79da0362a5ccfe4c5e19c6347a4fda01f65ce39a51c5172c2e47a2b0",
+      "src/react.ts": "c287c91edcb2ac9cef85146fe528061a1998f3097cbaaca996d18fb39939856b",
+      "src/react-ui.tsx": "cf966b8a84f27ae7d615368ab48fe8349232abb2fee0a804097e881b25854701"
+    }
+  },
+  "installedIdentity": {
+    "source": "node_web_bug_reporter",
+    "platform": "browser",
+    "reporter_sdk_runtime": "react",
+    "reporter_sdk_package": "@handrail/bug-reporter",
+    "reporter_sdk_version": "0.5.0",
+    "reporter_sdk_commit": "48d046430519871c55db84cb7ace7efd364814ab",
+    "reporter_sdk_ref": "commit:48d046430519871c55db84cb7ace7efd364814ab"
+  },
+  "bundledIdentity": {
+    "source": "node_web_bug_reporter",
+    "platform": "browser",
+    "reporter_sdk_runtime": "react",
+    "reporter_sdk_package": "@handrail/bug-reporter",
+    "reporter_sdk_version": "0.5.0",
+    "reporter_sdk_commit": "48d046430519871c55db84cb7ace7efd364814ab",
+    "reporter_sdk_ref": "commit:48d046430519871c55db84cb7ace7efd364814ab"
+  },
+  "bytes": 243625,
+  "sha256": "984be06291a23733f596e76de16b97c328a71ffeaa20ef9b33cba241723a7f0e",
+  "markers": {
+    "Mine": true,
+    "All users": true,
+    "all_users": true,
+    "is_owner": true,
+    "sessionKey": true,
+    "data-handrail-bug-history": true,
+    "data-handrail-bug-reporter-dialog": true
+  },
+  "synthetic": true,
+  "browserImages": [],
+  "renderedBrowserStatus": "unverified: native QA target/handoff/artifact output unavailable; Chromium not installed",
+  "tests": {
+    "frontend": {
+      "passed": 26
+    },
+    "ruby": {
+      "passed": 228,
+      "assertions": 8429
+    },
+    "mountedHistory": {
+      "passed": 14,
+      "assertions": 3042,
+      "overlapsFullSuite": true
+    },
+    "typecheck": "passed: tsc --noEmit -p tsconfig.json in clean pinned Bug JS checkout",
+    "typeContracts": "passed: tsc --noEmit -p tsconfig.contracts.json",
+    "build": "passed: npm run setup and npm run build",
+    "release": "passed: --git and --package",
+    "fixture": "passed: synthetic /history-fixture GET 200, Rails 7.2.3.2"
+  },
+  "initialFailures": [
+    "npm generated an SSH resolved lock entry; normalized to public HTTPS and normal setup passed",
+    "New detail test expected UI expansion to fetch; corrected to exercise headless getBug explicitly",
+    "Direct mounted Ruby command lacked Bundler; reran using bundle3.1 exec",
+    "New route test retained previous identity-call audit entries; cleared audit before asserting rejected attachment made no call"
+  ]
+}

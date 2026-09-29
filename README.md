@@ -48,14 +48,14 @@ installed commit; it changes no runtime code or browser asset.
 
 The current [release manifest](release-manifest.json) records Rails gem version
 **0.4.49** with `source_snapshot` provenance and null Rails release `commit`/`ref`.
-Its recorded base `da2327dc67796a56595286400779bb4b91d5a079` remains snapshot
+Its recorded base `c6706ad47193db67e08b5f41633caac95d97f0bc` remains snapshot
 provenance; neither that base nor null release identity prevents installing the
-containing source commit. Private frontend tooling is **0.4.61** (historically
+containing source commit. Private frontend tooling is **0.4.64** (historically
 0.4.57/0.4.58/0.4.59 in earlier work); these private versions are not Rails gem releases.
 The local `v0.4.50` tag's `version.rb` declares **0.4.49**; it is not a verified
 matching release and is not recommended here. The gem version is independent of
-the bundled **JS v0.4.50**, `refs/tags/v0.4.50`, at
-`7dfb33f548448f864cf957f19d96f8b5a27bc787` in the JS repository.
+the bundled **JS v0.5.0**, `commit:48d046430519871c55db84cb7ace7efd364814ab`, at
+`48d046430519871c55db84cb7ace7efd364814ab` in the JS repository.
 
 The original parity baseline was **JS v0.4.49**, `refs/tags/v0.4.49`, at
 `96b293248611594c388d0fab3af63b1b2d1aae5c`, recorded in `frontend/upstream.json`
@@ -64,7 +64,7 @@ at Rails commit `a6f83605c217f37ac0caa4afa982379206f6288f`. The
 Ruby normalization with that fixed JS server-entry baseline; it does not verify
 the current browser bundle. Rails commit `bb1a4f86bb48f63e5a2ade43a1565c4625c58334`
 upgraded the bundle to JS v0.4.50. The [current release manifest](release-manifest.json)
-and [upstream identity](frontend/upstream.json) record that current mapping.
+and [upstream identity](frontend/upstream.json) now record the 0.5.0 history-sharing upgrade.
 
 See the [release contract](docs/release-contract.md) for checksum, source and
 distribution-tag verification. Further source publication and consumer installation
@@ -424,3 +424,29 @@ runtime target and remaining gaps are in the [Rails 8.1 report](docs/rails-8.1-c
 Older Rails support does not imply obsolete-browser support. The bundle targets
 ES2020 and requires browser `fetch`, `Headers`, `URL`, `AbortController` and
 `MutationObserver`; see [browser requirements](docs/browser_adapter.md).
+
+### Opt-in All users history
+
+The Ruby API accepts `list_bugs(audience: 'all')` and
+`get_bug(id, audience: 'all')`. It refreshes verified policy before every shared
+read and requires `policy.all_users_history`. The same-origin forwarding guard
+allows audience only on history GET routes and retains server-owned scope.
+Mine remains the default; `visibility: 'all'` retains its archive meaning.
+Server policy/session checks remain authoritative, and cross-user reads grant
+no archive, restore or notification rights. Shared records expose report text
+and public status but no screenshots, private metadata or execution journey.
+
+Use a non-secret `sessionKey` in frontend mount/update options and change it on
+sign-out, account/environment/tenant switch to discard state and pending reads.
+Do not pass session credentials as this key. This sharing is bounded to a
+Handrail project and environment/source, not subtenants within that source.
+
+The browser bundle uses Bug JS **0.5.0** from public HTTPS Git commit
+`48d046430519871c55db84cb7ace7efd364814ab`, with matching lockfile and
+`frontend/upstream.json` source hashes. It displays Mine and conditional All
+users, refreshes policy for shared reads, clears stale results on revocation or
+session changes, and hides other users' archive/restore actions. Attachments
+remain private. Use `npm run setup` for the normal install/build pipeline.
+This working tree's manifest is a source snapshot, not a published release
+identity. Synthetic fixture verification is separate from installed-runtime
+acceptance; see [the delivery evidence](docs/feedback-history-bundle.md).

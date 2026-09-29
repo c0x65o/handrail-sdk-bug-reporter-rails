@@ -84,8 +84,8 @@ module Handrail
         History.list(self, options)
       end
 
-      def get_bug(bug_id)
-        History.get(self, bug_id)
+      def get_bug(bug_id, options = {})
+        History.get(self, bug_id, options)
       end
 
       def archive_bug(bug_id)

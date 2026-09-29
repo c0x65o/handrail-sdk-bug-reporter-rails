@@ -35,8 +35,8 @@ async function browser(t) {
 
 test('immutable HTTPS dependency, installed source, release identity and reproducible standalone asset', async () => {
   const identity = verifyDependency();
-  assert.equal(upstream.commit, '7dfb33f548448f864cf957f19d96f8b5a27bc787');
-  assert.equal(upstream.version, '0.4.50');
+  assert.equal(upstream.commit, '48d046430519871c55db84cb7ace7efd364814ab');
+  assert.equal(upstream.version, '0.5.0');
   assert.equal(await buildAsset(), asset, 'Committed asset must match a fresh build');
   const sandbox = {};
   vm.runInNewContext(asset, sandbox); // No DOM, React, require, timers or fetch.

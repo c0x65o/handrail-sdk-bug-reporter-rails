@@ -57,7 +57,7 @@ export function mount(element, options) {
       <HandrailBugReporterProvider key={generation}
         config={current.config} initialForm={current.initialForm}
         loadPolicyOnMount={current.loadPolicyOnMount}
-        historyPageSize={current.historyPageSize}>
+        historyPageSize={current.historyPageSize} sessionKey={current.sessionKey}>
         {current.launcher ? <CustomLauncher launcher={current.launcher}
           heading={current.heading} showHistory={current.showHistory}
           appearance={current.appearance} /> : <HandrailBugReporterButton label={current.label}
@@ -75,7 +75,8 @@ export function mount(element, options) {
       // Configuration/form replacement starts a fresh session. Presentation
       // updates keep the upstream form, open dialog, and submission state.
       if (Object.prototype.hasOwnProperty.call(patch, 'config') ||
-          Object.prototype.hasOwnProperty.call(patch, 'initialForm')) generation += 1;
+          Object.prototype.hasOwnProperty.call(patch, 'initialForm') ||
+          Object.prototype.hasOwnProperty.call(patch, 'sessionKey')) generation += 1;
       current = next;
       render();
       return handle;

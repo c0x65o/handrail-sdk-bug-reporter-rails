@@ -1,0 +1,56 @@
+Run options: --seed 21514
+
+# Running:
+
+....................................................................WARNING:  licenses is empty, but is recommended.  Use a license identifier from
+http://spdx.org/licenses or 'Nonstandard' for a nonstandard license.
+WARNING:  See https://guides.rubygems.org/specification-reference/ for help
+  Successfully built RubyGem
+  Name: handrail-bug-reporter
+  Version: 0.4.49
+  File: reporter.gem
+.........WARNING:  licenses is empty, but is recommended.  Use a license identifier from
+http://spdx.org/licenses or 'Nonstandard' for a nonstandard license.
+WARNING:  See https://guides.rubygems.org/specification-reference/ for help
+  Successfully built RubyGem
+  Name: handrail-bug-reporter
+  Version: 0.4.49
+  File: reporter.gem
+...rails_4_2: rejected Bootstrap pins must match rails_4_2
+rails_4_2: rejected Bootstrap pins must match rails_4_2
+rails_4_2: rejected Bootstrap pins must match rails_4_2
+rails_4_2: rejected Runtime directory must be outside the SDK checkout
+rails_4_2: rejected Use a runtime directory without whitespace
+rails_4_2: rejected HANDRAIL_COMPAT_JOBS must be 1 or 2
+rails_4_2: rejected Runtime directory is already in use
+rails_4_2: rejected SHA256 mismatch: /opt/handrail/.handrail/codex-runs/b3c0bb06-31c4-4b5e-bc15-b5e3cdb35445/tmp/bootstrap-controls-20260929-6-of8o47/runtime/downloads/ruby-2.3.8.tar.gz
+.rails_6_1: rejected Bootstrap pins must match rails_6_1
+rails_6_1: rejected Bootstrap pins must match rails_6_1
+rails_6_1: rejected Bootstrap pins must match rails_6_1
+rails_6_1: rejected Runtime directory must be outside the SDK checkout
+rails_6_1: rejected Use a runtime directory without whitespace
+rails_6_1: rejected HANDRAIL_COMPAT_JOBS must be 1 or 2
+rails_6_1: rejected Runtime directory is already in use
+rails_6_1: rejected SHA256 mismatch: /opt/handrail/.handrail/codex-runs/b3c0bb06-31c4-4b5e-bc15-b5e3cdb35445/tmp/bootstrap-controls-20260929-6-3kzpty/runtime/downloads/ruby-2.7.8.tar.gz
+.rails_5_2: rejected Bootstrap pins must match rails_5_2
+rails_5_2: rejected Bootstrap pins must match rails_5_2
+rails_5_2: rejected Bootstrap pins must match rails_5_2
+rails_5_2: rejected Runtime directory must be outside the SDK checkout
+rails_5_2: rejected Use a runtime directory without whitespace
+rails_5_2: rejected HANDRAIL_COMPAT_JOBS must be 1 or 2
+rails_5_2: rejected Runtime directory is already in use
+rails_5_2: rejected SHA256 mismatch: /opt/handrail/.handrail/codex-runs/b3c0bb06-31c4-4b5e-bc15-b5e3cdb35445/tmp/bootstrap-controls-20260929-6-iojyix/runtime/downloads/ruby-2.5.9.tar.gz
+.WARNING:  licenses is empty, but is recommended.  Use a license identifier from
+http://spdx.org/licenses or 'Nonstandard' for a nonstandard license.
+WARNING:  See https://guides.rubygems.org/specification-reference/ for help
+  Successfully built RubyGem
+  Name: handrail-bug-reporter
+  Version: 0.4.49
+  File: reporter.gem
+................................................................................PACKAGE EVIDENCE: source=a3e854159dec6b2595137651763cb54d908a3bae distribution=0ae47e35455d52b20a8f6787d87773e66fc7dcd5 tag=refs/tags/v1.2.3 {"identity":{"source":"node_web_bug_reporter","platform":"ruby","reporter_sdk_runtime":"ruby","reporter_sdk_package":"handrail-bug-reporter","reporter_sdk_version":"1.2.3","reporter_sdk_commit":"a3e854159dec6b2595137651763cb54d908a3bae","reporter_sdk_ref":"commit:a3e854159dec6b2595137651763cb54d908a3bae"},"bundled_js":{"package":"@handrail/bug-reporter","version":"0.5.0","ref":"commit:48d046430519871c55db84cb7ace7efd364814ab","commit":"48d046430519871c55db84cb7ace7efd364814ab"},"asset_sha256":"984be06291a23733f596e76de16b97c328a71ffeaa20ef9b33cba241723a7f0e"}
+....................../opt/handrail/repos/handrail/handrail-feedback-sdks/handrail-sdk-bug-reporter-rails/lib/handrail/bug_reporter/history.rb:175: warning: Float 1e999 out of range
+...........................................
+
+Finished in 48.430546s, 4.7078 runs/s, 174.0430 assertions/s.
+
+228 runs, 8429 assertions, 0 failures, 0 errors, 0 skips

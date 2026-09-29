@@ -1,0 +1,13 @@
+Run options: --seed 20713
+
+# Running:
+
+F.............
+
+Finished in 0.203776s, 68.7028 runs/s, 14869.2410 assertions/s.
+
+  1) Failure:
+MountedHistoryChecks#test_shared_audience_is_forwarded_only_for_reads_and_attachments_stay_unrouted [test/fixtures/mounted/history_checks.rb:86]:
+Expected ["alice", "alice", "alice", "alice", "alice"] to be empty.
+
+14 runs, 3030 assertions, 1 failures, 0 errors, 0 skips

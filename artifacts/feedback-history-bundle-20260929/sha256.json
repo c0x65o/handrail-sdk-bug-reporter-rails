@@ -1,0 +1,15 @@
+{
+  "checks/browser-readiness.log": "13291aeead62e8854d4275be371a38c844b0765bf09c46ba515f4005c0a0b10e",
+  "checks/build.log": "b716dd870e37fdb75ab91cac6466e0c547fdb7cdd72a0a6e35c8539e508f332c",
+  "checks/fixture.log": "bfefad011fc3656208f2fd7c097c34b5da1e9eb8a37c1831a8a2255366824d63",
+  "checks/frontend.log": "f97f50aa3f8ea34e59b12f266fe0650937b5c504f1965ea93f9bf5a40c8fcbcd",
+  "checks/mounted-history-bundled.log": "98cc7cb9c2936706ca139ba0768cff91820e693e99e8f1d33b2a46541404bc47",
+  "checks/mounted-history-final.log": "c099013c5691adcad4a61e40207818e57d24a1e06c11a616c8f9995ee9f4ae22",
+  "checks/mounted-history.log": "cc46ad3cb7687f21059cece9ba2d2ea1b21bb6ce25dc513237c1312cbb94823b",
+  "checks/package-manifest.log": "10119dc6629d5ff0e56e6d471fb4366c8afcd966dcb1f4c77eba201be00b20d6",
+  "checks/release.log": "809e38627423c52f4b1a3faeedc2a9a316fa4fb8219e6c89bb30942febd3acee",
+  "checks/ruby.log": "077e7425fda255b9b0bc1817a68fc7e91228d6aa85252bae862b00439ca42490",
+  "checks/type-contracts.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "checks/typecheck.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "verification.json": "1b5338891ca3b1f334a20befdbd1ecafedc099116c45e104a3a18ffa5c860703"
+}

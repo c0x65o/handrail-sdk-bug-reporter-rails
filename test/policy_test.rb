@@ -78,6 +78,17 @@ class PolicyTest < Minitest::Test
     assert_equal ["fixed"], policy.reporter_notifications[:lifecycles]
   end
 
+  def test_all_users_history_is_strictly_opt_in
+    [nil, false, "true", 1, {}, []].each do |value|
+      assert_equal false, parse(fixture.merge("history" => { "all_users" => value })).all_users_history
+    end
+    assert_equal false, parse(fixture).all_users_history
+    assert_equal true, parse(fixture.merge("history" => { "all_users" => true })).all_users_history
+    body = fixture.merge("history" => { "all_users" => true })
+    body["reporter"]["identity_verified"] = false
+    assert_nil parse(body)
+  end
+
   def test_strict_schema_project_environment_reporter_and_ask_shapes
     [nil, [], true, 1, "policy"].each { |body| assert_nil parse(body) }
     { "schema_version" => [nil, "1", true, 2], "project_id" => [nil, "wrong-project", " project-123", 123],

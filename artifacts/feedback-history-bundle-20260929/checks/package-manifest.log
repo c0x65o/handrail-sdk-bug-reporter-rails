@@ -1,0 +1,21 @@
+{
+  "rails": {
+    "package": "handrail-bug-reporter",
+    "version": "0.4.49",
+    "provenance": "source_snapshot",
+    "commit": null,
+    "ref": null,
+    "base_commit": "c6706ad47193db67e08b5f41633caac95d97f0bc",
+    "base_ref": "commit:c6706ad47193db67e08b5f41633caac95d97f0bc"
+  },
+  "bundled_js": {
+    "package": "@handrail/bug-reporter",
+    "version": "0.5.0",
+    "ref": "commit:48d046430519871c55db84cb7ace7efd364814ab",
+    "commit": "48d046430519871c55db84cb7ace7efd364814ab"
+  },
+  "artifact": "app/assets/javascripts/handrail_bug_reporter.js",
+  "sha256": "984be06291a23733f596e76de16b97c328a71ffeaa20ef9b33cba241723a7f0e",
+  "runtime_files_verified": 23,
+  "verification": "offline checksums (Git provenance not authenticated)"
+}

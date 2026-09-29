@@ -1,0 +1,175 @@
+
+> handrail-bug-reporter-rails-assets@0.4.64 test
+> node --test --test-concurrency=1 test/frontend/*.test.mjs
+
+TAP version 13
+# Subtest: immutable HTTPS dependency, installed source, release identity and reproducible standalone asset
+ok 1 - immutable HTTPS dependency, installed source, release identity and reproducible standalone asset
+  ---
+  duration_ms: 66.107768
+  type: 'test'
+  ...
+# Subtest: marker-free loading only initializes bounded lifecycle listeners, with no DOM, timer, storage or network effects
+ok 2 - marker-free loading only initializes bounded lifecycle listeners, with no DOM, timer, storage or network effects
+  ---
+  duration_ms: 121.080298
+  type: 'test'
+  ...
+# Subtest: explicit mount/update/unmount forwards genuine UI options and preserves presentation state
+ok 3 - explicit mount/update/unmount forwards genuine UI options and preserves presentation state
+  ---
+  duration_ms: 187.034137
+  type: 'test'
+  ...
+# Subtest: repeated mounts dispose islands, abort policy discovery and do not multiply document listeners
+ok 4 - repeated mounts dispose islands, abort policy discovery and do not multiply document listeners
+  ---
+  duration_ms: 172.435573
+  type: 'test'
+  ...
+# Subtest: headless factory forwards config and stamps actual submitted payload with upstream identity
+ok 5 - headless factory forwards config and stamps actual submitted payload with upstream identity
+  ---
+  duration_ms: 12.577904
+  type: 'test'
+  ...
+# Subtest: invalid mounts leave host content intact and independent hosts remain independent
+ok 6 - invalid mounts leave host content intact and independent hosts remain independent
+  ---
+  duration_ms: 16.051896
+  type: 'test'
+  ...
+# Subtest: RubyGems builds and installs the prebuilt asset with no Node or Git available
+ok 7 - RubyGems builds and installs the prebuilt asset with no Node or Git available
+  ---
+  duration_ms: 292.278004
+  type: 'test'
+  ...
+# Subtest: real Rails asset: Mine default, conditional All users, fresh policy, private shared detail and revocation
+ok 8 - real Rails asset: Mine default, conditional All users, fresh policy, private shared detail and revocation
+  ---
+  duration_ms: 418.074609
+  type: 'test'
+  ...
+# Subtest: real Rails asset: sessionKey switch aborts shared requests and discards late results
+ok 9 - real Rails asset: sessionKey switch aborts shared requests and discards late results
+  ---
+  duration_ms: 350.512512
+  type: 'test'
+  ...
+# Subtest: JS client through mounted Rails: accepted_malformed is submitted once
+ok 10 - JS client through mounted Rails: accepted_malformed is submitted once
+  ---
+  duration_ms: 820.673697
+  type: 'test'
+  ...
+# Subtest: JS client through mounted Rails: accepted_empty is submitted once
+ok 11 - JS client through mounted Rails: accepted_empty is submitted once
+  ---
+  duration_ms: 839.658019
+  type: 'test'
+  ...
+# Subtest: mounted Rails empty subscription preserves accepted parent and warns with one child call
+ok 12 - mounted Rails empty subscription preserves accepted parent and warns with one child call
+  ---
+  duration_ms: 877.814388
+  type: 'test'
+  ...
+# Subtest: workflow admin, nonadmin, anonymous and revoked states gate all eight operations before identity/HTTP
+ok 13 - workflow admin, nonadmin, anonymous and revoked states gate all eight operations before identity/HTTP
+  ---
+  duration_ms: 865.388373
+  type: 'test'
+  ...
+# Subtest: frozen JS reference accepts empty and primitive success values with one upstream call
+ok 14 - frozen JS reference accepts empty and primitive success values with one upstream call
+  ---
+  duration_ms: 8.7555
+  type: 'test'
+  ...
+# Subtest: ordinary DOM readiness and late script loading mount only enabled, valid v1 markers
+ok 15 - ordinary DOM readiness and late script loading mount only enabled, valid v1 markers
+  ---
+  duration_ms: 194.595687
+  type: 'test'
+  ...
+# Subtest: repeated assets and navigation events retain one root; cache/unload cycles abort requests and remove roots
+ok 16 - repeated assets and navigation events retain one root; cache/unload cycles abort requests and remove roots
+  ---
+  duration_ms: 490.484812
+  type: 'test'
+  ...
+# Subtest: removed markers and disabled updates dispose work; late inserted markers mount
+ok 17 - removed markers and disabled updates dispose work; late inserted markers mount
+  ---
+  duration_ms: 60.112153
+  type: 'test'
+  ...
+# Subtest: navigation refreshes configuration, explicit context and pathname fallback without query/session serialization
+ok 18 - navigation refreshes configuration, explicit context and pathname fallback without query/session serialization
+  ---
+  duration_ms: 191.148137
+  type: 'test'
+  ...
+# Subtest: custom launcher uses public dialog, preserves host control and removes listeners and history polling
+ok 19 - custom launcher uses public dialog, preserves host control and removes listeners and history polling
+  ---
+  duration_ms: 327.196336
+  type: 'test'
+  ...
+# Subtest: explicit teardown removes adapter listeners/observer, is repeatable and leaves manual mounts owned by callers
+ok 20 - explicit teardown removes adapter listeners/observer, is repeatable and leaves manual mounts owned by callers
+  ---
+  duration_ms: 94.266143
+  type: 'test'
+  ...
+# Subtest: CSRF wrapper reads current token per POST/PUT/DELETE, handles URL/header forms, and preserves caller behavior
+ok 21 - CSRF wrapper reads current token per POST/PUT/DELETE, handles URL/header forms, and preserves caller behavior
+  ---
+  duration_ms: 17.142445
+  type: 'test'
+  ...
+# Subtest: safe methods, foreign URLs, absent tokens and malformed URLs are passed through without token injection
+ok 22 - safe methods, foreign URLs, absent tokens and malformed URLs are passed through without token injection
+  ---
+  duration_ms: 14.162495
+  type: 'test'
+  ...
+# Subtest: genuine SDK retry observes token rotation without recreating the reporter
+ok 23 - genuine SDK retry observes token rotation without recreating the reporter
+  ---
+  duration_ms: 12.477531
+  type: 'test'
+  ...
+# Subtest: navigation cancels a pending submission and prevents its retry reaching the host fetch
+ok 24 - navigation cancels a pending submission and prevents its retry reaching the host fetch
+  ---
+  duration_ms: 92.31707
+  type: 'test'
+  ...
+# Subtest: host morphs that remove an island retire its requests and restore exactly one root
+ok 25 - host morphs that remove an island retire its requests and restore exactly one root
+  ---
+  duration_ms: 62.445246
+  type: 'test'
+  ...
+# Subtest: missing and replaced custom launchers are reconciled without retaining the old host listener
+ok 26 - missing and replaced custom launchers are reconciled without retaining the old host listener
+  ---
+  duration_ms: 111.879504
+  type: 'test'
+  ...
+1..26
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7791.264568
+npm notice
+npm notice New major version of npm available! 10.9.8 -> 12.1.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.1.0
+npm notice To update run: npm install -g npm@12.1.0
+npm notice

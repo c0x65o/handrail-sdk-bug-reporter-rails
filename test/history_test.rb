@@ -95,6 +95,34 @@ class HistoryTest < Minitest::Test
     assert_equal "Checkout failure", record[:title]
   end
 
+  def test_all_users_reads_refresh_policy_and_forward_only_audience
+    allowed = false
+    policy = JSON.parse(File.read(File.expand_path("fixtures/js_v0.4.49_policy.json", File.dirname(__FILE__))))
+    http = lambda do |uri, method, headers, body, _timeouts|
+      @calls << [uri, method, headers, body]
+      response = if uri.path.end_with?("/policy")
+        policy.merge("history" => { "all_users" => allowed })
+      elsif uri.path.end_with?("/mine")
+        page.merge("bugs" => [bug.merge("is_owner" => false)])
+      else
+        detail(bug.merge("is_owner" => false))
+      end
+      { :status => 200, :body => JSON.generate(response), :headers => {} }
+    end
+    reporter = SDK::Factory.new(configuration, :http => http,
+      :resolve_application_session_token => lambda { |_| SESSION }).for_request(:host_request)
+    assert_rejected { reporter.list_bugs(:audience => "all") }
+    assert_equal 1, @calls.length
+    allowed = true
+    assert_equal false, reporter.list_bugs(:audience => "all", :project_id => "forged")[:bugs][0][:is_owner]
+    assert_equal "all", URI.decode_www_form(@calls.last[0].query).to_h["audience"]
+    assert_equal "project-123", URI.decode_www_form(@calls.last[0].query).to_h["project_id"]
+    assert_equal false, reporter.get_bug("bug-123", :audience => "all")[:is_owner]
+    allowed = false
+    assert_rejected { reporter.get_bug("bug-123", :audience => "all") }
+    assert_equal 4, @calls.count { |call| call[0].path.end_with?("/policy") }
+  end
+
   def test_encoded_query_and_cursor_round_trip_with_configuration_authority
     cursor = "opaque+/= ?&%#雪"
     @body["pagination"]["next_cursor"] = cursor

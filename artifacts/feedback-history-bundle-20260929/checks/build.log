@@ -1,0 +1,5 @@
+
+> handrail-bug-reporter-rails-assets@0.4.64 build
+> node scripts/build.mjs
+
+handrail_bug_reporter.js: 243625 bytes; SHA-256 984be06291a23733f596e76de16b97c328a71ffeaa20ef9b33cba241723a7f0e

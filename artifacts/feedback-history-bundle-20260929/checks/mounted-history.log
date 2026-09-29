@@ -1,0 +1,3 @@
+<internal:/usr/lib/ruby/vendor_ruby/rubygems/core_ext/kernel_require.rb>:85:in `require': cannot load such file -- rack/mock (LoadError)
+	from <internal:/usr/lib/ruby/vendor_ruby/rubygems/core_ext/kernel_require.rb>:85:in `require'
+	from test/fixtures/mounted/history_checks.rb:3:in `<main>'

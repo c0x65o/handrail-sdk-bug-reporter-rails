@@ -71,7 +71,7 @@ function assertLayout(actual, theme, width, height) {
   assert.ok(actual.bounds.y >= 0 && actual.bounds.y + actual.bounds.height <= height);
 }
 
-test('Rails helper/packaged adapter CSS parity with verified JS v0.4.50', async t => {
+test('Rails helper/packaged adapter CSS parity with verified JS v0.5.0', async t => {
   // Optional review evidence from the actual checked UI, never a managed service.
   const output = process.env.STYLE_ARTIFACT_DIR && resolve(process.env.STYLE_ARTIFACT_DIR);
   if (output) {

@@ -9,7 +9,7 @@ module Handrail
       PAYLOAD_KEY = "handrail.bug_reporter.forwarded_payload".freeze
       RESOURCE_KEY = "handrail.bug_reporter.history_resource".freeze
       QUERY_KEY = "handrail.bug_reporter.history_query".freeze
-      HISTORY_QUERY_KEYS = %w[limit cursor search status_group sort visibility].freeze
+      HISTORY_QUERY_KEYS = %w[limit cursor search status_group sort visibility audience].freeze
 
       def initialize(app)
         @app = app
@@ -40,6 +40,10 @@ module Handrail
         return reject(405, "method_not_allowed", "allow" => allowed) unless allowed.split(", ").include?(method)
         env[RESOURCE_KEY] = resource
         env[QUERY_KEY] = path == "/mine" ? history_query(env["QUERY_STRING"].to_s) : {}
+        if method == "GET" && path =~ %r{\A/bugs/[^/]+\z}
+          query = history_query(env["QUERY_STRING"].to_s)
+          env[QUERY_KEY] = query["audience"] == "all" ? { "audience" => "all" } : {}
+        end
         request = ActionDispatch::Request.new(env)
         origin = env["HTTP_ORIGIN"]
         if env["HTTP_SEC_FETCH_SITE"].to_s.downcase == "cross-site" ||

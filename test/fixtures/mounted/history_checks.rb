@@ -71,6 +71,26 @@ class MountedHistoryChecks < Minitest::Test
     end
   end
 
+  def test_shared_audience_is_forwarded_only_for_reads_and_attachments_stay_unrouted
+    ROUTES.each do |method, path, _upstream|
+      @calls.clear
+      response = call_app(method, ROOT_PATH + path + "?audience=all&audience=mine&project_id=forged&environment=production&limit=7")
+      assert_equal 201, response[0], response[2]
+      query = { "project_id" => "server/project + one", "environment" => "staging" }
+      query["audience"] = "all" if method == "GET"
+      query["limit"] = "7" if path == "/mine"
+      assert_equal query, URI.decode_www_form(@calls.last[:uri].query).to_h
+      assert_private(response)
+    end
+    @calls.clear
+    @resolved.clear
+    assert_rejected(404, call_app("GET", ROOT_PATH + "/bugs/bug-123/attachments?audience=all"))
+    @responses << { :status => 403, :body => '{"error":"bug_history_identity_required"}' }
+    response = call_app("GET", ROOT_PATH + "/bugs/bug-123?audience=all")
+    assert_equal 403, response[0]
+    assert_private(response)
+  end
+
   def test_history_json_bytes_are_not_reserialized
     canonical = "{\n  \"summary\": {\"version\": 1, \"score\": 0.1234567890123456789}, \"journey\": []\n}"
     ROUTES.each do |method, path, _upstream|

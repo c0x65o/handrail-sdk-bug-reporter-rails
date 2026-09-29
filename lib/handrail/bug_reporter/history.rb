@@ -21,10 +21,12 @@ module Handrail
           reject! unless options.is_a?(Hash)
           # Never forward arbitrary caller keys, especially project/environment.
           query = {}
-          %w[limit cursor search status_group sort visibility].each do |key|
+          %w[limit cursor search status_group sort visibility audience].each do |key|
             value = options.key?(key.to_sym) ? options[key.to_sym] : options[key]
             query[key] = value unless value.nil? || value == ""
           end
+          reject! if query.key?("audience") && !%w[mine all].include?(query["audience"])
+          require_sharing!(client) if query["audience"] == "all"
           if query.key?("search")
             reject! unless query["search"].is_a?(String) && query["search"].valid_encoding?
             query["search"] = clean(query["search"])
@@ -48,11 +50,15 @@ module Handrail
           reject!
         end
 
-        def get(client, bug_id)
+        def get(client, bug_id, options = {})
           ready!(client)
+          reject! unless options.is_a?(Hash)
           id = normalized_id(bug_id)
+          audience = options[:audience] || options["audience"]
+          reject! if audience && !%w[mine all].include?(audience)
+          require_sharing!(client) if audience == "all"
           segment = URI.encode_www_form_component(id).gsub("+", "%20")
-          url = query_url(client, client.configuration.endpoints[:bugs] + "/" + segment)
+          url = query_url(client, client.configuration.endpoints[:bugs] + "/" + segment, audience == "all" ? { "audience" => "all" } : {})
           request(client, url) do |body|
             record(body["bug"]) if body.is_a?(Hash) && body["contract_version"] == "v1"
           end
@@ -80,6 +86,11 @@ module Handrail
         end
 
         private
+
+        def require_sharing!(client)
+          policy = client.discover_policy
+          reject! unless policy && policy.all_users_history == true
+        end
 
         def normalized_id(bug_id)
           reject! if bug_id.is_a?(String) && bug_id.valid_encoding? &&
@@ -207,6 +218,7 @@ module Handrail
           status = strings(rollup, %w[stage label raw_status])
           return nil if result.values.any?(&:nil?) || status.values.any?(&:nil?) ||
             !STAGES.include?(status[:stage]) || !boolean?(rollup["terminal"])
+          result[:is_owner] = input["is_owner"] != false
           impact = clean(input["canonical_impact"].nil? ? result[:severity] : input["canonical_impact"])
           impact = impact && Payload::IMPACTS[impact.downcase]
           return nil unless impact

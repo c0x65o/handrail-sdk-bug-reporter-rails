@@ -99,8 +99,8 @@ checks verify byte reproducibility, immutable upstream source and identity, and
 source load behavior. The original run executed the archive-install test contrary to its exclusion
 claim. The corrected fresh selection excludes it under the public HTTPS Git
 installation policy; the original installation effects are preserved in
-[evidence corrections](evidence-corrections.md). The current dependency is JS v0.4.50 at
-`7dfb33f548448f864cf957f19d96f8b5a27bc787`, which isolates reporter field labels
+[evidence corrections](evidence-corrections.md). The current dependency is JS v0.5.0 at
+`48d046430519871c55db84cb7ace7efd364814ab`, which isolates reporter field labels
 from host CSS. The [style fixture](../test/browser/reporter_style.md) verifies
 all fields alongside consent against the pinned direct React renderer.
 

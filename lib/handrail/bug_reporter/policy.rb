@@ -13,7 +13,7 @@ module Handrail
       IDENTITY_RETRY_DELAYS = [0.1, 0.25].freeze
 
       attr_reader :schema_version, :project_id, :environment, :identity_verified,
-        :access_level, :role, :ask_options, :automation_policy, :reporter_notifications
+        :access_level, :role, :ask_options, :automation_policy, :reporter_notifications, :all_users_history
 
       def self.timeout_ms(value)
         numeric = value.is_a?(Integer) || (value.is_a?(Float) && value.finite?)
@@ -43,6 +43,7 @@ module Handrail
         @access_level = access
         role = self.class.clean(body["reporter"]["role"])
         @role = ROLES.include?(role) ? role : nil
+        @all_users_history = body["history"].is_a?(Hash) && body["history"]["all_users"] == true
         @ask_options = AUTOMATION_OPTIONS
         @automation_policy = parse_automation(body["automation_policy"])
         notification = body["reporter_notifications"]

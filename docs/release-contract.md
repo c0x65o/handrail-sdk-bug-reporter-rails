@@ -7,9 +7,9 @@ npm, an asset build or a network request. A missing, malformed, stale or corrupt
 manifest/package raises `Handrail::BugReporter::ReleaseManifest::Invalid`.
 
 The Rails gem version comes from `lib/handrail/bug_reporter/version.rb`. It is
-independent of the frozen browser dependency: `@handrail/bug-reporter` **0.4.50**,
-`refs/tags/v0.4.50`, commit
-`7dfb33f548448f864cf957f19d96f8b5a27bc787`. The verifier compares that mapping with
+independent of the frozen browser dependency: `@handrail/bug-reporter` **0.5.0**,
+`commit:48d046430519871c55db84cb7ace7efd364814ab`, commit
+`48d046430519871c55db84cb7ace7efd364814ab`. The verifier compares that mapping with
 `frontend/upstream.json`, the dependency and both relevant package-lock entries.
 The JS repository's tracked generated release.ts is not an input.
 
@@ -145,7 +145,7 @@ The package test uses a temporary bare clone, temporary Git index and Git plumbi
 for synthetic source/distribution commits and a synthetic `v1.2.3` tag. It never
 changes registered checkout refs or history. It archives that tag, builds and
 installs the gem with an empty executable PATH and network guard, then checks
-identity from a different consumer Git repository. Rails 1.2.3 and JS 0.4.50 in
+identity from a different consumer Git repository. Rails 1.2.3 and JS 0.5.0 in
 this fixture explicitly prove version independence. No actual SDK release tag,
 publish operation or network install occurs.
 
