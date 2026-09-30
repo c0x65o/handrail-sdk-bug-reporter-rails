@@ -1,0 +1,167 @@
+{
+  "work_request_id": "32fecb56-bb15-5d0b-bfa0-277d37f11ad5",
+  "project_id": "0fef581d-d8f7-46fa-a111-fad9ee0c81ae",
+  "observed_at_utc": "2026-09-30T00:34:35Z",
+  "scope": "Dev fixture readiness only. Main owns native browser campaign admission and original outcome acceptance.",
+  "source_hashes": {
+    "scripts/seed-history-fixture.mjs": "11fe570d04dff99262a2793e7a2d6436d9d798a468fb6434f41d25705308946d",
+    "test/browser/history_credentials.fixture.mjs": "d29bc6eff0013c59cb4a17bf574a543bc92bfaac2f261c7f44e165b454210739",
+    "test/browser/history_login.fixture.mjs": "8b7a5ba106ba829b2b7b2aa440fbb8eec33fd817169c38852abd05fe27c94f26",
+    "test/browser/reporter_style.fixture.mjs": "4b8eb3884e22dd078dcfa35b34e3c23f48cfd2d666c8b02c1cf1859c8656a598",
+    "test/frontend/history_seed.test.mjs": "3420cf8c7f9720752f9260032bcec40e9b625f4e99663a484c126c22609b4279",
+    "test/frontend/history_login.test.mjs": "693a5922b46da77f4c31fc82c8de47b771aa140ef9fc760c8a4c319fb38c1db0",
+    "app/assets/javascripts/handrail_bug_reporter.js": "984be06291a23733f596e76de16b97c328a71ffeaa20ef9b33cba241723a7f0e"
+  },
+  "checks": [
+    {
+      "command": "node --test --test-concurrency=1 test/frontend/history_seed.test.mjs test/frontend/history_login.test.mjs",
+      "passed": 7,
+      "failed": 0
+    },
+    {
+      "command": "npm test",
+      "passed": 33,
+      "failed": 0,
+      "notes": "Sequential frontend suite; real HTTP fixture auth and restart persistence included. No native browser."
+    },
+    {
+      "command": "ruby scripts/verify_release.rb --git --package",
+      "exit_code": 0,
+      "runtime_files_verified": 23
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0
+    },
+    {
+      "command": "git check-ignore .history-fixture-private/credentials.json",
+      "exit_code": 0
+    }
+  ],
+  "state": {
+    "path": ".history-fixture-private/credentials.json",
+    "directory_mode": "0700",
+    "file_mode": "0600",
+    "gitignored": true,
+    "plaintext_passwords_retained": false,
+    "logins": [
+      {
+        "login": "qa-history-alice",
+        "identity": "alice"
+      },
+      {
+        "login": "qa-history-bob",
+        "identity": "bob"
+      }
+    ]
+  },
+  "seed_command": "node scripts/seed-history-fixture.mjs",
+  "working_directory": "/opt/handrail/repos/handrail/handrail-feedback-sdks/handrail-sdk-bug-reporter-rails",
+  "task_runs": [
+    {
+      "id": "7add5783-ad95-49e7-a15e-6f5c5b48455c",
+      "task_id": "ab4bb917-77d5-4a07-93c0-97bf3ff9e352",
+      "status": "succeeded",
+      "exit_code": 0,
+      "parameters": {
+        "persona": "alice"
+      },
+      "output": "Private history fixture credentials updated.",
+      "stderr": "",
+      "vault_login_entry_id": "b451f0d1-c473-4e2f-a6bc-b535a1c7d9e1",
+      "vault_login_entry_name": "qa-login-dev",
+      "vault_login_injected_at": "2026-09-30T00:31:31.191Z",
+      "finished_at": "2026-09-30T00:31:31.396Z",
+      "settled": true
+    },
+    {
+      "id": "89d2c2e3-d406-4106-bf69-0e471ff1e193",
+      "task_id": "0093f77d-2c71-4b64-b08d-7bab6d56d27b",
+      "status": "succeeded",
+      "exit_code": 0,
+      "parameters": {
+        "persona": "bob"
+      },
+      "output": "Private history fixture credentials updated.",
+      "stderr": "",
+      "vault_login_entry_id": "faa9ad3d-aaae-44cc-83b5-9e0e3c9ab0cf",
+      "vault_login_entry_name": "qa-history-bob-dev",
+      "vault_login_injected_at": "2026-09-30T00:32:15.650Z",
+      "finished_at": "2026-09-30T00:32:15.881Z",
+      "settled": true
+    },
+    {
+      "id": "f9851bb7-a692-4f61-8b2e-c41498153a3b",
+      "task_id": "ab4bb917-77d5-4a07-93c0-97bf3ff9e352",
+      "status": "succeeded",
+      "exit_code": 0,
+      "parameters": {
+        "persona": "alice"
+      },
+      "output": "Private history fixture credentials unchanged.",
+      "stderr": "",
+      "vault_login_entry_id": "b451f0d1-c473-4e2f-a6bc-b535a1c7d9e1",
+      "vault_login_entry_name": "qa-login-dev",
+      "vault_login_injected_at": "2026-09-30T00:32:39.254Z",
+      "finished_at": "2026-09-30T00:32:39.444Z",
+      "settled": true
+    }
+  ],
+  "profiles": {
+    "alice": {
+      "id": "b451f0d1-c473-4e2f-a6bc-b535a1c7d9e1",
+      "name": "qa-login-dev",
+      "mode": "seeded_bootstrap",
+      "configured_env_vars": []
+    },
+    "bob": {
+      "id": "faa9ad3d-aaae-44cc-83b5-9e0e3c9ab0cf",
+      "name": "qa-history-bob-dev",
+      "mode": "same-project canonical Vault-only copy",
+      "audit_id": "49864956-fb24-4593-9330-baac63c8afbd"
+    }
+  },
+  "service": {
+    "id": "8317027d-9b3b-4d61-8946-c7c978b1ec39",
+    "action": "start",
+    "command": "PORT=4179 npm run fixture:style",
+    "port": 4179,
+    "verification": {
+      "contract_version": "owner_goal.dev_service_action.v5",
+      "verification_profile": "http_service",
+      "post_action_verification_required": true,
+      "post_action_verified": true,
+      "startup_stabilized": true,
+      "observed_runtime_status": "running",
+      "supervised": true,
+      "process_identity_verified": null,
+      "listener_attributed": true,
+      "listener_attribution_source": "post_action_host_pid_probe",
+      "healthy": true,
+      "route_registration_confirmed": true,
+      "scoped_qa_route_registered": true,
+      "failed_checks": []
+    },
+    "status": "running",
+    "health_http_status": 200,
+    "proxy_history_url": "https://h-8db4e04b77c8e633.dev.handrail-daas.com/history-fixture",
+    "sdk_runtime_instance_id": "bc69c3cf-c349-4e14-b8bd-0cfff83f74fe",
+    "sdk_source_at_launch": {
+      "verified": false,
+      "reason": "sdk_dev_source_checkout_dirty"
+    },
+    "ttl_expires_at": "2026-09-30T01:02:57.642Z"
+  },
+  "remaining": [
+    "Main owner_assistant_create_qa_campaign: native proxy Alice login, desktop/mobile OFF/ON/later-OFF, synthetic held-response session switch, real logout and Bob login.",
+    "Native proxy authentication/rendering unverified here; local HTTP tests and seed/service receipts do not establish browser acceptance or Known Users verification."
+  ],
+  "delivery": {
+    "committed": false,
+    "pushed": false,
+    "deployed": false,
+    "republished": false,
+    "customer_database_changed": false,
+    "prior_uncommitted_changes_preserved": true
+  }
+}

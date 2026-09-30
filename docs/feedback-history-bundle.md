@@ -1,5 +1,7 @@
 # Rails feedback history bundle delivery
 
+Current continuation: [authenticated native QA handoff](feedback-history-native-qa.md). Publication has already completed; do not replay the historical publication step below.
+
 Work request `4adf873c-44f5-5a84-a092-b6aa4065043f`; intended destination is the
 Rails SDK's bundled browser UI. This closes the old Bug JS dependency gap for
 outcome `f588b46d-a0d6-41ed-83d9-e07bc1e7751f`. Source/build verification passes;

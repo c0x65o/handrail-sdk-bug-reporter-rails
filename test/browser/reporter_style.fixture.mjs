@@ -1,3 +1,5 @@
+import { createHistoryFixtureLogin } from './history_login.fixture.mjs';
+import { historyFixtureAccounts } from './history_credentials.fixture.mjs';
 import { historyHtml, historyScript } from './reporter_history.fixture.mjs';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
@@ -33,7 +35,7 @@ export const cases = ['light', 'dark'].flatMap(theme => [false, true].map(absent
   return { theme, absent, options, expected };
 }));
 
-export async function startStyleFixture(port = 0) {
+export async function startStyleFixture(port = 0, { stateDirectory } = {}) {
   assert.equal(upstream.version, '0.5.0');
   assert.equal(upstream.commit, '48d046430519871c55db84cb7ace7efd364814ab');
   verifyDependency(); // Pin, lock, installed identity AND source-map hashes.
@@ -69,11 +71,14 @@ export async function startStyleFixture(port = 0) {
   ]);
   const unexpected = [];
   const requests = [];
-  const server = createServer((req, res) => {
+  const login = createHistoryFixtureLogin(historyFixtureAccounts(stateDirectory));
+  const server = createServer(async (req, res) => {
     const url = new URL(req.url, 'http://localhost');
     requests.push({ method: req.method, path: url.pathname });
-    res.setHeader('Content-Security-Policy', "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'");
+    res.setHeader('Content-Security-Policy', "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'");
     res.setHeader('Cache-Control', 'no-store');
+    try { if (await login(req, res, url.pathname)) return; }
+    catch { res.writeHead(400).end('Invalid fixture request'); return; }
     if (req.method === 'GET' && url.pathname === `${endpoint}/policy`) {
       res.setHeader('Content-Type', 'application/json');
       return res.end(JSON.stringify(policy));
@@ -81,7 +86,8 @@ export async function startStyleFixture(port = 0) {
     if (req.method === 'GET' && assets.has(url.pathname)) {
       const [type, body] = assets.get(url.pathname);
       res.setHeader('Content-Type', type);
-      return res.end(body);
+      return res.end(url.pathname === '/history-fixture.js'
+        ? body.replace("identity: 'alice'", `identity: '${req.historyFixtureIdentity}'`) : body);
     }
     if (req.method === 'GET' && url.pathname === '/history-fixture') {
       res.setHeader('Content-Type', 'text/html; charset=utf-8');

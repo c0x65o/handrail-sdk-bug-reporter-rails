@@ -1,0 +1,129 @@
+{
+  "observed_at_utc": "2026-09-30T00:20:17.836566+00:00",
+  "work_request_id": "2f1f7920-c7fb-5140-8857-4b49be4df265",
+  "outcome_id": "f588b46d-a0d6-41ed-83d9-e07bc1e7751f",
+  "verdict": "follow_up_required",
+  "local_known_users_identity_gap": "closed: unmodified source resolver, schema validation, resource connection, token hashing and session verification SQL",
+  "simulated_boundaries": [
+    "outer staff/capability middleware",
+    "host current-session resolver",
+    "seeded feedback rows",
+    "Rails browser policy/history responses and UI identity transitions"
+  ],
+  "checks": [
+    {
+      "name": "disposable PostgreSQL migration + sharing integration",
+      "passed": 2,
+      "command": "bash artifacts/feedback-history-session-20260930/run-disposable.sh",
+      "log": "checks/integration.log",
+      "migrations_through": 1492
+    },
+    {
+      "name": "focused Handrail regressions",
+      "passed": 10,
+      "log": "checks/regressions.log"
+    },
+    {
+      "name": "Bug JS reporter/server/React/UI regressions",
+      "passed": 54,
+      "log": "checks/bug-sdk.log"
+    },
+    {
+      "name": "Enhancement JS reporter/server/React/UI regressions",
+      "passed": 36,
+      "log": "checks/enhancement-sdk.log"
+    },
+    {
+      "name": "Rails npm test including reproducible build",
+      "passed": 28,
+      "log_repo": "rails",
+      "log": "checks/frontend.log"
+    },
+    {
+      "name": "Rails expanded login/service HTTP tests",
+      "passed": 3,
+      "overlap_with_frontend_suite": 2,
+      "log_repo": "rails",
+      "log": "checks/login.log"
+    },
+    {
+      "name": "Rails history/policy/forwarding",
+      "passed": 58,
+      "assertions": 3542,
+      "log_repo": "rails",
+      "log": "checks/ruby.log"
+    },
+    {
+      "name": "Rails release git/package contract",
+      "runtime_files": 23,
+      "log_repo": "rails",
+      "log": "checks/release.log"
+    },
+    {
+      "name": "JS syntax and git diff whitespace checks",
+      "result": "passed"
+    },
+    {
+      "name": "scoped typed compile",
+      "result": "no typed source edited; Rails frontend build is exercised by npm test"
+    },
+    {
+      "name": "native browser rendering",
+      "result": "unverified; not launched by this worker"
+    }
+  ],
+  "initial_failure": {
+    "log": "checks/integration-initial-failure.log",
+    "cause": "test-local loop variable shadowed current source revision",
+    "resolution": "renamed currentRevision; complete disposable rerun passed"
+  },
+  "rails": {
+    "published_commit": "f22b012a7629886005300816439845c487fc867b",
+    "contributor_version": "0.5.0",
+    "gem_manifest_version": "0.4.49",
+    "manifest_provenance": "source_snapshot",
+    "bug_js_version": "0.5.0",
+    "bug_js_pin": "48d046430519871c55db84cb7ace7efd364814ab",
+    "asset_sha256": "984be06291a23733f596e76de16b97c328a71ffeaa20ef9b33cba241723a7f0e"
+  },
+  "installed_evidence": {
+    "live_version": "unverified; tool returned null",
+    "migration_1490_applied": "unverified; no declared runtime/database resource exposed",
+    "prior_supplied_release_commit_contains_1490": true,
+    "runtime_reads": "runtime-reads.json"
+  },
+  "native_qa": {
+    "project_id": "0fef581d-d8f7-46fa-a111-fad9ee0c81ae",
+    "service_id": "8317027d-9b3b-4d61-8946-c7c978b1ec39",
+    "route": "/history-fixture",
+    "login_route": "/login",
+    "vault_profiles_observed": 0,
+    "configured_tasks_observed": 0,
+    "service_status": "scope rejected; not observed",
+    "handoff": "Rails docs/feedback-history-native-qa.md"
+  },
+  "remaining": [
+    "Main SDK-context private dev profile/account binding and existing service start/restart",
+    "Main owner_assistant_create_qa_campaign desktop/mobile native rendering and login switch",
+    "Main installed version and migration 1490 read evidence; final outcome acceptance"
+  ],
+  "concurrent_main_commit_including_harness": "7e00668cec6eb43738ca0d9590fb247092f997e6",
+  "worker_actions": {
+    "commit": false,
+    "push": false,
+    "deploy": false,
+    "control_plane_writes": false,
+    "queue_writes": false,
+    "customer_policies": false
+  },
+  "source_sha256": {
+    "handrail/scripts/test-feedback-history-sharing.mjs": "1de854a75a10b469f4aded99949712571a9bcd2190d0fc9f500ec6d1c30f94c4",
+    "handrail/docs/implementation/feedback-history-session-verification.md": "e0c4b0142cddcd5e0fe53dbec801fbc26b1192f63ef8a040193828e7a344e551",
+    "rails/scripts/render-history.mjs": "dd15016edab78da537c5da4893d94972228a026baef8333e3e060b7ec4773a7e",
+    "rails/test/browser/history_login.fixture.mjs": "6cf2fafb0cc12e0c9db051551e134158329dc99313a17abe1ff49e82a520a91e",
+    "rails/test/browser/reporter_style.fixture.mjs": "9d8d268c13e8585c748cda61e39e0744460a1bb1c70fea5ee6ad1ac50079cdea",
+    "rails/test/browser/reporter_history.fixture.mjs": "06217edbc8e3ba8f92c9157eebc9900ddfe6ce4cf73b82e33c66f321df020ac0",
+    "rails/test/frontend/history_login.test.mjs": "559b0577f926d533855f6b49ae1c1954640a1ffd795a638bf9d35697dfc384fb",
+    "rails/docs/feedback-history-native-qa.md": "5f572b1cac773311eb442f66e2c2f219dacfe1a3a90b32e366b7e2be25ee1afd"
+  }
+}

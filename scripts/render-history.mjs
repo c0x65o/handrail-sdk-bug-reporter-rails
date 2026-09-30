@@ -33,6 +33,12 @@ try {
   for (const [width, height, size] of [[1440, 1000, 'desktop'], [390, 844, 'mobile']]) {
     await page.setViewportSize({ width, height });
     await page.goto(target);
+    const login = await page.evaluate(async () => {
+      const response = await fetch('/fixture-session', { credentials: 'same-origin' });
+      return response.ok ? response.json() : null;
+    });
+    assert.equal(login?.authenticated, true, 'Native QA must authenticate through the real fixture login using its same-project dev Vault profile.');
+    assert.equal(login.identity, 'alice', 'Run the focused rendering recipe with the Alice QA profile.');
     await openHistory();
     assert.equal(await page.getByRole('button', { name: 'All users', exact: true }).count(), 0);
     await page.getByRole('button', { name: 'View My checkout report', exact: true }).waitFor();
@@ -51,7 +57,9 @@ try {
     await page.getByRole('button', { name: 'All users', exact: true }).click();
     await page.getByRole('button', { name: 'View Shared checkout report', exact: true }).waitFor({ state: 'detached' });
     await capture(size + '-revoked');
-    await page.evaluate(() => { historyFixture.allowed = true; historyFixture.hold = true; });
+    await page.evaluate(() => { historyFixture.allowed = true; historyFixture.switchIdentity('alice'); });
+    await openHistory(); // Rediscover after OFF before beginning the held-response scenario.
+    await page.evaluate(() => { historyFixture.hold = true; });
     await page.getByRole('button', { name: 'All users', exact: true }).click();
     await page.waitForFunction(() => historyFixture.pending.length === 1);
     assert.equal(await page.evaluate(() => {
@@ -68,9 +76,17 @@ try {
   assert.deepEqual(errors, []);
   const identity = await page.evaluate(() => HandrailBugReporter.identity);
   assert.equal(identity.reporter_sdk_commit, '48d046430519871c55db84cb7ace7efd364814ab');
+  const logout = await page.evaluate(async () => {
+    const state = await (await fetch('/fixture-session', { credentials: 'same-origin' })).json();
+    const response = await fetch('/fixture-session', { method: 'POST', credentials: 'same-origin',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ action: 'logout', csrf: state.csrf }) });
+    return { logout: response.status, after: (await fetch('/fixture-session', { credentials: 'same-origin' })).status };
+  });
+  assert.deepEqual(logout, { logout: 200, after: 401 });
   await writeFile(resolve(runDir, 'history-bundle-evidence.json'), JSON.stringify({
-    observedAt: new Date().toISOString(), target, identity, synthetic: true,
-    limitation: 'Scripted policy/history; no real installed application-session verification.', artifacts, errors,
+    observedAt: new Date().toISOString(), target, identity, synthetic: true, outerLogin: { persona: 'alice', logout },
+    limitation: 'Genuine outer fixture login; policy/history and UI identity switching remain synthetic. Known Users verification is covered separately by the disposable Handrail SQL integration, not by this login.', artifacts, errors,
   }, null, 2) + '\n');
 } finally {
   await session.browser.close();

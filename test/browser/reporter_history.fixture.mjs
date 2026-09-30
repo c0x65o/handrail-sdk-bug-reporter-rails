@@ -23,6 +23,6 @@ const config = { transport: 'same-origin', apiBaseUrl: '/feedback/api/mobile-bug
     return reply(body);
   } };
 fixture.reporter = HandrailBugReporter.createBugReporter(config);
-fixture.handle = HandrailBugReporter.mount(document.getElementById('history-root'), { config, sessionKey: 'alice', heading: 'Synthetic Rails feedback', label: 'Open feedback' });
+fixture.handle = HandrailBugReporter.mount(document.getElementById('history-root'), { config, sessionKey: fixture.identity, heading: 'Synthetic Rails feedback', label: 'Open feedback' });
 fixture.switchIdentity = identity => { fixture.identity = identity; fixture.handle.update({ sessionKey: identity }); };
 `;
