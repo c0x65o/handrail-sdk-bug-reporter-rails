@@ -48,14 +48,14 @@ installed commit; it changes no runtime code or browser asset.
 
 The current [release manifest](release-manifest.json) records Rails gem version
 **0.4.49** with `source_snapshot` provenance and null Rails release `commit`/`ref`.
-Its recorded base `c6706ad47193db67e08b5f41633caac95d97f0bc` remains snapshot
+Its recorded base `3e13f9fa8354bab3e14d7c858a268ad834028967` remains snapshot
 provenance; neither that base nor null release identity prevents installing the
-containing source commit. Private frontend tooling is **0.4.64** (historically
-0.4.57/0.4.58/0.4.59 in earlier work); these private versions are not Rails gem releases.
+containing source commit. The private frontend tooling version is recorded in
+`package.json`; it is independent of the Rails gem release version.
 The local `v0.4.50` tag's `version.rb` declares **0.4.49**; it is not a verified
 matching release and is not recommended here. The gem version is independent of
-the bundled **JS v0.5.0**, `commit:48d046430519871c55db84cb7ace7efd364814ab`, at
-`48d046430519871c55db84cb7ace7efd364814ab` in the JS repository.
+the bundled **JS v0.5.1**, `commit:10e6a92a6a21c30237c5cba494b1251e628b5f39`, at
+`10e6a92a6a21c30237c5cba494b1251e628b5f39` in the JS repository.
 
 The original parity baseline was **JS v0.4.49**, `refs/tags/v0.4.49`, at
 `96b293248611594c388d0fab3af63b1b2d1aae5c`, recorded in `frontend/upstream.json`
@@ -64,7 +64,7 @@ at Rails commit `a6f83605c217f37ac0caa4afa982379206f6288f`. The
 Ruby normalization with that fixed JS server-entry baseline; it does not verify
 the current browser bundle. Rails commit `bb1a4f86bb48f63e5a2ade43a1565c4625c58334`
 upgraded the bundle to JS v0.4.50. The [current release manifest](release-manifest.json)
-and [upstream identity](frontend/upstream.json) now record the 0.5.0 history-sharing upgrade.
+and [upstream identity](frontend/upstream.json) now record the 0.5.1 closed-report history correction.
 
 See the [release contract](docs/release-contract.md) for checksum, source and
 distribution-tag verification. Further source publication and consumer installation
@@ -441,8 +441,8 @@ sign-out, account/environment/tenant switch to discard state and pending reads.
 Do not pass session credentials as this key. This sharing is bounded to a
 Handrail project and environment/source, not subtenants within that source.
 
-The browser bundle uses Bug JS **0.5.0** from public HTTPS Git commit
-`48d046430519871c55db84cb7ace7efd364814ab`, with matching lockfile and
+The browser bundle uses Bug JS **0.5.1** from public HTTPS Git commit
+`10e6a92a6a21c30237c5cba494b1251e628b5f39`, with matching lockfile and
 `frontend/upstream.json` source hashes. It displays Mine and conditional All
 users, refreshes policy for shared reads, clears stale results on revocation or
 session changes, and hides other users' archive/restore actions. Attachments

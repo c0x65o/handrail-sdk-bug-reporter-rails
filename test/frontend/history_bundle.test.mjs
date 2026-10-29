@@ -68,3 +68,50 @@ test('real Rails asset: sessionKey switch aborts shared requests and discards la
   assert.equal(f.button('All users'), undefined);
   assert.doesNotMatch(f.text(), /Shared checkout report|My checkout report/);
 });
+
+test('real Rails asset: closed report receipt promises no pending fix or release', async t => {
+  const f = await fixture(t);
+  const time = '2026-10-29T10:00:00Z';
+  const bug = {
+    id: 'closed-bug', title: 'Cancelled checkout report', environment: 'dev', severity: 'sev3',
+    status: 'closed', status_group: 'closed', occurrence_count: 1, reporter_occurrence_count: 1,
+    created_at: time, updated_at: time, first_reported_at: time, last_reported_at: time,
+    status_rollup: { stage: 'closed', label: 'Closed — not actionable', terminal: true,
+      raw_status: 'closed', updated_at: time },
+    resolution_journey: {
+      schema_version: 1, headline: 'Closed — not actionable', outcome: 'closed', handling: 'team_review',
+      next_step: null, started_at: time, completed_at: time, total_duration_ms: null,
+      verification_method: null, verification_label: null, release_environment: null,
+      fixed_version: null, released_version: null, automatic_fix_authorized: false,
+      automatic_delivery_authorized: false, approval_required: false,
+      milestones: ['reported', 'confirmed', 'corrected', 'checked', 'released', 'confirmed_resolved']
+        .map((key, index) => ({ key,
+          label: ['Reported', 'Confirmed', 'Corrected', 'Safety checked', 'Released', 'Confirmed resolved'][index],
+          state: index === 0 ? 'complete' : 'stopped', started_at: null, completed_at: null, duration_ms: null }))
+    }
+  };
+  const requests = [];
+  f.state.handle.update({ loadPolicyOnMount: false, config: {
+    transport: 'same-origin', apiBaseUrl: '/feedback/api/mobile-bug-reports',
+    projectId: 'history-fixture', environment: 'dev',
+    fetch: async (input, init) => {
+      requests.push({ path: input, method: init.method });
+      assert.equal(new URL(input, 'https://fixture.invalid').pathname, '/feedback/api/mobile-bug-reports/mine');
+      return new Response(JSON.stringify({ contract_version: 'v1', bugs: [bug],
+        pagination: { limit: 20, has_more: false, next_cursor: null } }),
+      { headers: { 'content-type': 'application/json' } });
+    }
+  } });
+  await f.open();
+  f.w.document.querySelector('[aria-label="View Cancelled checkout report"]').click();
+  await tick();
+  const receipt = f.w.document.querySelector('[data-handrail-bug-resolution-receipt]');
+  assert.ok(receipt);
+  assert.match(f.text(), /Closed — not actionable/);
+  assert.match(f.text(), /Stopped/);
+  assert.match(receipt.textContent, /No further automated work is planned/);
+  assert.match(receipt.textContent, /None recorded/);
+  assert.doesNotMatch(f.text(), /Paused|Pending|Team review|as this report progresses/);
+  assert.equal(requests.length, 1);
+  assert.equal(requests[0].method, 'GET');
+});

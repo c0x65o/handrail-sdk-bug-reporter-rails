@@ -35,8 +35,8 @@ async function browser(t) {
 
 test('immutable HTTPS dependency, installed source, release identity and reproducible standalone asset', async () => {
   const identity = verifyDependency();
-  assert.equal(upstream.commit, '48d046430519871c55db84cb7ace7efd364814ab');
-  assert.equal(upstream.version, '0.5.0');
+  assert.equal(upstream.commit, '10e6a92a6a21c30237c5cba494b1251e628b5f39');
+  assert.equal(upstream.version, '0.5.1');
   assert.equal(await buildAsset(), asset, 'Committed asset must match a fresh build');
   const sandbox = {};
   vm.runInNewContext(asset, sandbox); // No DOM, React, require, timers or fetch.
@@ -117,6 +117,8 @@ test('explicit mount/update/unmount forwards genuine UI options and preserves pr
   await tick();
   const dialog = host.querySelector('[role="dialog"]');
   assert.ok(dialog);
+  assert.equal(dialog.getAttribute('data-handrail-bug-reporter-dialog'), 'true');
+  assert.equal(dialog.querySelector('h2').textContent, 'Feedback');
   assert.ok(dialog.classList.contains('custom-dialog'));
   assert.equal(host.querySelector('[data-theme]').getAttribute('data-theme'), 'dark');
   assert.equal(host.querySelector('[data-theme]').style.getPropertyValue('--handrail-bug-radius'), '19px');

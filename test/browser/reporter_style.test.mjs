@@ -69,9 +69,13 @@ function assertLayout(actual, theme, width, height) {
   assert.ok(actual.bounds.width > width / 2);
   assert.ok(actual.bounds.x >= 0 && actual.bounds.x + actual.bounds.width <= width);
   assert.ok(actual.bounds.y >= 0 && actual.bounds.y + actual.bounds.height <= height);
+  if (width <= 560) {
+    assert.equal(actual.bounds.width, width, 'mobile dialog fills viewport width');
+    assert.equal(actual.bounds.height, height, 'mobile dialog fills viewport height');
+  }
 }
 
-test('Rails helper/packaged adapter CSS parity with verified JS v0.5.0', async t => {
+test('Rails helper/packaged adapter CSS parity with verified JS v0.5.1', async t => {
   // Optional review evidence from the actual checked UI, never a managed service.
   const output = process.env.STYLE_ARTIFACT_DIR && resolve(process.env.STYLE_ARTIFACT_DIR);
   if (output) {
@@ -137,6 +141,12 @@ test('Rails helper/packaged adapter CSS parity with verified JS v0.5.0', async t
               const dialog = page.locator(dialogSelector);
               const checkbox = page.getByRole('checkbox', { name: consentName });
               await checkbox.waitFor({ state: 'visible' });
+              assert.equal(await dialog.getAttribute('data-handrail-bug-reporter-dialog'), 'true');
+              assert.equal(await dialog.getByRole('heading', { name: 'Style fixture', exact: true }).count(), 1);
+              assert.equal(await dialog.evaluate(el => el.classList.contains('rails-feedback-dialog')), true);
+              const columns = await page.locator('[data-handrail-bug-report-layout]').evaluate(el =>
+                getComputedStyle(el).gridTemplateColumns.split(' ').length);
+              assert.equal(columns, width <= 860 ? 1 : 2, 'packaged responsive form columns');
               await page.waitForFunction(selector => document.querySelector(selector)?.contains(document.activeElement), dialogSelector);
               const beforeLateCSS = await layout(page);
               assertLayout(beforeLateCSS, theme, width, height);

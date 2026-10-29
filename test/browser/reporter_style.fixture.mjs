@@ -23,7 +23,7 @@ export const cases = ['light', 'dark'].flatMap(theme => [false, true].map(absent
     mutedText: theme === 'dark' ? '#bbbbbb' : '#666666', fontFamily: 'Arial, sans-serif' };
   const options = { endpoint, mode: 'custom-launcher', launcher_id: 'host-bug-button',
     show_history: false, allow_screenshots: true, heading: 'Style fixture',
-    appearance: { theme_mode: theme, tokens, style: { '--handrail-bug-radius': '13px' } },
+    appearance: { theme_mode: theme, class_name: 'rails-feedback-dialog', tokens, style: { '--handrail-bug-radius': '13px' } },
     ...(absent ? {} : { context }) };
   const expected = { config: { transport: 'same-origin', enabled: true, apiBaseUrl: endpoint,
     projectId: 'style-project', environment: 'staging', allowScreenshots: true },
@@ -31,13 +31,13 @@ export const cases = ['light', 'dark'].flatMap(theme => [false, true].map(absent
     buildNumber: context.build_number, commitSha: context.commit_sha,
     appFlavor: context.app_flavor, profileKey: context.profile_key },
   showHistory: false, loadPolicyOnMount: true, heading: 'Style fixture',
-  appearance: { themeMode: theme, tokens, style: options.appearance.style } };
+  appearance: { themeMode: theme, className: 'rails-feedback-dialog', tokens, style: options.appearance.style } };
   return { theme, absent, options, expected };
 }));
 
 export async function startStyleFixture(port = 0, { stateDirectory } = {}) {
-  assert.equal(upstream.version, '0.5.0');
-  assert.equal(upstream.commit, '48d046430519871c55db84cb7ace7efd364814ab');
+  assert.equal(upstream.version, '0.5.1');
+  assert.equal(upstream.commit, '10e6a92a6a21c30237c5cba494b1251e628b5f39');
   verifyDependency(); // Pin, lock, installed identity AND source-map hashes.
   const sibling = process.env.HANDRAIL_JS_REFERENCE_REPO || resolve(root, '../handrail-sdk-bug-reporter-js');
   for (const [path, hash] of Object.entries(upstream.sourceSha256)) {

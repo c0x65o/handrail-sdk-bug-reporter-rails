@@ -101,7 +101,7 @@ RubyGems archive-install test is incompatible with the current public-HTTPS-Git-
 installation contract; do not count its exclusion as a pass.
 
 The dependency and lockfile use public HTTPS Git with full SHA
-`7dfb33f548448f864cf957f19d96f8b5a27bc787` (`v0.4.50`), not a tag dependency.
+`10e6a92a6a21c30237c5cba494b1251e628b5f39` (`v0.5.1`), not a tag dependency.
 `frontend/upstream.json` records SHA-256 hashes read from that exact reference
 checkout. Before bundling, the build verifies the installed package version,
 embedded release identity, both distributed source maps' original SDK sources,
