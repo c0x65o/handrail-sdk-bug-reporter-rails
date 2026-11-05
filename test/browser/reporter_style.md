@@ -24,7 +24,7 @@ not available to the service.
 
 The reference Git checkout defaults to `../handrail-sdk-bug-reporter-js`.
 Set `HANDRAIL_JS_REFERENCE_REPO` to another existing checkout if necessary. It
-must contain commit `10e6a92a6a21c30237c5cba494b1251e628b5f39`. The fixture reads
+must contain commit `9961a4646d079a8348579c178b7ae0d7247a7f3e`. The fixture reads
 that commit with `git show`, irrespective of working-tree edits or HEAD, and
 checks every source hash in `frontend/upstream.json`. The direct React reference
 uses the installed public `@handrail/bug-reporter/react` entry after validating

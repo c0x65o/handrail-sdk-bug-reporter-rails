@@ -80,7 +80,7 @@ test('fixture login fails closed without private setup and rate limits at 10 per
 
 test('existing style service protects history and serves the published asset after login', async t => {
   const { startStyleFixture } = await import('../browser/reporter_style.fixture.mjs');
-  const { sha256 } = await import('../../scripts/contract.mjs');
+  const { sha256, read } = await import('../../scripts/contract.mjs');
   const account = { login: 'qa-history-bob', password: randomBytes(24).toString('hex'), identity: 'bob' };
   const stateDirectory = mkdtempSync(join(tmpdir(), 'history-service-'));
   t.after(() => rmSync(stateDirectory, { recursive: true, force: true }));
@@ -103,7 +103,7 @@ test('existing style service protects history and serves the published asset aft
   assert.match(await (await request('/history-fixture', { headers })).text(), /Synthetic Rails SDK fixture/);
   assert.match(await (await request('/history-fixture.js', { headers })).text(), /identity: 'bob'/);
   const bytes = Buffer.from(await (await request('/javascripts/handrail_bug_reporter.js')).arrayBuffer());
-  assert.equal(sha256(bytes), '984be06291a23733f596e76de16b97c328a71ffeaa20ef9b33cba241723a7f0e');
+  assert.equal(sha256(bytes), sha256(read('app/assets/javascripts/handrail_bug_reporter.js')));
   assert.deepEqual(service.unexpected, []);
   // Restart reloads persistent hashes; old in-memory sessions do not survive.
   await service.close();

@@ -75,7 +75,7 @@ function assertLayout(actual, theme, width, height) {
   }
 }
 
-test('Rails helper/packaged adapter CSS parity with verified JS v0.5.1', async t => {
+test('Rails helper/packaged adapter CSS parity with verified JS v0.5.2', async t => {
   // Optional review evidence from the actual checked UI, never a managed service.
   const output = process.env.STYLE_ARTIFACT_DIR && resolve(process.env.STYLE_ARTIFACT_DIR);
   if (output) {

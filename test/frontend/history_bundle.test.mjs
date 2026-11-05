@@ -10,12 +10,21 @@ async function fixture(t) {
   const w = dom.window;
   t.after(() => { w.historyFixture?.handle.unmount(); w.close(); });
   Object.assign(w, { Headers, Request, Response });
+  const intervals = new Map();
+  const originalInterval = w.setInterval.bind(w);
+  const originalClear = w.clearInterval.bind(w);
+  w.setInterval = (callback, delay, ...args) => {
+    const id = originalInterval(callback, delay, ...args);
+    if (delay === 15000) intervals.set(id, callback);
+    return id;
+  };
+  w.clearInterval = id => { intervals.delete(id); originalClear(id); };
   w.eval(read('app/assets/javascripts/handrail_bug_reporter.js'));
   w.eval(historyScript);
   const button = text => [...w.document.querySelectorAll('button')].find(b => b.textContent === text);
   const click = async text => { assert.ok(button(text), text); button(text).click(); await tick(); };
   const open = async () => { await tick(); await click('Open feedback'); w.document.querySelector('[data-handrail-bug-view-switch="history"]').click(); await tick(); };
-  return { w, state: w.historyFixture, button, click, open, text: () => w.document.body.textContent };
+  return { poll: async () => { for (const callback of intervals.values()) callback(); await tick(); }, w, state: w.historyFixture, button, click, open, text: () => w.document.body.textContent };
 }
 
 test('real Rails asset: Mine default, conditional All users, fresh policy, private shared detail and revocation', async t => {
@@ -114,4 +123,24 @@ test('real Rails asset: closed report receipt promises no pending fix or release
   assert.doesNotMatch(f.text(), /Paused|Pending|Team review|as this report progresses/);
   assert.equal(requests.length, 1);
   assert.equal(requests[0].method, 'GET');
+});
+
+
+test('packaged history keeps rows during background refresh and pauses while reading details', async t => {
+  const f = await fixture(t);
+  f.state.allowed = true;
+  await f.open();
+  await f.click('All users');
+  f.state.hold = true;
+  await f.poll();
+  assert.equal(f.state.pending.length, 1, 'background refresh uses the current shared query');
+  assert.match(f.text(), /Shared checkout report/, 'rows remain visible while refresh is pending');
+  f.state.pending.shift().resolve();
+  await tick();
+  f.w.document.querySelector('[aria-label="View Shared checkout report"]').click();
+  await tick();
+  const requests = f.state.requests.length;
+  await f.poll();
+  assert.equal(f.state.requests.length, requests, 'expanded details suspend automatic refresh');
+  assert.match(f.text(), /Shared checkout report/);
 });
