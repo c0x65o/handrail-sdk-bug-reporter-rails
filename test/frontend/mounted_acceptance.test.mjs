@@ -94,6 +94,18 @@ test('mounted Rails empty subscription preserves accepted parent and warns with 
     ['/api/mobile-bug-reports', '/api/mobile-bug-reports/bugs/bug-canonical.123/subscription']);
 });
 
+test('SDK forwards a reporter answer through the mounted Rails session and CSRF boundary', async t => {
+  const rails = await host(t, 'history');
+  await rails.session('admin');
+  const reporter = createBugReporter({ transport: 'same-origin', apiBaseUrl: endpoint,
+    projectId: 'project-123', environment: 'staging', fetch: rails.fetch });
+  const input = { option: 'Checkout', answer: 'From the cart' };
+  const result = await reporter.answerInformationRequest('bug-canonical.123', 'rfi-1', input);
+  assert.deepEqual(result, { contract_version: 'v1', bugId: 'bug-canonical.123',
+    informationRequestId: 'rfi-1', answered: true, replayed: false, analysisResumed: true });
+  assert.deepEqual(rails.audit().filter(row => row.kind === 'http').map(row => row.body), [input]);
+});
+
 test('workflow admin, nonadmin, anonymous and revoked states gate all eight operations before identity/HTTP', async t => {
   const rails = await host(t, 'submission');
   const body = JSON.stringify({ title: 'Fixture', description: 'Fixture', reporter_notification: { notify_on_resolution: true } });

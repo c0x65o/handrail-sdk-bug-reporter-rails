@@ -157,14 +157,16 @@ class InformationRequestTest < Minitest::Test
     assert_nil client.get_bug("bug-123")[:information_request][:current_behavior]
     # Malformed requests are dropped; the record itself stays valid.
     [[], "rfi-1", 1, true, {}, QUESTION.merge("id" => nil), QUESTION.merge("question" => " "),
-      QUESTION.merge("id" => 7)].each do |value|
+      QUESTION.merge("id" => 7), QUESTION.merge("options" => "Card"), QUESTION.merge("options" => ["Only"]),
+      QUESTION.merge("options" => ["Card", "Card"]), QUESTION.merge("response_allowed" => false),
+      QUESTION.merge("options" => [], "allows_written_answer" => false)].each do |value|
       @body = detail.call(bug.merge("information_request" => value))
       record = client.get_bug("bug-123")
       assert_equal "bug-123", record[:id]
       assert_nil record[:information_request]
     end
-    @body = detail.call(bug.merge("information_request" => QUESTION.merge("options" => "Card")))
-    assert_equal [], client.get_bug("bug-123")[:information_request][:options]
+    @body = detail.call(bug.merge("is_owner" => false, "information_request" => QUESTION))
+    assert_nil client.get_bug("bug-123")[:information_request]
     @body = { "contract_version" => "v1", "bugs" => [bug.merge("information_request" => QUESTION), bug.merge("information_request" => [])],
       "pagination" => { "limit" => 10, "has_more" => false } }
     page = client.list_bugs

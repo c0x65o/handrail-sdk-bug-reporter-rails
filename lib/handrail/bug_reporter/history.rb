@@ -243,12 +243,14 @@ module Handrail
         # Optional on every record. A missing or malformed request projects to
         # nil and never invalidates the surrounding record.
         def information_request(input)
-          return nil unless input.is_a?(Hash)
+          return nil unless input.is_a?(Hash) && input["response_allowed"] == true && input["options"].is_a?(Array)
           result = strings(input, %w[id current_behavior question asked_at])
           return nil unless result[:id] && result[:question]
-          options = input["options"].is_a?(Array) ? input["options"].map { |option| clean(option) }.compact : []
-          result.merge(:options => options, :allows_written_answer => input["allows_written_answer"] != false,
-            :response_allowed => input["response_allowed"] == true)
+          options = input["options"].map { |option| clean(option) }
+          written = input["allows_written_answer"] == true
+          return nil unless (options.empty? && written) || options.length.between?(2, 4)
+          return nil if options.include?(nil) || options.uniq != options
+          result.merge(:options => options, :allows_written_answer => written, :response_allowed => true)
         end
 
         def archive_closed_result(input)
@@ -287,7 +289,7 @@ module Handrail
           result.merge!(strings(input, %w[reported_app_version reported_route reported_app_flavor first_reported_at last_reported_at created_at updated_at fixed_at closed_at]))
           result.merge(:impact => impact, :status_group => group, :status_rollup => status,
             :resolution_journey => journey(input["resolution_journey"]),
-            :information_request => information_request(input["information_request"]),
+            :information_request => result[:is_owner] ? information_request(input["information_request"]) : nil,
             :archived => archived, :archived_at => archived_at,
             :occurrence_count => non_negative(input.fetch("occurrence_count", MISSING), 1),
             :reporter_occurrence_count => non_negative(input.fetch("reporter_occurrence_count", MISSING), 1))

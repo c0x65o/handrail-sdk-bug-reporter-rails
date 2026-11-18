@@ -75,7 +75,7 @@ try {
   }
   assert.deepEqual(errors, []);
   const identity = await page.evaluate(() => HandrailBugReporter.identity);
-  assert.equal(identity.reporter_sdk_commit, '9961a4646d079a8348579c178b7ae0d7247a7f3e');
+  assert.equal(identity.reporter_sdk_commit, '50fbee4427554e0778763efe84324c613b02d8e8');
   const logout = await page.evaluate(async () => {
     const state = await (await fetch('/fixture-session', { credentials: 'same-origin' })).json();
     const response = await fetch('/fixture-session', { method: 'POST', credentials: 'same-origin',

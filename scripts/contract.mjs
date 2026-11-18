@@ -17,7 +17,9 @@ export function verifyDependency() {
   const lock = json('package-lock.json');
   assert.equal(manifest.dependencies[upstream.package], dependency);
   assert.equal(lock.packages[''].dependencies[upstream.package], dependency);
-  assert.equal(lock.packages[`node_modules/${upstream.package}`].resolved, dependency);
+  const locked = lock.packages[`node_modules/${upstream.package}`];
+  assert.equal(locked.resolved, dependency);
+  assert.equal(locked.version, upstream.version);
   const installed = json(`node_modules/${upstream.package}/package.json`);
   assert.equal(installed.name, upstream.package);
   assert.equal(installed.version, upstream.version);

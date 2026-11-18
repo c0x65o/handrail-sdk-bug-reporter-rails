@@ -86,6 +86,9 @@ class WorkflowHTTP
         { :notification_subscription => { :active => true, :created => true,
           :recipient_hint => "j***@example.com", :subscribed_at => TIME } }
       end
+    when ["POST", ROOT + "/bugs/#{BUG_ID}/information-requests/rfi-1/answer"]
+      { :contract_version => "v1", :bug_id => BUG_ID, :information_request_id => "rfi-1",
+        :answered => true, :replayed => false, :analysis_resumed => true }
     when ["POST", ROOT + "/mine/archive-closed"]
       { :contract_version => "v1", :archived_count => 0 }
     when ["GET", ROOT + "/mine"]
