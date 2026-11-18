@@ -100,6 +100,12 @@ module Handrail
         History.archive_closed(self)
       end
 
+      # Answer the open request for information on an owned bug with an offered
+      # option, a written answer, or both. Handrail checks ownership and choices.
+      def answer_information_request(bug_id:, request_id:, option: nil, answer: nil)
+        History.answer_information_request(self, bug_id, request_id, option, answer)
+      end
+
       # Best effort only: discovery never changes ordinary submission state.
       # Each invocation owns its deadline and result; there is no shared cache.
       def discover_policy(timeout_ms: nil)

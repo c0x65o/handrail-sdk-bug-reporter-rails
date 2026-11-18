@@ -13,7 +13,7 @@ class MountedAcceptedResponseChecks < Minitest::Test
     routes = [["POST", ""], ["GET", "/policy"], ["GET", "/mine"],
       ["GET", "/bugs/bug-123"], ["POST", "/bugs/bug-123/subscription"],
       ["PUT", "/bugs/bug-123/archive"], ["DELETE", "/bugs/bug-123/archive"],
-      ["POST", "/mine/archive-closed"]]
+      ["POST", "/mine/archive-closed"], ["POST", "/bugs/bug-123/information-requests/rfi-1/answer"]]
     bodies = [nil, "", "accepted but not JSON hbr_private_diagnostic", "\xff".b,
       "null", "false", "42", '"accepted"', "[]",
       '{"bug_id":"canonical-id","event_id":"other-id","precise":0.12345678901234567890123456789,"integer":9007199254740993}']
@@ -23,7 +23,8 @@ class MountedAcceptedResponseChecks < Minitest::Test
           @calls.clear
           @resolved.clear
           @responses = [{ :status => status, :body => bytes }]
-          result = call_app(method, ROOT_PATH + path, JSON.generate(wire))
+          body = path.end_with?("/answer") ? { "option" => "Card" } : wire
+          result = call_app(method, ROOT_PATH + path, JSON.generate(body))
           assert_equal status, result[0], [method, path, bytes].inspect
           expected = [204, 205].include?(status) || index < 2 ? "" : index < 4 ? "null" : bytes
           assert_equal expected, result[2]

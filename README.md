@@ -158,6 +158,18 @@ GET policy, owned history/detail, subscription and archive routes; see
 [forwarding](docs/forwarding.md), [history routes](docs/history-forwarding.md)
 and the [route definitions](config/routes.rb).
 
+Since 0.4.50 the engine also forwards a reporter's answer to the team's request
+for information: `POST {mount}/bugs/:bug_id/information-requests/:request_id/answer`
+with JSON `{ "option": "...", "answer": "..." }` (either or both). Like the other
+mutating routes it requires the CSRF header and passes `authorize_request`; only
+`option`/`answer` are forwarded, with the report token, the resolved application
+session token and the configured project/environment. Handrail's status and JSON
+are returned; errors keep Handrail's `{ "error", "code" }` (400/404/409). History
+records may carry an optional `information_request`
+(`id`, `current_behavior`, `question`, `options`, `allows_written_answer`,
+`asked_at`, `response_allowed`); a missing or malformed value projects to `nil`
+and never invalidates the record.
+
 ## Place the browser reporter
 
 The generator does not edit layouts or insert launchers. Deliberately place
@@ -329,8 +341,9 @@ submitted if its follow-up subscription fails; inspect `notification_warning`.
 Do not fabricate consent or recipients. The same client exports
 `discover_policy(timeout_ms: nil)` (validated policy or best-effort `nil`),
 `list_bugs(options = {})`, `get_bug(bug_id)`, `archive_bug(bug_id)`,
-`restore_bug(bug_id)` and `archive_closed_bugs`. History uses validated, frozen
-server projections and upstream ownership checks.
+`restore_bug(bug_id)`, `archive_closed_bugs` and
+`answer_information_request(bug_id:, request_id:, option: nil, answer: nil)`.
+History uses validated, frozen server projections and upstream ownership checks.
 
 ## Capability evidence
 

@@ -46,6 +46,17 @@ module Handrail
           :url => @configuration.endpoints[:bugs] + resource.fetch(1) + "?" + query)
       end
 
+      # Body is stripped to option/answer; the guard supplies the encoded
+      # /bugs/:id/information-requests/:request_id/answer child resource.
+      def answer_information_request(input, resource)
+        body = input.is_a?(Hash) && History.information_answer(input["option"], input["answer"])
+        raise Error.new(:invalid_information_answer), :cause => nil unless body
+        query = URI.encode_www_form("project_id" => @configuration.project_id,
+          "environment" => @configuration.environment)
+        @client.request(:method => "POST", :endpoint => :bugs, :body => JSON.generate(body),
+          :url => @configuration.endpoints[:bugs] + resource.fetch(1) + "?" + query)
+      end
+
       def policy
         query = URI.encode_www_form("project_id" => @configuration.project_id,
           "environment" => @configuration.environment)

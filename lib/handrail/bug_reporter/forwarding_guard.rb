@@ -25,15 +25,21 @@ module Handrail
         allowed = { "" => "POST", "/" => "POST", "/policy" => "GET",
           "/mine" => "GET", "/mine/archive-closed" => "POST" }[path]
         resource = nil
-        subscription = false
+        json_child = false
         if path == "/mine" || path == "/mine/archive-closed"
           resource = [:history, path == "/mine" ? "" : "/archive-closed"]
+        elsif (match = /\A\/bugs\/([^\/]+)\/information-requests\/([^\/]+)\/answer\z/.match(path))
+          segment, request_segment = encoded_id(match[1]), encoded_id(match[2])
+          return reject(404, "bug_history_not_found") unless segment && request_segment
+          allowed = "POST"
+          json_child = true
+          resource = [:bugs, "/" + segment + "/information-requests/" + request_segment + "/answer"]
         elsif (match = /\A\/bugs\/([^\/]+)(\/archive|\/subscription)?\z/.match(path))
-          segment = encoded_bug_id(match[1])
+          segment = encoded_id(match[1])
           return reject(404, "bug_history_not_found") unless segment
           allowed = match[2] ? "PUT, DELETE" : "GET"
-          subscription = match[2] == "/subscription"
-          allowed = "POST" if subscription
+          json_child = match[2] == "/subscription"
+          allowed = "POST" if json_child
           resource = [:bugs, "/" + segment + match[2].to_s]
         end
         return reject(404, "bug_reporter_route_not_found") unless allowed
@@ -50,7 +56,7 @@ module Handrail
             (origin && origin != request.base_url)
           return reject(403, "bug_reporter_cross_site_denied")
         end
-        if method == "POST" && (path.empty? || path == "/" || subscription)
+        if method == "POST" && (path.empty? || path == "/" || json_child)
           length = env["CONTENT_LENGTH"].to_s
           return reject(400, "invalid_report") unless length.empty? || length =~ /\A[0-9]+\z/
           return reject(413, "report_too_large") if length.to_i > MAX_BODY_BYTES
@@ -87,7 +93,8 @@ module Handrail
 
       private
 
-      def encoded_bug_id(raw)
+      # Bug and information-request IDs are each exactly one resource segment.
+      def encoded_id(raw)
         return nil if raw =~ /%(?![0-9a-f]{2})/i
         # PATH_INFO is still escaped here. Do not decode Rails' route params a
         # second time, or let format parsing truncate IDs containing a dot.

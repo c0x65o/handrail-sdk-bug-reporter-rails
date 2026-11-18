@@ -11,18 +11,22 @@ class MountedAuthorizationChecks < Minitest::Test
     ["POST", ""], ["GET", "/policy"], ["GET", "/mine"],
     ["GET", "/bugs/bug-123"], ["PUT", "/bugs/bug-123/archive"],
     ["DELETE", "/bugs/bug-123/archive"], ["POST", "/mine/archive-closed"],
-    ["POST", "/bugs/bug-123/subscription"]
+    ["POST", "/bugs/bug-123/subscription"], ["POST", "/bugs/bug-123/information-requests/rfi-1/answer"]
   ].freeze
 
   def authorize_admin
     configure({}, :authorize_request => lambda { |request| request.session[:principal] == "fixture-principal" })
   end
 
+  def body_for(path)
+    JSON.generate(path.end_with?("/answer") ? { "option" => "Card" } : wire)
+  end
+
   def each_route(headers = {})
     ROUTES.each do |method, path|
       @calls.clear
       @resolved.clear
-      yield call_app(method, ROOT_PATH + path, JSON.generate(wire), headers), method
+      yield call_app(method, ROOT_PATH + path, body_for(path), headers), method
     end
   end
 
@@ -68,9 +72,12 @@ class MountedAuthorizationChecks < Minitest::Test
         @calls.clear
         @resolved.clear
         @responses = [{ :status => status, :body => '{"error":"private-upstream-detail"}' }] * 2
-        response = call_app(method, ROOT_PATH + path, JSON.generate(wire))
+        response = call_app(method, ROOT_PATH + path, body_for(path))
         assert_equal status, response[0]
-        assert_equal({ "error" => "bug_reporting_rejected" }, JSON.parse(response[2]))
+        # Answer errors keep Handrail's {error, code} for the reporter UI.
+        expected = path.end_with?("/answer") ?
+          { "error" => "private-upstream-detail", "code" => "bug_reporting_rejected" } : { "error" => "bug_reporting_rejected" }
+        assert_equal expected, JSON.parse(response[2])
         assert_equal(status == 422 ? 1 : 2, @calls.length)
         assert_equal @calls.length, @resolved.length
         assert_private(response)

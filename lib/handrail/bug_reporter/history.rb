@@ -57,8 +57,7 @@ module Handrail
           audience = options[:audience] || options["audience"]
           reject! if audience && !%w[mine all].include?(audience)
           require_sharing!(client) if audience == "all"
-          segment = URI.encode_www_form_component(id).gsub("+", "%20")
-          url = query_url(client, client.configuration.endpoints[:bugs] + "/" + segment, audience == "all" ? { "audience" => "all" } : {})
+          url = query_url(client, client.configuration.endpoints[:bugs] + "/" + segment(id), audience == "all" ? { "audience" => "all" } : {})
           request(client, url) do |body|
             record(body["bug"]) if body.is_a?(Hash) && body["contract_version"] == "v1"
           end
@@ -69,8 +68,7 @@ module Handrail
         def change_archive_state(client, bug_id, archived)
           ready!(client)
           id = normalized_id(bug_id)
-          segment = URI.encode_www_form_component(id).gsub("+", "%20")
-          url = query_url(client, client.configuration.endpoints[:bugs] + "/" + segment + "/archive")
+          url = query_url(client, client.configuration.endpoints[:bugs] + "/" + segment(id) + "/archive")
           request(client, url, archived ? "PUT" : "DELETE") do |body|
             result = archive_result(body)
             result if result && result[:bug_id] == id && result[:archived] == archived
@@ -85,7 +83,36 @@ module Handrail
           request(client, url, "POST") { |body| archive_closed_result(body) }
         end
 
+        # The reporter answers one open request for information with a choice,
+        # a written answer, or both. Handrail validates the choice and lengths.
+        def answer_information_request(client, bug_id, request_id, option, answer)
+          ready!(client)
+          id = normalized_id(bug_id)
+          request_key = normalized_id(request_id)
+          body = information_answer(option, answer)
+          reject! unless body
+          url = query_url(client, client.configuration.endpoints[:bugs] + "/" + segment(id) +
+            "/information-requests/" + segment(request_key) + "/answer")
+          request(client, url, "POST", JSON.generate(body)) do |result|
+            answer_result(result, id, request_key)
+          end
+        rescue EncodingError, ArgumentError
+          reject!
+        end
+
+        # Only option/answer leave the host. Blank or absent values are omitted;
+        # nil means the input cannot be an answer.
+        def information_answer(option, answer)
+          return nil unless (option.nil? || option.is_a?(String)) && (answer.nil? || answer.is_a?(String))
+          body = { "option" => clean(option), "answer" => clean(answer) }.reject { |_, value| value.nil? }
+          body.empty? ? nil : body
+        end
+
         private
+
+        def segment(id)
+          URI.encode_www_form_component(id).gsub("+", "%20")
+        end
 
         def require_sharing!(client)
           policy = client.discover_policy
@@ -118,8 +145,8 @@ module Handrail
           endpoint + "?" + URI.encode_www_form(values.reject { |_, value| value.nil? || value == "" })
         end
 
-        def request(client, url, method = "GET")
-          response = client.request(:method => method, :url => url)
+        def request(client, url, method = "GET", body = nil)
+          response = client.request(:method => method, :url => url, :body => body)
           begin
             bytes = response.body
             bytes = bytes.dup.force_encoding(Encoding::UTF_8) if bytes.is_a?(String)
@@ -204,6 +231,26 @@ module Handrail
             :archived => input["archived"], :archived_at => archived_at }
         end
 
+        def answer_result(input, bug_id, request_id)
+          return nil unless input.is_a?(Hash) && input["contract_version"] == "v1" &&
+            input["answered"] == true && boolean?(input["replayed"]) &&
+            (input["analysis_resumed"].nil? || boolean?(input["analysis_resumed"]))
+          return nil unless clean(input["bug_id"]) == bug_id && clean(input["information_request_id"]) == request_id
+          { :contract_version => "v1", :bug_id => bug_id, :information_request_id => request_id,
+            :answered => true, :replayed => input["replayed"], :analysis_resumed => input["analysis_resumed"] }
+        end
+
+        # Optional on every record. A missing or malformed request projects to
+        # nil and never invalidates the surrounding record.
+        def information_request(input)
+          return nil unless input.is_a?(Hash)
+          result = strings(input, %w[id current_behavior question asked_at])
+          return nil unless result[:id] && result[:question]
+          options = input["options"].is_a?(Array) ? input["options"].map { |option| clean(option) }.compact : []
+          result.merge(:options => options, :allows_written_answer => input["allows_written_answer"] != false,
+            :response_allowed => input["response_allowed"] == true)
+        end
+
         def archive_closed_result(input)
           return nil unless input.is_a?(Hash) && input["contract_version"] == "v1"
           count = integer(input.fetch("archived_count", MISSING))
@@ -240,6 +287,7 @@ module Handrail
           result.merge!(strings(input, %w[reported_app_version reported_route reported_app_flavor first_reported_at last_reported_at created_at updated_at fixed_at closed_at]))
           result.merge(:impact => impact, :status_group => group, :status_rollup => status,
             :resolution_journey => journey(input["resolution_journey"]),
+            :information_request => information_request(input["information_request"]),
             :archived => archived, :archived_at => archived_at,
             :occurrence_count => non_negative(input.fetch("occurrence_count", MISSING), 1),
             :reporter_occurrence_count => non_negative(input.fetch("reporter_occurrence_count", MISSING), 1))

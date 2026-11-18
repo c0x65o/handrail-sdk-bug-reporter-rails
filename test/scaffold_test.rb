@@ -74,7 +74,8 @@ class ScaffoldTest < ScaffoldTestCase
         raise "Engine not in booted host" unless app.railties.any? { |railtie| railtie.is_a?(engine) }
         paths = engine.routes.routes.map { |route| route.path.spec.to_s }
         expected = ["/", "/policy", "/mine", "/bugs/:bug_id", "/bugs/:bug_id/subscription",
-          "/bugs/:bug_id/archive", "/bugs/:bug_id/archive", "/mine/archive-closed"]
+          "/bugs/:bug_id/archive", "/bugs/:bug_id/archive", "/mine/archive-closed",
+          "/bugs/:bug_id/information-requests/:request_id/answer"]
         raise "Missing opt-in routes" unless paths == expected
       end
       request = Rack::MockRequest.new(app)

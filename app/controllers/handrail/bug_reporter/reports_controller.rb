@@ -4,7 +4,7 @@ require "handrail/bug_reporter/forwarding"
 module Handrail
   module BugReporter
     class ReportsController < ActionController::Base
-      protect_from_forgery :with => :exception, :only => [:create, :archive, :subscription]
+      protect_from_forgery :with => :exception, :only => [:create, :archive, :subscription, :answer_information_request]
       rescue_from ActionController::InvalidAuthenticityToken do
         render_error(403, "invalid_authenticity_token")
       end
@@ -35,6 +35,13 @@ module Handrail
         history
       end
 
+      def answer_information_request
+        forward(:information_request) do |service|
+          service.answer_information_request(request.env.fetch(ForwardingGuard::PAYLOAD_KEY),
+            request.env.fetch(ForwardingGuard::RESOURCE_KEY))
+        end
+      end
+
       private
 
       # Keep verification mandatory even when a host disables its own CSRF checks
@@ -53,6 +60,7 @@ module Handrail
         response = yield Forwarding.new(factory, request)
         render_success(response)
       rescue Error => error
+        return render_answer_error(error) if ownership_status == :information_request
         if ownership_status == :subscription
           return render_error(400, "invalid_report") if error.code == :invalid_subscription
           status = error.status_code || 502
@@ -70,6 +78,20 @@ module Handrail
 
       def render_error(status, code)
         render :json => { :error => code }, :status => status
+      end
+
+      # The reporter UI distinguishes Handrail's answer errors (e.g. already
+      # answered or closed), so keep its status plus sanitized {error, code}.
+      def render_answer_error(error)
+        if error.code == :invalid_information_answer
+          return render :json => { :error => "Choose an option or write an answer.",
+            :code => "information_request_answer_invalid" }, :status => 400
+        end
+        unless error.status_code && error.status_code.between?(400, 599)
+          return render :json => { :error => "bug_reporting_unavailable", :code => "bug_reporting_unavailable" }, :status => 502
+        end
+        render :json => { :error => error.upstream_message || "bug_reporting_rejected",
+          :code => error.upstream_code || "bug_reporting_rejected" }, :status => error.status_code
       end
 
       def render_success(response)

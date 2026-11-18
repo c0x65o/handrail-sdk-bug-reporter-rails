@@ -6,7 +6,10 @@ class PayloadTest < ScaffoldTestCase
   Payload = Handrail::BugReporter::Payload
   Identity = Handrail::BugReporter::Identity
   FIXTURES = JSON.parse(File.read(File.join(ROOT, "test/fixtures/js_v0.4.49_payload.json")))
-  IDENTITY_DIFFERENCES = %w[platform reporter_sdk_runtime reporter_sdk_package reporter_sdk_commit reporter_sdk_ref].freeze
+  # The recorded JS fixture carries the JS SDK identity; the Rails gem version
+  # is independent and is checked against Identity::SDK_IDENTITY below.
+  IDENTITY_DIFFERENCES = %w[platform reporter_sdk_runtime reporter_sdk_package reporter_sdk_version
+    reporter_sdk_commit reporter_sdk_ref].freeze
 
   def report(input = {}, hooks = [])
     Payload.new({ :title => "Title", :description => "Description" }.merge(input),
