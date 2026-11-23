@@ -1,13 +1,13 @@
 {
   "package": "@handrail/bug-reporter",
-  "version": "0.6.1",
-  "commit": "50fbee4427554e0778763efe84324c613b02d8e8",
-  "ref": "commit:50fbee4427554e0778763efe84324c613b02d8e8",
+  "version": "0.6.2",
+  "commit": "dd32c3228a1c0a33ac2495c0b2366fb43da389fc",
+  "ref": "commit:dd32c3228a1c0a33ac2495c0b2366fb43da389fc",
   "sourceSha256": {
     "src/identity.ts": "e92ea96c110647ab3cd2b3995899641a1f37688f70c74e879e21bbd018f65e71",
     "src/severity.ts": "c936e4fd9ff46bfd4a7e4c92eb704de0bbbc8924cc7e7e5386c112af0d6b37dd",
-    "src/reporter.ts": "d4ab65f9f07ba473934652ba396e76dd91c75c188b96ccc231de764ec8c7d509",
+    "src/reporter.ts": "d5a3860714d4b267855fec1953bfccf55152db32dcd7cb6553a397a9e24746c2",
     "src/react.ts": "843e997abf00fe07544d639a83a0f09b92228e9fe5f08f821676fbb6ea80eff0",
-    "src/react-ui.tsx": "1f54241c68f973ea4336db872264b58643c4a612dfb2821c3897aa1d3ba55bf3"
+    "src/react-ui.tsx": "fc4677f13e6945c7e73da99c79031d9c53c86449ded01d1962b226bf9ccc401e"
   }
 }

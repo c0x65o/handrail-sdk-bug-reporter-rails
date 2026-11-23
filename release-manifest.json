@@ -2,21 +2,21 @@
   "schema_version": 1,
   "rails": {
     "package": "handrail-bug-reporter",
-    "version": "0.4.50",
+    "version": "0.4.51",
     "provenance": "source_snapshot",
     "commit": null,
     "ref": null,
-    "base_commit": "9d076f2f08f9a6ca7da2108e08aec17057e02f26",
-    "base_ref": "commit:9d076f2f08f9a6ca7da2108e08aec17057e02f26"
+    "base_commit": "b1057a06e89b798cbcbeafee2de98182a057f38c",
+    "base_ref": "commit:b1057a06e89b798cbcbeafee2de98182a057f38c"
   },
   "bundled_js": {
     "package": "@handrail/bug-reporter",
-    "version": "0.6.1",
-    "ref": "commit:50fbee4427554e0778763efe84324c613b02d8e8",
-    "commit": "50fbee4427554e0778763efe84324c613b02d8e8"
+    "version": "0.6.2",
+    "ref": "commit:dd32c3228a1c0a33ac2495c0b2366fb43da389fc",
+    "commit": "dd32c3228a1c0a33ac2495c0b2366fb43da389fc"
   },
   "files_sha256": {
-    "app/assets/javascripts/handrail_bug_reporter.js": "4cf47e7bfe5dc49f4ff3365990cb18e2f9d3f41c5d5f066119dd113d066c9263",
+    "app/assets/javascripts/handrail_bug_reporter.js": "58a9d77088a42bf6d6db43015fdbd8ec9e360606308bf6901a20ff8b865aca78",
     "app/controllers/handrail/bug_reporter/reports_controller.rb": "246ca34b6f053b170e0ff8da133a9c80dc8614fba8a07533597044c2532702ce",
     "app/helpers/handrail/bug_reporter_helper.rb": "514325f7fd7c798f8124a4ccc60a47162a84102267d4d4f864638410f516d6ff",
     "config/routes.rb": "f724fca83628531bb9aebaf48c03bf789dc67249882c7e60988b95e1156a6c7d",
@@ -29,24 +29,24 @@
     "lib/handrail/bug_reporter/engine.rb": "d7910b07025a509b9586dce8fd01d7f0cc6248d2039e3511cb7e011387a479dc",
     "lib/handrail/bug_reporter/forwarding.rb": "1b80fbe05b2ed267e1ef47d52e492bf6e39f475d89e4adf3def7160590f5840a",
     "lib/handrail/bug_reporter/forwarding_guard.rb": "b8d835a9b258ffa26c2cb5587951291a04ac8748b1d2d9323b66bec5f42eb389",
-    "lib/handrail/bug_reporter/history.rb": "8a3effff99ced2f60e6e617f4437809c1a294b59fd0dedf9b7d29402b49e6475",
+    "lib/handrail/bug_reporter/history.rb": "690606f096eece81bfafd3be4813a3e79427c9982b5be5df24197d5b90736308",
     "lib/handrail/bug_reporter/identity.rb": "2eba9374faeb544c3f2c7c73907b60f6d23ea46ecfcd94f9749f6328e29f753c",
     "lib/handrail/bug_reporter/notification.rb": "652b5a365fc685333c88dc9a0608e2e90e19a79a304d7a30af9292d0de86b854",
     "lib/handrail/bug_reporter/payload.rb": "7a07de96beb4945720d71d2f6ffe1f81977bb2b4afea0107c84ed3051abcd5a5",
     "lib/handrail/bug_reporter/policy.rb": "41b78a19a0841d553e40807b2528c0fa3f0e4d92965cd52605de2486326c8f13",
     "lib/handrail/bug_reporter/release.rb": "e684ea1c31df88b3fe3f07d4cb025209b67dabee4c6c390718cae0b6f7d55d70",
-    "lib/handrail/bug_reporter/release_manifest.rb": "c067782170b39954668d2e566993cc7ea4debe5987df5d7ae961e46e5eb470e8",
+    "lib/handrail/bug_reporter/release_manifest.rb": "76aa634ee8e2b7f62030615321d9bcc2e4a2cf414d1d4bd9f75d6e2ccc666196",
     "lib/handrail/bug_reporter/screenshot.rb": "ff4e5ac51e69ed7a78681237e2f1eee1b965cf48c235fcf129e1acda3d5a1a18",
     "lib/handrail/bug_reporter/transport.rb": "2e817d69e39e118346ebb522611a5e93063bed7c514884dd4e276b261fe11122",
-    "lib/handrail/bug_reporter/version.rb": "2bc8fcb85bcbbdc795198d7baa51fc2445a992329fae7d1993dce787c1215354"
+    "lib/handrail/bug_reporter/version.rb": "7b921841b49cdae1c90acf64c2517e1c4e438fb21833c1cd8220b000eb56ec2e"
   },
   "source_sha256": {
     "frontend/entry.jsx": "a663afcaa812c57879d4dfd4b40d31d6cb4064262184daf19173a9b42ecabde7",
     "frontend/rails_adapter.js": "f5cb49f28025d06442492a48cfe945377290ef1f22497fb1c4a480940132a1e7",
-    "frontend/upstream.json": "ff1bd45469fb1c33b124fad556ec9e8c1804cf499daffc69d39b4dc2a5ad51b8",
+    "frontend/upstream.json": "899f1efa0f20d1b24c351a6b701f471c10a0ef38e3a81b63aa7e5f1286b7e3d9",
     "handrail-bug-reporter.gemspec": "283f3fa82280d16f6ea184344450fcb47820acf8fb415fc1eb28fe4ca19219eb",
-    "package-lock.json": "ec1d9eeae3d033f4db6e68ca0be2f15319587f9ffc411d156de9688474d56ea4",
-    "package.json": "08a73f7df5536e09010f748dede9b61b25e4a20e963060fb92674dc101cbb93e",
+    "package-lock.json": "7fe5f9404431799f24390a3ba536dccf4378bff6f6b8e81b5c9f1ddf77a30c90",
+    "package.json": "813a3ca0e3466346dc6675155c38c306b26729cd7fcf80c5371a3bf0bbfc82dc",
     "scripts/build.mjs": "37a30a7d1a2196f932e1308bca389736568cb76c1a0d28e6e591135697890316",
     "scripts/contract.mjs": "520c433f2fe85cc977e61d9fd31a748388e641c137aebf1213c7c0d0249112c4"
   },

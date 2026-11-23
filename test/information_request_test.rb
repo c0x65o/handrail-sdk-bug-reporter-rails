@@ -158,7 +158,7 @@ class InformationRequestTest < Minitest::Test
     # Malformed requests are dropped; the record itself stays valid.
     [[], "rfi-1", 1, true, {}, QUESTION.merge("id" => nil), QUESTION.merge("question" => " "),
       QUESTION.merge("id" => 7), QUESTION.merge("options" => "Card"), QUESTION.merge("options" => ["Only"]),
-      QUESTION.merge("options" => ["Card", "Card"]), QUESTION.merge("response_allowed" => false),
+      QUESTION.merge("options" => ["Card", "Card"]),
       QUESTION.merge("options" => [], "allows_written_answer" => false)].each do |value|
       @body = detail.call(bug.merge("information_request" => value))
       record = client.get_bug("bug-123")
@@ -166,7 +166,18 @@ class InformationRequestTest < Minitest::Test
       assert_nil record[:information_request]
     end
     @body = detail.call(bug.merge("is_owner" => false, "information_request" => QUESTION))
-    assert_nil client.get_bug("bug-123")[:information_request]
+    shared = client.get_bug("bug-123")[:information_request]
+    assert_equal QUESTION["question"], shared[:question]
+    assert_equal true, shared[:response_allowed]
+    [true, false].each do |owner|
+      old = QUESTION.reject { |key, _| key == "response_allowed" }
+      @body = detail.call(bug.merge("is_owner" => owner, "information_request" => old,
+        "information_requests" => [QUESTION.merge("answer" => { "text" => "Card" })]))
+      record = client.get_bug("bug-123")
+      assert_equal owner, record[:information_request][:response_allowed]
+      assert_equal "Card", record[:information_requests][0][:answer][:text]
+      assert_equal false, record[:information_requests][0][:response_allowed]
+    end
     @body = { "contract_version" => "v1", "bugs" => [bug.merge("information_request" => QUESTION), bug.merge("information_request" => [])],
       "pagination" => { "limit" => 10, "has_more" => false } }
     page = client.list_bugs

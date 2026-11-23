@@ -242,15 +242,19 @@ module Handrail
 
         # Optional on every record. A missing or malformed request projects to
         # nil and never invalidates the surrounding record.
-        def information_request(input)
-          return nil unless input.is_a?(Hash) && input["response_allowed"] == true && input["options"].is_a?(Array)
+        def information_request(input, owner)
+          return nil unless input.is_a?(Hash) && input["options"].is_a?(Array)
           result = strings(input, %w[id current_behavior question asked_at])
           return nil unless result[:id] && result[:question]
           options = input["options"].map { |option| clean(option) }
           written = input["allows_written_answer"] == true
           return nil unless (options.empty? && written) || options.length.between?(2, 4)
           return nil if options.include?(nil) || options.uniq != options
-          result.merge(:options => options, :allows_written_answer => written, :response_allowed => true)
+          if input["answer"].is_a?(Hash)
+            result[:answer] = strings(input["answer"], %w[option text answered_at])
+          end
+          result.merge(:options => options, :allows_written_answer => written,
+            :response_allowed => !result[:answer] && input.fetch("response_allowed", owner) == true)
         end
 
         def archive_closed_result(input)
@@ -289,7 +293,8 @@ module Handrail
           result.merge!(strings(input, %w[reported_app_version reported_route reported_app_flavor first_reported_at last_reported_at created_at updated_at fixed_at closed_at]))
           result.merge(:impact => impact, :status_group => group, :status_rollup => status,
             :resolution_journey => journey(input["resolution_journey"]),
-            :information_request => result[:is_owner] ? information_request(input["information_request"]) : nil,
+            :information_request => information_request(input["information_request"], result[:is_owner]),
+            :information_requests => Array(input["information_requests"]).map { |q| information_request(q, result[:is_owner]) }.compact,
             :archived => archived, :archived_at => archived_at,
             :occurrence_count => non_negative(input.fetch("occurrence_count", MISSING), 1),
             :reporter_occurrence_count => non_negative(input.fetch("reporter_occurrence_count", MISSING), 1))
