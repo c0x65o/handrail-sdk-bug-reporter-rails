@@ -6,17 +6,17 @@
     "provenance": "source_snapshot",
     "commit": null,
     "ref": null,
-    "base_commit": "b1057a06e89b798cbcbeafee2de98182a057f38c",
-    "base_ref": "commit:b1057a06e89b798cbcbeafee2de98182a057f38c"
+    "base_commit": "4f7dc9b54ef59dc037290c1086ba9ebc18d2170f",
+    "base_ref": "commit:4f7dc9b54ef59dc037290c1086ba9ebc18d2170f"
   },
   "bundled_js": {
     "package": "@handrail/bug-reporter",
     "version": "0.6.2",
-    "ref": "commit:dd32c3228a1c0a33ac2495c0b2366fb43da389fc",
-    "commit": "dd32c3228a1c0a33ac2495c0b2366fb43da389fc"
+    "ref": "commit:71d26126715fc4435da21c0d80283877b40d6fcb",
+    "commit": "71d26126715fc4435da21c0d80283877b40d6fcb"
   },
   "files_sha256": {
-    "app/assets/javascripts/handrail_bug_reporter.js": "58a9d77088a42bf6d6db43015fdbd8ec9e360606308bf6901a20ff8b865aca78",
+    "app/assets/javascripts/handrail_bug_reporter.js": "07b51fb4ebe758ef97f7fadb2b3662296ccd6869206a308546c53b726455cad4",
     "app/controllers/handrail/bug_reporter/reports_controller.rb": "246ca34b6f053b170e0ff8da133a9c80dc8614fba8a07533597044c2532702ce",
     "app/helpers/handrail/bug_reporter_helper.rb": "514325f7fd7c798f8124a4ccc60a47162a84102267d4d4f864638410f516d6ff",
     "config/routes.rb": "f724fca83628531bb9aebaf48c03bf789dc67249882c7e60988b95e1156a6c7d",
@@ -35,7 +35,7 @@
     "lib/handrail/bug_reporter/payload.rb": "7a07de96beb4945720d71d2f6ffe1f81977bb2b4afea0107c84ed3051abcd5a5",
     "lib/handrail/bug_reporter/policy.rb": "41b78a19a0841d553e40807b2528c0fa3f0e4d92965cd52605de2486326c8f13",
     "lib/handrail/bug_reporter/release.rb": "e684ea1c31df88b3fe3f07d4cb025209b67dabee4c6c390718cae0b6f7d55d70",
-    "lib/handrail/bug_reporter/release_manifest.rb": "76aa634ee8e2b7f62030615321d9bcc2e4a2cf414d1d4bd9f75d6e2ccc666196",
+    "lib/handrail/bug_reporter/release_manifest.rb": "cbab971a41e81fc2d152be3c761e5f7e611e238031d197f1fe9758f0e015b7cc",
     "lib/handrail/bug_reporter/screenshot.rb": "ff4e5ac51e69ed7a78681237e2f1eee1b965cf48c235fcf129e1acda3d5a1a18",
     "lib/handrail/bug_reporter/transport.rb": "2e817d69e39e118346ebb522611a5e93063bed7c514884dd4e276b261fe11122",
     "lib/handrail/bug_reporter/version.rb": "7b921841b49cdae1c90acf64c2517e1c4e438fb21833c1cd8220b000eb56ec2e"
@@ -43,10 +43,10 @@
   "source_sha256": {
     "frontend/entry.jsx": "a663afcaa812c57879d4dfd4b40d31d6cb4064262184daf19173a9b42ecabde7",
     "frontend/rails_adapter.js": "f5cb49f28025d06442492a48cfe945377290ef1f22497fb1c4a480940132a1e7",
-    "frontend/upstream.json": "899f1efa0f20d1b24c351a6b701f471c10a0ef38e3a81b63aa7e5f1286b7e3d9",
+    "frontend/upstream.json": "42f947f8efd7c56ba80acb1e1a836e821800cc08cf4c68cf61d5fcb55ef2880e",
     "handrail-bug-reporter.gemspec": "283f3fa82280d16f6ea184344450fcb47820acf8fb415fc1eb28fe4ca19219eb",
-    "package-lock.json": "7fe5f9404431799f24390a3ba536dccf4378bff6f6b8e81b5c9f1ddf77a30c90",
-    "package.json": "813a3ca0e3466346dc6675155c38c306b26729cd7fcf80c5371a3bf0bbfc82dc",
+    "package-lock.json": "716e9db9c02d8a02fcac4391ce0a096f1b0d34f57efb648235f44eadaff00e86",
+    "package.json": "0ff0f0bc78f3551c0b2a4a1e07df30d65cf7fafab2e17fcfa6e7b1d70969dfed",
     "scripts/build.mjs": "37a30a7d1a2196f932e1308bca389736568cb76c1a0d28e6e591135697890316",
     "scripts/contract.mjs": "520c433f2fe85cc977e61d9fd31a748388e641c137aebf1213c7c0d0249112c4"
   },

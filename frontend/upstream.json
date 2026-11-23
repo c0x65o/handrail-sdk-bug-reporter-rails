@@ -1,8 +1,8 @@
 {
   "package": "@handrail/bug-reporter",
   "version": "0.6.2",
-  "commit": "dd32c3228a1c0a33ac2495c0b2366fb43da389fc",
-  "ref": "commit:dd32c3228a1c0a33ac2495c0b2366fb43da389fc",
+  "commit": "71d26126715fc4435da21c0d80283877b40d6fcb",
+  "ref": "commit:71d26126715fc4435da21c0d80283877b40d6fcb",
   "sourceSha256": {
     "src/identity.ts": "e92ea96c110647ab3cd2b3995899641a1f37688f70c74e879e21bbd018f65e71",
     "src/severity.ts": "c936e4fd9ff46bfd4a7e4c92eb704de0bbbc8924cc7e7e5386c112af0d6b37dd",

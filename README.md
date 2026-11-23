@@ -53,7 +53,7 @@ The manifest identifies the base commit used to build the snapshot. The private 
 The local `v0.4.50` tag's `version.rb` declares **0.4.49**; it is not a verified
 matching release and is not recommended here. The gem version is independent of
 the bundled **JS v0.6.2** at
-`dd32c3228a1c0a33ac2495c0b2366fb43da389fc` in the JS repository.
+`71d26126715fc4435da21c0d80283877b40d6fcb` in the JS repository.
 
 The original parity baseline was **JS v0.4.49**, `refs/tags/v0.4.49`, at
 `96b293248611594c388d0fab3af63b1b2d1aae5c`, recorded in `frontend/upstream.json`
@@ -453,7 +453,7 @@ Do not pass session credentials as this key. This sharing is bounded to a
 Handrail project and environment/source, not subtenants within that source.
 
 The browser bundle uses Bug JS **0.6.2** from public HTTPS Git commit
-`dd32c3228a1c0a33ac2495c0b2366fb43da389fc`, with matching lockfile and
+`71d26126715fc4435da21c0d80283877b40d6fcb`, with matching lockfile and
 `frontend/upstream.json` source hashes. It displays Mine and conditional All
 users, refreshes policy for shared reads, clears stale results on revocation or
 session changes, and hides other users' archive/restore actions. Attachments
