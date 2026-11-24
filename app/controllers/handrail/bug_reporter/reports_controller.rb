@@ -4,7 +4,7 @@ require "handrail/bug_reporter/forwarding"
 module Handrail
   module BugReporter
     class ReportsController < ActionController::Base
-      protect_from_forgery :with => :exception, :only => [:create, :archive, :subscription, :answer_information_request]
+      protect_from_forgery :with => :exception, :only => [:create, :archive, :subscription, :answer_information_request, :confirm_administrator_step]
       rescue_from ActionController::InvalidAuthenticityToken do
         render_error(403, "invalid_authenticity_token")
       end
@@ -35,6 +35,12 @@ module Handrail
         history
       end
 
+      def confirm_administrator_step
+        forward(:confirmation) do |service|
+          service.history("POST", request.env.fetch(ForwardingGuard::RESOURCE_KEY), {})
+        end
+      end
+
       def answer_information_request
         forward(:information_request) do |service|
           service.answer_information_request(request.env.fetch(ForwardingGuard::PAYLOAD_KEY),
@@ -61,6 +67,9 @@ module Handrail
         render_success(response)
       rescue Error => error
         return render_answer_error(error) if ownership_status == :information_request
+        if ownership_status == :confirmation && %w[bug_administrator_step_forbidden bug_administrator_step_not_pending bug_history_not_found].include?(error.upstream_code)
+          return render :json => { :error => "bug_reporting_rejected", :code => error.upstream_code }, :status => error.status_code
+        end
         if ownership_status == :subscription
           return render_error(400, "invalid_report") if error.code == :invalid_subscription
           status = error.status_code || 502

@@ -106,6 +106,17 @@ test('SDK forwards a reporter answer through the mounted Rails session and CSRF 
   assert.deepEqual(rails.audit().filter(row => row.kind === 'http').map(row => row.body), [input]);
 });
 
+test('JS confirms the administrator step through the mounted Rails session', async t => {
+  const rails = await host(t, 'history');
+  await rails.session('admin');
+  const reporter = createBugReporter({ transport: 'same-origin', apiBaseUrl: endpoint,
+    projectId: 'project-123', environment: 'staging', fetch: rails.fetch });
+  const result = await reporter.confirmAdministratorStep('bug-canonical.123');
+  assert.deepEqual(result, { contract_version: 'v1', bug_id: 'bug-canonical.123', confirmed: true,
+    confirmed_by: 'administrator', replayed: false, check_started: true });
+  assert.deepEqual(rails.audit().filter(row => row.kind === 'http').map(row => row.body), [null]);
+});
+
 test('workflow admin, nonadmin, anonymous and revoked states gate all eight operations before identity/HTTP', async t => {
   const rails = await host(t, 'submission');
   const body = JSON.stringify({ title: 'Fixture', description: 'Fixture', reporter_notification: { notify_on_resolution: true } });

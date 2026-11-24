@@ -13,9 +13,9 @@ module Handrail
       SHA256 = /\A[0-9a-f]{64}\z/
       VERSION = /\A(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:\.[a-zA-Z0-9]+)*\z/
       JS_BASELINE = {
-        "package" => "@handrail/bug-reporter", "version" => "0.6.2",
-        "ref" => "commit:71d26126715fc4435da21c0d80283877b40d6fcb",
-        "commit" => "71d26126715fc4435da21c0d80283877b40d6fcb"
+        "package" => "@handrail/bug-reporter", "version" => "0.6.3",
+        "ref" => "commit:d61913c7ee5d268b28f165c7440f1281ef0091b3",
+        "commit" => "d61913c7ee5d268b28f165c7440f1281ef0091b3"
       }.freeze
       SOURCE_FILES = %w[handrail-bug-reporter.gemspec frontend/upstream.json
         frontend/entry.jsx frontend/rails_adapter.js package.json package-lock.json

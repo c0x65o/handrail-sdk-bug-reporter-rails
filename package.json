@@ -16,7 +16,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@handrail/bug-reporter": "git+https://github.com/c0x65o/handrail-sdk-bug-reporter-js.git#71d26126715fc4435da21c0d80283877b40d6fcb",
+    "@handrail/bug-reporter": "git+https://github.com/c0x65o/handrail-sdk-bug-reporter-js.git#d61913c7ee5d268b28f165c7440f1281ef0091b3",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },

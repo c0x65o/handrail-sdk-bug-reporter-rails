@@ -36,8 +36,8 @@ export const cases = ['light', 'dark'].flatMap(theme => [false, true].map(absent
 }));
 
 export async function startStyleFixture(port = 0, { stateDirectory } = {}) {
-  assert.equal(upstream.version, '0.6.2');
-  assert.equal(upstream.commit, '71d26126715fc4435da21c0d80283877b40d6fcb');
+  assert.equal(upstream.version, '0.6.3');
+  assert.equal(upstream.commit, 'd61913c7ee5d268b28f165c7440f1281ef0091b3');
   verifyDependency(); // Pin, lock, installed identity AND source-map hashes.
   const sibling = process.env.HANDRAIL_JS_REFERENCE_REPO || resolve(root, '../handrail-sdk-bug-reporter-js');
   for (const [path, hash] of Object.entries(upstream.sourceSha256)) {

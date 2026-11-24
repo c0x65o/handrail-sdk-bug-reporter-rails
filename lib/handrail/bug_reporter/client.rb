@@ -102,6 +102,10 @@ module Handrail
 
       # Answer the open request for information on an owned bug with an offered
       # option, a written answer, or both. Handrail checks ownership and choices.
+      def confirm_administrator_step(bug_id:)
+        History.confirm_administrator_step(self, bug_id)
+      end
+
       def answer_information_request(bug_id:, request_id:, option: nil, answer: nil)
         History.answer_information_request(self, bug_id, request_id, option, answer)
       end

@@ -77,6 +77,22 @@ module Handrail
           reject!
         end
 
+        def confirm_administrator_step(client, bug_id)
+          ready!(client)
+          id = normalized_id(bug_id)
+          url = query_url(client, client.configuration.endpoints[:bugs] + "/" + segment(id) + "/administrator-step/confirm")
+          request(client, url, "POST") do |reply|
+            next unless reply.is_a?(Hash) && reply["contract_version"] == "v1" && reply["bug_id"] == id &&
+              reply["confirmed"] == true && boolean?(reply["replayed"]) &&
+              (reply["check_started"].nil? || boolean?(reply["check_started"])) &&
+              (reply["confirmed_by"].nil? || reply["confirmed_by"].is_a?(String))
+            strings(reply, %w[contract_version bug_id confirmed_by]).merge(:confirmed => true,
+              :replayed => reply["replayed"], :check_started => reply["check_started"])
+          end
+        rescue EncodingError, ArgumentError
+          reject!
+        end
+
         def archive_closed(client)
           ready!(client)
           url = query_url(client, client.configuration.endpoints[:history] + "/archive-closed")
@@ -264,13 +280,24 @@ module Handrail
           { :contract_version => "v1", :archived_count => count }
         end
 
+        def administrator_action(input)
+          return nil unless input.is_a?(Hash) && input["kind"] == "administrator_correction" && input["responsible"] == "administrator"
+          confirmation = input["confirmation"]
+          action = strings(input, %w[kind responsible label summary])
+          return nil unless confirmation.is_a?(Hash) && action.values.all?
+          action.merge(:confirmation => { :allowed => confirmation["allowed"] == true, :checking => confirmation["checking"] == true,
+            :last_confirmed_at => clean(confirmation["last_confirmed_at"]) })
+        end
+
         def record(input)
           return nil unless input.is_a?(Hash) && input["status_rollup"].is_a?(Hash)
           rollup = input["status_rollup"]
           result = strings(input, %w[id title severity environment status])
           status = strings(rollup, %w[stage label raw_status])
+          status[:label] ||= "Needs team review" if %w[needs_attention wont_fix].include?(status[:stage])
           return nil if result.values.any?(&:nil?) || status.values.any?(&:nil?) ||
             !STAGES.include?(status[:stage]) || !boolean?(rollup["terminal"])
+          result[:next_action] = administrator_action(input["next_action"]) if input.key?("next_action")
           result[:is_owner] = input["is_owner"] != false
           impact = clean(input["canonical_impact"].nil? ? result[:severity] : input["canonical_impact"])
           impact = impact && Payload::IMPACTS[impact.downcase]

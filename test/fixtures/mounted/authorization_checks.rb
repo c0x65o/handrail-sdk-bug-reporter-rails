@@ -11,7 +11,7 @@ class MountedAuthorizationChecks < Minitest::Test
     ["POST", ""], ["GET", "/policy"], ["GET", "/mine"],
     ["GET", "/bugs/bug-123"], ["PUT", "/bugs/bug-123/archive"],
     ["DELETE", "/bugs/bug-123/archive"], ["POST", "/mine/archive-closed"],
-    ["POST", "/bugs/bug-123/subscription"], ["POST", "/bugs/bug-123/information-requests/rfi-1/answer"]
+    ["POST", "/bugs/bug-123/administrator-step/confirm"], ["POST", "/bugs/bug-123/subscription"], ["POST", "/bugs/bug-123/information-requests/rfi-1/answer"]
   ].freeze
 
   def authorize_admin
@@ -19,6 +19,7 @@ class MountedAuthorizationChecks < Minitest::Test
   end
 
   def body_for(path)
+    return "" if path.end_with?("/administrator-step/confirm")
     JSON.generate(path.end_with?("/answer") ? { "option" => "Card" } : wire)
   end
 

@@ -89,6 +89,10 @@ class WorkflowHTTP
     when ["POST", ROOT + "/bugs/#{BUG_ID}/information-requests/rfi-1/answer"]
       { :contract_version => "v1", :bug_id => BUG_ID, :information_request_id => "rfi-1",
         :answered => true, :replayed => false, :analysis_resumed => true }
+    when ["POST", ROOT + "/bugs/#{BUG_ID}/administrator-step/confirm"]
+      raise "Unexpected confirmation body" unless bytes.nil?
+      { :contract_version => "v1", :bug_id => BUG_ID, :confirmed => true,
+        :confirmed_by => "administrator", :replayed => false, :check_started => true }
     when ["POST", ROOT + "/mine/archive-closed"]
       { :contract_version => "v1", :archived_count => 0 }
     when ["GET", ROOT + "/mine"]

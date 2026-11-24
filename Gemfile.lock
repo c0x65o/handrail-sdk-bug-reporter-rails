@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    handrail-bug-reporter (0.4.51)
+    handrail-bug-reporter (0.4.52)
       railties (>= 4.2, < 8.2)
 
 GEM

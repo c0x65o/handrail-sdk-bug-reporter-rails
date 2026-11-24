@@ -47,13 +47,13 @@ readiness. The subsequent documentation patch is retained separately from this
 installed commit; it changes no runtime code or browser asset.
 
 The current [release manifest](release-manifest.json) records Rails gem version
-**0.4.51** with `source_snapshot` provenance and null Rails release `commit`/`ref`.
+**0.4.52** with `source_snapshot` provenance and null Rails release `commit`/`ref`.
 The manifest identifies the base commit used to build the snapshot. The private frontend tooling version is recorded in
 `package.json`; it is independent of the Rails gem release version.
 The local `v0.4.50` tag's `version.rb` declares **0.4.49**; it is not a verified
 matching release and is not recommended here. The gem version is independent of
-the bundled **JS v0.6.2** at
-`71d26126715fc4435da21c0d80283877b40d6fcb` in the JS repository.
+the bundled **JS v0.6.3** at
+`d61913c7ee5d268b28f165c7440f1281ef0091b3` in the JS repository.
 
 The original parity baseline was **JS v0.4.49**, `refs/tags/v0.4.49`, at
 `96b293248611594c388d0fab3af63b1b2d1aae5c`, recorded in `frontend/upstream.json`
@@ -62,7 +62,7 @@ at Rails commit `a6f83605c217f37ac0caa4afa982379206f6288f`. The
 Ruby normalization with that fixed JS server-entry baseline; it does not verify
 the current browser bundle. Rails commit `bb1a4f86bb48f63e5a2ade43a1565c4625c58334`
 upgraded the bundle to JS v0.4.50. The [current release manifest](release-manifest.json)
-and [upstream identity](frontend/upstream.json) now record the 0.6.2 tracker with support for answering information requests.
+and [upstream identity](frontend/upstream.json) now record the 0.6.3 tracker with support for answering information requests.
 
 See the [release contract](docs/release-contract.md) for checksum, source and
 distribution-tag verification. Further source publication and consumer installation
@@ -452,8 +452,8 @@ sign-out, account/environment/tenant switch to discard state and pending reads.
 Do not pass session credentials as this key. This sharing is bounded to a
 Handrail project and environment/source, not subtenants within that source.
 
-The browser bundle uses Bug JS **0.6.2** from public HTTPS Git commit
-`71d26126715fc4435da21c0d80283877b40d6fcb`, with matching lockfile and
+The browser bundle uses Bug JS **0.6.3** from public HTTPS Git commit
+`d61913c7ee5d268b28f165c7440f1281ef0091b3`, with matching lockfile and
 `frontend/upstream.json` source hashes. It displays Mine and conditional All
 users, refreshes policy for shared reads, clears stale results on revocation or
 session changes, and hides other users' archive/restore actions. Attachments

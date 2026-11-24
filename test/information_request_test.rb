@@ -139,6 +139,24 @@ class InformationRequestTest < Minitest::Test
     end
   end
 
+  def test_administrator_step_in_history_and_confirmation
+    bug = JSON.parse(HISTORY)["bug"]
+    step = { "kind" => "administrator_correction", "responsible" => "administrator",
+      "label" => "Waiting on an administrator", "summary" => "Enable checkout.",
+      "confirmation" => { "allowed" => false, "checking" => true, "last_confirmed_at" => nil } }
+    [false, true].each do |owner|
+      @body = { "contract_version" => "v1", "bug" => bug.merge("is_owner" => owner, "next_action" => step) }
+      result = client.get_bug("bug-123")[:next_action]
+      assert_equal step["summary"], result[:summary]
+      assert_equal({ :allowed => false, :checking => true, :last_confirmed_at => nil }, result[:confirmation])
+    end
+    @body = { "contract_version" => "v1", "bug" => bug }
+    refute client.get_bug("bug-123").key?(:next_action)
+    @body = { "contract_version" => "v1", "bug_id" => "bug-123", "confirmed" => true,
+      "replayed" => true, "confirmed_by" => "administrator", "check_started" => nil }
+    assert client.confirm_administrator_step(:bug_id => "bug-123")[:replayed]
+  end
+
   def test_history_records_tolerate_and_project_information_requests
     bug = JSON.parse(HISTORY)["bug"]
     detail = lambda { |record| { "contract_version" => "v1", "bug" => record } }

@@ -34,12 +34,12 @@ module Handrail
           allowed = "POST"
           json_child = true
           resource = [:bugs, "/" + segment + "/information-requests/" + request_segment + "/answer"]
-        elsif (match = /\A\/bugs\/([^\/]+)(\/archive|\/subscription)?\z/.match(path))
+        elsif (match = /\A\/bugs\/([^\/]+)(\/archive|\/subscription|\/administrator-step\/confirm)?\z/.match(path))
           segment = encoded_id(match[1])
           return reject(404, "bug_history_not_found") unless segment
           allowed = match[2] ? "PUT, DELETE" : "GET"
           json_child = match[2] == "/subscription"
-          allowed = "POST" if json_child
+          allowed = "POST" if json_child || match[2] == "/administrator-step/confirm"
           resource = [:bugs, "/" + segment + match[2].to_s]
         end
         return reject(404, "bug_reporter_route_not_found") unless allowed

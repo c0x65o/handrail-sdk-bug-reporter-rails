@@ -7,6 +7,7 @@ Handrail::BugReporter::Engine.routes.draw do
   put "/bugs/:bug_id/archive", :to => "reports#archive", :format => false, :constraints => { :bug_id => /[^\/]+/ }
   delete "/bugs/:bug_id/archive", :to => "reports#archive", :format => false, :constraints => { :bug_id => /[^\/]+/ }
   post "/mine/archive-closed", :to => "reports#archive", :format => false
+  post "/bugs/:bug_id/administrator-step/confirm", :to => "reports#confirm_administrator_step", :format => false, :constraints => { :bug_id => /[^\/]+/ }
   post "/bugs/:bug_id/information-requests/:request_id/answer", :to => "reports#answer_information_request",
     :format => false, :constraints => { :bug_id => /[^\/]+/, :request_id => /[^\/]+/ }
 end

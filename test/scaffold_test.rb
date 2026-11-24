@@ -75,7 +75,7 @@ class ScaffoldTest < ScaffoldTestCase
         paths = engine.routes.routes.map { |route| route.path.spec.to_s }
         expected = ["/", "/policy", "/mine", "/bugs/:bug_id", "/bugs/:bug_id/subscription",
           "/bugs/:bug_id/archive", "/bugs/:bug_id/archive", "/mine/archive-closed",
-          "/bugs/:bug_id/information-requests/:request_id/answer"]
+          "/bugs/:bug_id/administrator-step/confirm", "/bugs/:bug_id/information-requests/:request_id/answer"]
         raise "Missing opt-in routes" unless paths == expected
       end
       request = Rack::MockRequest.new(app)

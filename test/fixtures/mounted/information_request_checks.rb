@@ -44,6 +44,27 @@ class MountedInformationRequestChecks < Minitest::Test
       "content-type" => "application/json", "x-handrail-application-session-token" => "alice-1" }, sent[:headers])
   end
 
+  def test_administrator_confirmation_forwards_without_a_body_and_requires_csrf
+    path = ROOT_PATH + "/bugs/bug-123/administrator-step/confirm"
+    assert_rejected(403, call_app("POST", path, "", { "HTTP_X_CSRF_TOKEN" => "" }))
+    { 200 => nil, 403 => "bug_administrator_step_forbidden", 409 => "bug_administrator_step_not_pending",
+      404 => "bug_history_not_found" }.each do |status, code|
+      body = code ? JSON.generate("code" => code, "error" => "private-upstream-detail") : '{"confirmed":true}'
+      @responses << { :status => status, :body => body }
+      response = call_app("POST", path)
+      assert_equal status, response[0]
+      expected = code ? { "code" => code, "error" => "bug_reporting_rejected" } : { "confirmed" => true }
+      assert_equal expected, JSON.parse(response[2])
+      sent = @calls.last
+      assert_equal "POST", sent[:method]
+      assert_equal "/prefix/api/mobile-bug-reports/bugs/bug-123/administrator-step/confirm", sent[:uri].path
+      assert_equal "server/project + one", URI.decode_www_form(sent[:uri].query).to_h["project_id"]
+      assert_nil sent[:body]
+      assert_equal "Bearer hbr_server_fixture", sent[:headers]["authorization"]
+      assert_match(/alice-/, sent[:headers]["x-handrail-application-session-token"])
+    end
+  end
+
   def test_option_only_and_answer_only_bodies
     [[{ "option" => "Card" }, { "option" => "Card" }], [{ "answer" => "Saved card" }, { "answer" => "Saved card" }],
       [{ "option" => "", "answer" => "Saved card" }, { "answer" => "Saved card" }]].each do |body, expected|
